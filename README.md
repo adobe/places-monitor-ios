@@ -47,18 +47,18 @@ With the workspace open, you can run the test app by selecting the appropriate s
 
 ###### Testing on simulator
 - Select the `Simulator - MonitorTestApp` scheme and hit run. <br><br>
-<img src="https://github.com/sbenedicadb/ACPPlacesMonitor/tree/assets/test_app_sim.png" height="40"></img><br><br>
+<img src="https://github.com/adobe/ACPPlacesMonitor/blob/assets/test_app_sim.png" height="40"></img><br><br>
 - In the app, make sure you enter in a name for your device and hit the `Set Name` button.<br><br>
-<img src="https://github.com/sbenedicadb/ACPPlacesMonitor/tree/assets/set_name.png" height="100"></img><br><br>
+<img src="https://github.com/adobe/ACPPlacesMonitor/blob/assets/set_name.png" height="100"></img><br><br>
 - On the simulator, you will be spoofing the location using our `.gpx` files.  In the menu for the debug area in Xcode, hit the "simulate location" button to toggle between `AdobeSanJose` and `Safeway-SantaClara` locations. <br><br>
-<img src="https://github.com/sbenedicadb/ACPPlacesMonitor/tree/assets/spoof_location.png" height="140"></img> <br>
+<img src="https://github.com/adobe/ACPPlacesMonitor/blob/assets/spoof_location.png" height="140"></img> <br>
 _Hint:_ Sometimes the "simulate location" button does not appear in the debug area on your first launch.  If you notice it missing, try re-launching the app.
 
 ###### Testing on device
 - Select the `Device - MonitorTestApp` scheme, then your device, and hit run. <br><br>
-<img src="https://github.com/sbenedicadb/ACPPlacesMonitor/tree/assets/test_app_device.png" height="40"></img><br><br>
+<img src="https://github.com/adobe/ACPPlacesMonitor/blob/assets/test_app_device.png" height="40"></img><br><br>
 - In the app, make sure you enter in a name for your device and hit the `Set Name` button.<br><br>
-<img src="https://github.com/sbenedicadb/ACPPlacesMonitor/tree/assets/set_name_device.png" height="100"></img><br><br>
+<img src="https://github.com/adobe/ACPPlacesMonitor/blob/assets/set_name_device.png" height="100"></img><br><br>
 - Walk around
 
 ###### Validating results
