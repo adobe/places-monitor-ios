@@ -33,7 +33,7 @@ Prerequisites:
 
 You can build the Places Monitor library by selecting the scheme called `ACPPlacesMonitor_iOS`.  All source code for the monitor can be found in the `ACPPlacesMonitor` group of the solution navigator.  The source itself lives in the [code/src/](https://git.corp.adobe.com/dms-mobile/bourbon-platform-ios-places-monitor/tree/dev/code/src) directory.
 
-<img src="https://github.com/sbenedicadb/ACPPlacesMonitor/tree/assets/build_library.png" height="400"></img>
+<img src="https://github.com/adobe/ACPPlacesMonitor/blob/assets/build_library.png" height="400"></img>
 
 #### Running unit tests
 With the `ACPPlacesMonitor_iOS` scheme selected, you can run unit tests from the menu via `Product > Test`, or using the keyboard shortcut `⌘U`.
