@@ -1,0 +1,14 @@
+platform :ios, '10.0'
+
+workspace 'ACPPlacesMonitor'
+project 'ACPPlacesMonitor.xcodeproj'
+
+target 'MonitorTestApp' do
+  platform :ios, '10.0'
+  pod 'ACPCore_Staging'
+  pod 'ACPLifecycle_Staging'
+  pod 'ACPIdentity_Staging'
+  pod 'ACPAnalytics_Staging'
+  pod 'ACPSignal_Staging'
+  pod 'ACPUserProfile_Staging'
+end
