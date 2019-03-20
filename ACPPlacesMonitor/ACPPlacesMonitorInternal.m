@@ -266,9 +266,9 @@
                                    limit:ACPPlacesMonitorDefaultMaxMonitoredRegionCount
                                 callback: ^ (NSArray<ACPPlacesPoi*>* _Nullable nearbyPoi) {
 
-                  [self resetMonitoredGeofences];
+        [self resetMonitoredGeofences];
 
-                  if (nearbyPoi.count) {
+        if (nearbyPoi.count) {
             ACPPlacesMonitorLogDebug(@"Received a new list of POIs from Places: %@", nearbyPoi);
             [self startMonitoringGeoFences:nearbyPoi];
         } else {

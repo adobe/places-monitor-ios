@@ -16,10 +16,13 @@ Pod::Spec.new do |s|
 
   s.default_subspec = "iOS"
 
+  s.static_framework = true
+
   s.dependency "ACPCore", ">= 2.1.0"
   s.dependency "ACPPlaces", ">= 1.0.0"
 
   s.subspec "iOS" do |ios|
+    ios.public_header_files = "ACPPlacesMonitor/ACPPlacesMonitor.h"
     ios.source_files = "ACPPlacesMonitor/*.{h,m}"
     ios.frameworks = "CoreLocation"
   end

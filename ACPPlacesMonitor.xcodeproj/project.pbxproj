@@ -22,11 +22,8 @@
 		9715ADE5E30E033E80A088EB /* libPods-ACPPlacesMonitor-iOS-unit-tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 039965AAF189DF1496DD10BB /* libPods-ACPPlacesMonitor-iOS-unit-tests.a */; };
 		BC8D17C86B04F307F40942A6 /* libPods-ACPPlacesMonitor_iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A5BF60A2954AFD70989239 /* libPods-ACPPlacesMonitor_iOS.a */; };
 		C8EC56ED203BF1D100656224 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8EC56E9203BF1D100656224 /* libOCMock.a */; };
-		C8EC5712203F707C00656224 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8EC5701203DF7E100656224 /* CoreTelephony.framework */; };
 		D4B095DD209BA9C40065678F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0DE361FC36BA000E96578 /* CoreLocation.framework */; };
 		F04CF4EE1FCF7BF90071CD3D /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0DD401FC336F700E96578 /* libsqlite3.0.tbd */; };
-		F0739DB71FD1F99D00C66F4C /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0162A5B1FCF881F00DDCF16 /* UserNotifications.framework */; };
-		F0739DB81FD1F9A500C66F4C /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0162A5E1FCF883900DDCF16 /* WebKit.framework */; };
 		F0B902531FD0663F00CA6EB2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0C8AC0A1FA8D8C500B44460 /* SystemConfiguration.framework */; };
 		F0B902541FD0665D00CA6EB2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0C8AC081FA8D8BA00B44460 /* UIKit.framework */; };
 		F0B902551FD06FD400CA6EB2 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0162A611FD05DFC00DDCF16 /* XCTest.framework */; };
@@ -178,9 +175,6 @@
 				24D8BEC621DEBD4000D168EC /* libACPPlacesMonitor_iOS.a in Frameworks */,
 				243E663321FF66A400482882 /* libc++.tbd in Frameworks */,
 				D4B095DD209BA9C40065678F /* CoreLocation.framework in Frameworks */,
-				C8EC5712203F707C00656224 /* CoreTelephony.framework in Frameworks */,
-				F0739DB81FD1F9A500C66F4C /* WebKit.framework in Frameworks */,
-				F0739DB71FD1F99D00C66F4C /* UserNotifications.framework in Frameworks */,
 				F0B902541FD0665D00CA6EB2 /* UIKit.framework in Frameworks */,
 				F0B902531FD0663F00CA6EB2 /* SystemConfiguration.framework in Frameworks */,
 				C8EC56ED203BF1D100656224 /* libOCMock.a in Frameworks */,

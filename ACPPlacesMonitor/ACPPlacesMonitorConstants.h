@@ -61,7 +61,8 @@ FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameUpdateMonitorConfigur
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataMonitorMode;
 
 
-#pragma mark - capabilities definitions by platform
+#pragma mark - capability definitions by platform
+
 #if TARGET_OS_SIMULATOR && ADBLOCATIONTESTING
 #define BEACONS_SUPPORTED                                   1
 #define GEOFENCES_SUPPORTED                                 1

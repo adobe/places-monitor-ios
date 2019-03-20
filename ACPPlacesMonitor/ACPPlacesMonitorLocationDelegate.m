@@ -19,19 +19,11 @@
 #import "ACPPlacesMonitorLocationDelegate.h"
 #import "ACPPlacesMonitorLogger.h"
 #import "ACPPlaces.h"
-#import <UIKit/UIKit.h>
-
-// TODO: remove this before going live!!!
-#import <UserNotifications/UserNotifications.h>
 
 @implementation ACPPlacesMonitorLocationDelegate
 
 #pragma mark - location methods
 - (void) locationManager: (CLLocationManager*) manager didUpdateLocations: (NSArray<CLLocation*>*) locations {
-
-    // TODO: remove this before going live!!!
-    [self sendMessageToSlack:[NSString stringWithFormat:@"locationManager:didUpdateLocations: %@", [locations lastObject]]];
-
     ACPPlacesMonitorLogDebug(@"%s - location:%@", __PRETTY_FUNCTION__, [locations lastObject]);
     [_parent postLocationUpdate:[locations lastObject]];
 }
@@ -49,16 +41,6 @@
 #pragma mark - region methods (beacons and geo fences)
 #if GEOFENCES_SUPPORTED || BEACONS_SUPPORTED
 - (void) locationManager: (CLLocationManager*) manager didEnterRegion: (CLRegion*) region {
-
-
-
-    // TODO: remove this before going live!!!
-    [self triggerLocalNotification:[NSString stringWithFormat:@"Entry event for region ID (%@)", region.identifier]];
-    [self sendMessageToSlack:region forEvent:ACPRegionEventTypeEntry];
-
-
-
-
     // make sure we're not already in this region before posting this entry event
     if ([_parent deviceIsWithinRegion:region]) {
         return;
@@ -79,16 +61,6 @@
 }
 
 - (void) locationManager: (CLLocationManager*) manager didExitRegion: (CLRegion*) region {
-
-
-
-    // TODO: remove this before going live!!!
-    [self triggerLocalNotification:[NSString stringWithFormat:@"Exit event for region ID (%@)", region.identifier]];
-    [self sendMessageToSlack:region forEvent:ACPRegionEventTypeExit];
-
-
-
-
     // only post an exit if we have an associated entry
     if (![_parent deviceIsWithinRegion:region]) {
         return;
@@ -177,59 +149,6 @@
         return @"Not Determined";
         break;
     }
-}
-
-
-// TODO: remove this before going live!!!
-- (void) sendMessageToSlack: (NSString*) string {
-    auto bgtask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
-
-    NSURLSession* session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    NSString* jsonString = [NSString stringWithFormat:@"{\"text\":\"%@\"}", string];
-    NSData* postData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-
-    // steve's channel, please do not use
-    //    NSMutableURLRequest* request = [[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://hooks.slack.com/services/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"]] mutableCopy];
-
-    NSMutableURLRequest* request = [[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://hooks.slack.com/services/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"]] mutableCopy];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:postData];
-    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)postData.length] forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-
-    NSURLSessionTask* task = [session dataTaskWithRequest:request];
-    [task resume];
-
-    [[UIApplication sharedApplication] endBackgroundTask:bgtask];
-}
-
-- (void) sendMessageToSlack: (CLRegion*) region forEvent: (ACPRegionEventType) event {
-    NSString* message = [NSString stringWithFormat:@"raw '%@' event for region id '%@'",
-      event == ACPRegionEventTypeEntry ? @"entry" : @"exit", region.identifier];
-
-    [self sendMessageToSlack:message];
-}
-
-// TODO: remove this before going live!!!
-- (void) triggerLocalNotification: (NSString*) message {
-    UNMutableNotificationContent* objNotificationContent = [[UNMutableNotificationContent alloc] init];
-    objNotificationContent.title = [NSString localizedUserNotificationStringForKey:@"Places Monitor Region Event" arguments:nil];
-    objNotificationContent.body = [NSString localizedUserNotificationStringForKey:message arguments:nil];
-
-    UNTimeIntervalNotificationTrigger* trigger =  [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1.f repeats:NO];
-
-    UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:@"acpplacesmonitor"
-                                                                          content:objNotificationContent
-                                                                          trigger:trigger];
-
-    UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
-    [center addNotificationRequest:request withCompletionHandler: ^ (NSError * _Nullable error) {
-               if (!error) {
-                   NSLog(@"Local Notification succeeded");
-               } else {
-                   NSLog(@"Local Notification failed");
-        }
-    }];
 }
 
 @end
