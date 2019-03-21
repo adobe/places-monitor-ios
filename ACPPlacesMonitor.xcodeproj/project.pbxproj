@@ -18,10 +18,10 @@
 		24D8BEAD21CC12D000D168EC /* ACPPlacesMonitorListenerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D8BEAC21CC12D000D168EC /* ACPPlacesMonitorListenerTests.m */; };
 		24D8BEC621DEBD4000D168EC /* libACPPlacesMonitor_iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2429BC1421C1CA38003DB1A5 /* libACPPlacesMonitor_iOS.a */; };
 		24D8BECD21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D8BECC21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.m */; };
-		9715ADE5E30E033E80A088EB /* libPods-ACPPlacesMonitor-iOS-unit-tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 039965AAF189DF1496DD10BB /* libPods-ACPPlacesMonitor-iOS-unit-tests.a */; };
-		BC8D17C86B04F307F40942A6 /* libPods-ACPPlacesMonitor_iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A5BF60A2954AFD70989239 /* libPods-ACPPlacesMonitor_iOS.a */; };
+		5EFEAEB94DFAE5BBB3C01F31 /* Pods_ACPPlacesMonitor_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 848A92EAA45D3C30F09A4B2B /* Pods_ACPPlacesMonitor_iOS.framework */; };
 		C8EC56ED203BF1D100656224 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8EC56E9203BF1D100656224 /* libOCMock.a */; };
 		D4B095DD209BA9C40065678F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0DE361FC36BA000E96578 /* CoreLocation.framework */; };
+		D8D11B54CFE1D196AA776DA0 /* Pods_ACPPlacesMonitor_iOS_unit_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1424DBB83B6CAF52FF545098 /* Pods_ACPPlacesMonitor_iOS_unit_tests.framework */; };
 		F04CF4EE1FCF7BF90071CD3D /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0DD401FC336F700E96578 /* libsqlite3.0.tbd */; };
 		F0B902531FD0663F00CA6EB2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0C8AC0A1FA8D8C500B44460 /* SystemConfiguration.framework */; };
 		F0B902541FD0665D00CA6EB2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0C8AC081FA8D8BA00B44460 /* UIKit.framework */; };
@@ -41,7 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		039965AAF189DF1496DD10BB /* libPods-ACPPlacesMonitor-iOS-unit-tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ACPPlacesMonitor-iOS-unit-tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1424DBB83B6CAF52FF545098 /* Pods_ACPPlacesMonitor_iOS_unit_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ACPPlacesMonitor_iOS_unit_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		240B0ABC2241985A00D2089C /* ACPPlacesMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACPPlacesMonitor.h; sourceTree = "<group>"; };
 		240B0B162241A76600D2089C /* TestablePlacesMonitorListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestablePlacesMonitorListener.h; path = mocks/TestablePlacesMonitorListener.h; sourceTree = "<group>"; };
 		2429BC1421C1CA38003DB1A5 /* libACPPlacesMonitor_iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libACPPlacesMonitor_iOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,7 +54,6 @@
 		2488B3CA21C459EA00E160DD /* ACPPlacesMonitorInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACPPlacesMonitorInternal.h; sourceTree = "<group>"; };
 		2488B3CB21C459EA00E160DD /* ACPPlacesMonitorInternal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorInternal.m; sourceTree = "<group>"; };
 		2488B3D121C46FBE00E160DD /* ACPPlacesMonitorInternalTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorInternalTests.m; sourceTree = "<group>"; };
-		249FCA75964D9A5C6A1CFAB0 /* libPods-MonitorTestApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MonitorTestApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D2E59C21C80E5E002F65DA /* ACPPlaces_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ACPPlaces_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D8BE9F21CC002D00D168EC /* ACPPlacesQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPPlacesQueue.h; sourceTree = "<group>"; };
 		24D8BEA021CC002D00D168EC /* ACPPlacesQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesQueue.m; sourceTree = "<group>"; };
@@ -69,10 +68,7 @@
 		24D8BECB21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACPPlacesMonitorLocationDelegate.h; sourceTree = "<group>"; };
 		24D8BECC21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorLocationDelegate.m; sourceTree = "<group>"; };
 		24D8BECE21DFCCB100D168EC /* ACPPlaces_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ACPPlaces_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2A4F1164573F2B6B1096CD1E /* Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig"; path = "Pods/Target Support Files/Pods-ACPPlacesMonitor-iOS-unit-tests/Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig"; sourceTree = "<group>"; };
-		36AE30FBEFD16B3EC5DE5F7E /* Pods-ACPPlacesMonitor_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor_iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ACPPlacesMonitor_iOS/Pods-ACPPlacesMonitor_iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		3F5860C5206C1FF60059F17E /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
-		4630B9BAA5EF9A2BDBA7F4EF /* Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ACPPlacesMonitor-iOS-unit-tests/Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
 		540522DC1FB51DA600424AEC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5486F8681FB61FCE0099AB2E /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.1.sdk/System/Library/Frameworks/UserNotifications.framework; sourceTree = DEVELOPER_DIR; };
 		5486F86D1FB61FDB0099AB2E /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS11.1.sdk/System/Library/Frameworks/UserNotifications.framework; sourceTree = DEVELOPER_DIR; };
@@ -110,8 +106,12 @@
 		54E0DE381FC36BAF00E96578 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS11.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		54E0DE3A1FC36BBE00E96578 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS4.1.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		54E0DE3C1FC36BDC00E96578 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.1.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
-		977F870F8E74F418AA4C69BE /* Pods-ACPPlacesMonitor_iOS.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor_iOS.test.xcconfig"; path = "Pods/Target Support Files/Pods-ACPPlacesMonitor_iOS/Pods-ACPPlacesMonitor_iOS.test.xcconfig"; sourceTree = "<group>"; };
-		9A73051F114EE7E710A80D7C /* Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ACPPlacesMonitor-iOS-unit-tests/Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
+		7E8713A537B2A1B91BAB19E7 /* Pods-ACPPlacesMonitor_iOS.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor_iOS.test.xcconfig"; path = "Target Support Files/Pods-ACPPlacesMonitor_iOS/Pods-ACPPlacesMonitor_iOS.test.xcconfig"; sourceTree = "<group>"; };
+		848A92EAA45D3C30F09A4B2B /* Pods_ACPPlacesMonitor_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ACPPlacesMonitor_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8664D83214EC439DD98F821C /* Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig"; path = "Target Support Files/Pods-ACPPlacesMonitor-iOS-unit-tests/Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig"; sourceTree = "<group>"; };
+		A015A74A6CD2F06CAFFD5D10 /* Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig"; path = "Target Support Files/Pods-ACPPlacesMonitor-iOS-unit-tests/Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig"; sourceTree = "<group>"; };
+		B9A2FD710463E9FBC3CFFE66 /* Pods-ACPPlacesMonitor_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor_iOS.debug.xcconfig"; path = "Target Support Files/Pods-ACPPlacesMonitor_iOS/Pods-ACPPlacesMonitor_iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		BC42E22BD248E8843B6952DC /* Pods-ACPPlacesMonitor_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor_iOS.release.xcconfig"; path = "Target Support Files/Pods-ACPPlacesMonitor_iOS/Pods-ACPPlacesMonitor_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		C810D27A1F6A4001003D7CC6 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		C83299391F674238008E2D50 /* libgmock_main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmock_main.a; path = "../../../../Library/Developer/Xcode/DerivedData/bourbon-ios-gbvgbozilehawdcjonjwhlfmchwm/Build/Products/Debug/libgmock_main.a"; sourceTree = "<group>"; };
 		C832993A1F674238008E2D50 /* libgmock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmock.a; path = "../../../../Library/Developer/Xcode/DerivedData/bourbon-ios-gbvgbozilehawdcjonjwhlfmchwm/Build/Products/Debug/libgmock.a"; sourceTree = "<group>"; };
@@ -119,13 +119,12 @@
 		C832993C1F674238008E2D50 /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = "../bourbon-core-cpp/tools/gtest-1.8.0/googlemock/build-xcode/gtest/Debug/libgtest.a"; sourceTree = "<group>"; };
 		C8EC56E9203BF1D100656224 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOCMock.a; path = ../../code/unitTests/3rdparty/OCMock/libOCMock.a; sourceTree = "<group>"; };
 		C8EC5701203DF7E100656224 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		C91FDCB2C4DAC9181A7999D6 /* Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig"; path = "Target Support Files/Pods-ACPPlacesMonitor-iOS-unit-tests/Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig"; sourceTree = "<group>"; };
 		D422AA72202BF339005C34E2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		D484BB712050E686006CA927 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		D484BB732050E6AF006CA927 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DAC123C620C0E86B001AB615 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		DAFA90061FFD9C6E0069ACAC /* ACPPlacesMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitor.m; sourceTree = "<group>"; };
-		E2A5BF60A2954AFD70989239 /* libPods-ACPPlacesMonitor_iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ACPPlacesMonitor_iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EF31984E10D07B987DB20A8D /* Pods-ACPPlacesMonitor_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ACPPlacesMonitor_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-ACPPlacesMonitor_iOS/Pods-ACPPlacesMonitor_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		F0162A5B1FCF881F00DDCF16 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		F0162A5E1FCF883900DDCF16 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		F0162A611FD05DFC00DDCF16 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -160,7 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2488B3C921C4558F00E160DD /* CoreLocation.framework in Frameworks */,
-				BC8D17C86B04F307F40942A6 /* libPods-ACPPlacesMonitor_iOS.a in Frameworks */,
+				5EFEAEB94DFAE5BBB3C01F31 /* Pods_ACPPlacesMonitor_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,7 +175,7 @@
 				F0B902531FD0663F00CA6EB2 /* SystemConfiguration.framework in Frameworks */,
 				C8EC56ED203BF1D100656224 /* libOCMock.a in Frameworks */,
 				F04CF4EE1FCF7BF90071CD3D /* libsqlite3.0.tbd in Frameworks */,
-				9715ADE5E30E033E80A088EB /* libPods-ACPPlacesMonitor-iOS-unit-tests.a in Frameworks */,
+				D8D11B54CFE1D196AA776DA0 /* Pods_ACPPlacesMonitor_iOS_unit_tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,7 +198,7 @@
 				F0D206CC1FCF78F10013D96D /* ACPPlacesMonitorUnitTests */,
 				541548641E9BEB3F00135479 /* Products */,
 				C83299381F674238008E2D50 /* Frameworks */,
-				A3A75BF659F4857B8F5B6B13 /* Pods */,
+				B34FCA6F90A4089744E34C57 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,17 +211,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A3A75BF659F4857B8F5B6B13 /* Pods */ = {
+		B34FCA6F90A4089744E34C57 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				4630B9BAA5EF9A2BDBA7F4EF /* Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig */,
-				9A73051F114EE7E710A80D7C /* Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig */,
-				2A4F1164573F2B6B1096CD1E /* Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig */,
-				36AE30FBEFD16B3EC5DE5F7E /* Pods-ACPPlacesMonitor_iOS.debug.xcconfig */,
-				EF31984E10D07B987DB20A8D /* Pods-ACPPlacesMonitor_iOS.release.xcconfig */,
-				977F870F8E74F418AA4C69BE /* Pods-ACPPlacesMonitor_iOS.test.xcconfig */,
+				8664D83214EC439DD98F821C /* Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig */,
+				A015A74A6CD2F06CAFFD5D10 /* Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig */,
+				C91FDCB2C4DAC9181A7999D6 /* Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig */,
+				B9A2FD710463E9FBC3CFFE66 /* Pods-ACPPlacesMonitor_iOS.debug.xcconfig */,
+				BC42E22BD248E8843B6952DC /* Pods-ACPPlacesMonitor_iOS.release.xcconfig */,
+				7E8713A537B2A1B91BAB19E7 /* Pods-ACPPlacesMonitor_iOS.test.xcconfig */,
 			);
 			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		C83299381F674238008E2D50 /* Frameworks */ = {
@@ -312,9 +312,8 @@
 				C832993A1F674238008E2D50 /* libgmock.a */,
 				C832993B1F674238008E2D50 /* libgtest_main.a */,
 				C832993C1F674238008E2D50 /* libgtest.a */,
-				039965AAF189DF1496DD10BB /* libPods-ACPPlacesMonitor-iOS-unit-tests.a */,
-				E2A5BF60A2954AFD70989239 /* libPods-ACPPlacesMonitor_iOS.a */,
-				249FCA75964D9A5C6A1CFAB0 /* libPods-MonitorTestApp.a */,
+				1424DBB83B6CAF52FF545098 /* Pods_ACPPlacesMonitor_iOS_unit_tests.framework */,
+				848A92EAA45D3C30F09A4B2B /* Pods_ACPPlacesMonitor_iOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -356,7 +355,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2429BC1A21C1CA39003DB1A5 /* Build configuration list for PBXNativeTarget "ACPPlacesMonitor_iOS" */;
 			buildPhases = (
-				F384BDF368A82ABD73A987D0 /* [CP] Check Pods Manifest.lock */,
+				93EA5547F8BB90B6F3B9EB48 /* [CP] Check Pods Manifest.lock */,
 				2429BC1021C1CA38003DB1A5 /* Sources */,
 				2429BC1121C1CA38003DB1A5 /* Frameworks */,
 				2429BC1221C1CA38003DB1A5 /* CopyFiles */,
@@ -374,10 +373,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F0D206D31FCF78F10013D96D /* Build configuration list for PBXNativeTarget "ACPPlacesMonitor-iOS-unit-tests" */;
 			buildPhases = (
-				FFC5473350D88C35257572EA /* [CP] Check Pods Manifest.lock */,
+				6B6AD6B688996F95762AEB45 /* [CP] Check Pods Manifest.lock */,
 				F0D206C71FCF78F10013D96D /* Sources */,
 				F0D206C81FCF78F10013D96D /* Frameworks */,
 				F0D206C91FCF78F10013D96D /* Resources */,
+				F2AD7DE41AC58AF7F91E2BCB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -440,7 +440,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		F384BDF368A82ABD73A987D0 /* [CP] Check Pods Manifest.lock */ = {
+		6B6AD6B688996F95762AEB45 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ACPPlacesMonitor-iOS-unit-tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		93EA5547F8BB90B6F3B9EB48 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -462,7 +484,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FFC5473350D88C35257572EA /* [CP] Check Pods Manifest.lock */ = {
+		F2AD7DE41AC58AF7F91E2BCB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -470,18 +492,18 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"${PODS_ROOT}/Target Support Files/Pods-ACPPlacesMonitor-iOS-unit-tests/Pods-ACPPlacesMonitor-iOS-unit-tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/OCMock/OCMock.framework",
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ACPPlacesMonitor-iOS-unit-tests-checkManifestLockResult.txt",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OCMock.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ACPPlacesMonitor-iOS-unit-tests/Pods-ACPPlacesMonitor-iOS-unit-tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -514,7 +536,7 @@
 /* Begin XCBuildConfiguration section */
 		2429BC1B21C1CA39003DB1A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36AE30FBEFD16B3EC5DE5F7E /* Pods-ACPPlacesMonitor_iOS.debug.xcconfig */;
+			baseConfigurationReference = B9A2FD710463E9FBC3CFFE66 /* Pods-ACPPlacesMonitor_iOS.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -547,7 +569,7 @@
 		};
 		2429BC1C21C1CA39003DB1A5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EF31984E10D07B987DB20A8D /* Pods-ACPPlacesMonitor_iOS.release.xcconfig */;
+			baseConfigurationReference = BC42E22BD248E8843B6952DC /* Pods-ACPPlacesMonitor_iOS.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -579,7 +601,7 @@
 		};
 		2429BC1D21C1CA39003DB1A5 /* Test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 977F870F8E74F418AA4C69BE /* Pods-ACPPlacesMonitor_iOS.test.xcconfig */;
+			baseConfigurationReference = 7E8713A537B2A1B91BAB19E7 /* Pods-ACPPlacesMonitor_iOS.test.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -790,7 +812,7 @@
 		};
 		C8CA5EB82044D0D300DB70BA /* Test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2A4F1164573F2B6B1096CD1E /* Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig */;
+			baseConfigurationReference = C91FDCB2C4DAC9181A7999D6 /* Pods-ACPPlacesMonitor-iOS-unit-tests.test.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -822,7 +844,7 @@
 		};
 		F0D206D41FCF78F10013D96D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4630B9BAA5EF9A2BDBA7F4EF /* Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig */;
+			baseConfigurationReference = 8664D83214EC439DD98F821C /* Pods-ACPPlacesMonitor-iOS-unit-tests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -852,7 +874,7 @@
 		};
 		F0D206D51FCF78F10013D96D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9A73051F114EE7E710A80D7C /* Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig */;
+			baseConfigurationReference = A015A74A6CD2F06CAFFD5D10 /* Pods-ACPPlacesMonitor-iOS-unit-tests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";

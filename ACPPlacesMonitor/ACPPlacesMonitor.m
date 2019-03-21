@@ -36,8 +36,8 @@
     } else {
         [ACPCore log:ACPMobileLogLevelError
                  tag:ACPPlacesMonitorExtensionName
-             message:@"An error occurred while attempting to register the ACPPlacesMonitor extension: %@",
-         [error localizedDescription] ? : @"unknown error"];
+             message:[NSString stringWithFormat:@"An error occurred while attempting to register the ACPPlacesMonitor extension: %@",
+         [error localizedDescription] ? : @"unknown error"]];
     }
 }
 
@@ -70,8 +70,8 @@
     if (!event) {
         [ACPCore log:ACPMobileLogLevelWarning
                  tag:ACPPlacesMonitorExtensionName
-             message:@"An error occurred while creating event '%@': %@", eventName,
-         [eventCreationError localizedDescription] ? : @"unknown error"];
+             message:[NSString stringWithFormat:@"An error occurred while creating event '%@': %@", eventName,
+         [eventCreationError localizedDescription] ? : @"unknown error"]];
         return;
     }
 
@@ -80,8 +80,8 @@
     if (![ACPCore dispatchEvent:event error:&dispatchError]) {
         [ACPCore log:ACPMobileLogLevelWarning
                  tag:ACPPlacesMonitorExtensionName
-             message:@"An error occurred while dispatching event '%@': %@", eventName,
-         [dispatchError localizedDescription] ? : @"unknown error"];
+             message:[NSString stringWithFormat:@"An error occurred while dispatching event '%@': %@", eventName,
+         [dispatchError localizedDescription] ? : @"unknown error"]];
     }
 }
 

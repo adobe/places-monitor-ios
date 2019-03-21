@@ -21,6 +21,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class ACPPlacesMonitorInternal;
 
+/**
+ * @class ACPPlacesMonitorLocationDelegate
+ *
+ * @discussion This class implements all the delegate methods in the CLLocationManagerDelegate protocol.
+ *
+ * More information about each method can be found in Apple's documentation:
+ * https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate?language=objc
+ */
 @interface ACPPlacesMonitorLocationDelegate : NSObject <CLLocationManagerDelegate>
 
 @property(nonatomic, strong) ACPPlacesMonitorInternal* parent;

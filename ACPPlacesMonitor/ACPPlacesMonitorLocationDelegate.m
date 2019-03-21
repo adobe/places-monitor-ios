@@ -20,14 +20,6 @@
 #import "ACPPlacesMonitorInternal.h"
 #import "ACPPlacesMonitorLocationDelegate.h"
 
-/**
- * @class ACPPlacesMonitorLocationDelegate
- *
- * @discussion This class implements all the delegate methods in the CLLocationManagerDelegate protocol.
- *
- * More information about each method can be found in Apple's documentation:
- * https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate?language=objc
- */
 @implementation ACPPlacesMonitorLocationDelegate
 
 #pragma mark - location methods
@@ -49,7 +41,6 @@
         [ACPCore log:ACPMobileLogLevelDebug
                  tag:ACPPlacesMonitorExtensionName
              message:[NSString stringWithFormat:@"Places functionality has been suspended due to a monitoring failure: %@", error]];
-        ACPPlacesMonitorLogDebug();
     }
 }
 
@@ -106,7 +97,7 @@
 - (void) locationManager: (CLLocationManager*) manager didDetermineState: (CLRegionState) state forRegion: (CLRegion*) region {
     [ACPCore log:ACPMobileLogLevelDebug
              tag:ACPPlacesMonitorExtensionName
-         message:[NSString stringWithFormat:@"%s - region:%@ - state:%d", __PRETTY_FUNCTION__, region, state]];
+         message:[NSString stringWithFormat:@"%s - region:%@ - state:%ld", __PRETTY_FUNCTION__, region, (long)state]];
 }
 
 - (void) locationManager: (CLLocationManager*) manager monitoringDidFailForRegion: (CLRegion*) region withError: (NSError*) error {

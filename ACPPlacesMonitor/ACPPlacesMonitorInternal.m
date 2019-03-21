@@ -84,8 +84,8 @@
         } else {
             [ACPCore log:ACPMobileLogLevelError
                      tag:ACPPlacesMonitorExtensionName
-                 message:@"There was an error registering for Event Hub shared state events: %@",
-             error.localizedDescription ? : @"unknown"];
+                 message:[NSString stringWithFormat:@"There was an error registering for Event Hub shared state events: %@",
+             error.localizedDescription ? : @"unknown"]];
         }
 
         if ([self.api registerListener:[ACPPlacesMonitorListener class]
@@ -98,8 +98,8 @@
         } else {
             [ACPCore log:ACPMobileLogLevelError
                      tag:ACPPlacesMonitorExtensionName
-                 message:@"There was an error registering for Places response events: %@",
-             error.localizedDescription ? : @"unknown"];
+                 message:[NSString stringWithFormat:@"There was an error registering for Places response events: %@",
+             error.localizedDescription ? : @"unknown"]];
         }
 
         if ([self.api registerListener:[ACPPlacesMonitorListener class]
@@ -112,8 +112,8 @@
         } else {
             [ACPCore log:ACPMobileLogLevelError
                      tag:ACPPlacesMonitorExtensionName
-                 message:@"There was an error registering for Places Monitor request events: %@",
-             error.localizedDescription ? : @"unknown"];
+                 message:[NSString stringWithFormat:@"There was an error registering for Places Monitor request events: %@",
+             error.localizedDescription ? : @"unknown"]];
         }
 
         [self loadPersistedValues];
@@ -193,8 +193,8 @@
         if (error != nil) {
             [ACPCore log:ACPMobileLogLevelWarning
                      tag:ACPPlacesMonitorExtensionName
-                 message:@"Could not process event, an error occured while retrieving configuration shared state %ld",
-             [error code]];
+                 message:[NSString stringWithFormat:@"Could not process event, an error occured while retrieving configuration shared state %ld",
+             [error code]]];
             return;
         }
 

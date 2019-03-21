@@ -1,123 +1,218 @@
-# sourcedrop vars
+# architectures
+# source: https://en.wikipedia.org/wiki/List_of_iOS_devices#RAM,_Processor,_and_Highest_supported_iOS_release
+
+# device architectures
+ARCH_ARM64 = arm64
+ARCH_ARMV7S = armv7s
+# armv7 == 32-bit processor - used in iPhone 5 and iPhone 5c, which can run up to iOS 10.3.3...so we have to leave it in for now
+ARCH_ARMV7 = armv7
+
+# simulator architectures
+ARCH_X86_64 = x86_64
+# i386 == 32-bit simulator - cocoapods complains when this is missing so leaving it in
+ARCH_I386 = i386
+
+# platforms
+SDK_IOS = iphoneos
+SDK_IOS_SIMULATOR = iphonesimulator
+
+# configurations
+BUILD_IOS_TARGET_VERSION = IPHONEOS_DEPLOYMENT_TARGET=10.0
+BUILDFLAGS_BITCODE = BITCODE_GENERATION_MODE=bitcode OTHER_CFLAGS='-fembed-bitcode -Wno-error=unused-command-line-argument'
+BUILDFLAGS = GCC_TREAT_WARNINGS_AS_ERRORS=YES GCC_GENERATE_DEBUGGING_SYMBOLS=NO STRIP_INSTALLED_PRODUCT=YES STRIP_STYLE=ALL GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS NDEBUG=1 NS_BLOCK_ASSERTIONS=1 COMPILEFORAPP'
+CORE_LIB_NAME = lib$(EXTENSION_NAME)_iOS.a
+DERIVED_DATA = -derivedDataPath
+DESTINATION = -destination
+EXTENSION_NAME = ACPPlacesMonitor
+RELEASE = -configuration Release
+SDK_VERSION = $(shell grep 'NSString\* const ACPPlacesMonitorExtensionVersion' $(ROOT_DIR)/ACPPlacesMonitor/ACPPlacesMonitorConstants.m | sed 's/.*NSString\* const ACPPlacesMonitorExtensionVersion.*=.*\@\"\(.*\)\".*/\1/')
+TEST_DERIVED_DATA = $(DERIVED_DATA) '$(TEST_DERIVED_DATA_PATH)'
+TEST_DESTINATION = $(DESTINATION) 'platform=iOS Simulator,name=iPhone 8'
+XCODEBUILD = xcodebuild
+XCODEBUILD_COMPATIBLE = $(shell [ $(XCODEBUILD_VERSION) -gt 7 ] && echo true)
+XCODEBUILD_VERSION = $(shell xcodebuild -version | grep Xcode | sed 's/Xcode[[:space:]]*\([0-9]*\)\..*/\1/')
+
+# directories
+BIN_DIR = $(ROOT_DIR)/bin/iOS/
+BUILD_DIR = Build/
+BUILD_TEMP_DIR = $(BIN_DIR)build_temp/
+DEV_BUILD_DIR = devbuild
+DOC_DIR = $(ROOT_DIR)/doc
+INCLUDE_DIR = $(ROOT_DIR)/code/src/include
+LIBRARY_NAME = $(LIB_BASE_NAME)/
+PRODUCTS_DIR = Products/
+RELEASE_DIR_IPHONE = $(BUILD_DIR)$(PRODUCTS_DIR)Release-$(SDK_IOS)/
+RELEASE_DIR_SIMULATOR = $(BUILD_DIR)$(PRODUCTS_DIR)Release-$(SDK_IOS_SIMULATOR)/
 ROOT_DIR = $(shell git rev-parse --show-toplevel)
 
-LIB_VERSION = $(shell grep 'EXTENSION_VERSION =' ../../code/src/ACPPlacesMonitor.m | sed 's/.*EXTENSION_VERSION.*=.*\@\"\(.*\)\".*/\1/')
+# environments
+WORKSPACE_NAME = $(EXTENSION_NAME).xcworkspace
+PROJECT_FILE = $(EXTENSION_NAME).xcodeproj
+BUILD_SCHEME = $(EXTENSION_NAME)_iOS
+TEST_DERIVED_DATA_PATH = $(EXTENSION_NAME)/out
+TEST = test
 
-ZIP_DIR = AdobeMobileLibrary-apple-$(SDK_VERSION)-src
-COMBINED_SRC_ZIP_DIR = $(ROOT_DIR)/bin/$(ZIP_DIR)
-
-# xcode compatability
-XCODEBUILD_VERSION = $(shell xcodebuild -version | grep Xcode | sed 's/Xcode[[:space:]]*\([0-9]*\)\..*/\1/')
-XCODEBUILD_COMPATIBLE = $(shell [ $(XCODEBUILD_VERSION) -gt 7 ] && echo true)
-
-export EXTENSION_NAME = ACPPlacesMonitor
-SUBMAKE_FILE_PATH=../../tools/makefiles/
+# files
+DOCUMENTATION = documentation.html
+LIB_BASE_NAME = lib$(EXTENSION_NAME)_iOS
+LICENSE_FILE = LICENSE.md
+LIPO_LIB_PHONE = $(BUILD_DIR)$(LIB_BASE_NAME)
+RELEASE_NOTES = ReleaseNotes.txt
+UNIT_TEST_REPORT = $(TEST_DERIVED_DATA_PATH)/build/reports/iosUnitTestReport
+UNIT_TEST_REPORT_HTML = $(UNIT_TEST_REPORT).html
+UNIT_TEST_REPORT_XML = $(UNIT_TEST_REPORT).xml
+FUNCTIONAL_TEST_REPORT = $(TEST_DERIVED_DATA_PATH)/build/reports/FunctionalTests/iosFunctionalTestReport
+FUNCTIONAL_TEST_REPORT_HTML = $(FUNCTIONAL_TEST_REPORT).html
+FUNCTIONAL_TEST_REPORT_XML = $(FUNCTIONAL_TEST_REPORT).xml
 
 # targets
 check-xcode-version:
-# check xcodebuild version (requires version 7 or greater)
+	# check xcodebuild version (requires version 7 or greater)
+	@echo "build version: " $(XCODEBUILD_VERSION)
 ifeq ($(XCODEBUILD_COMPATIBLE),true)
 	@echo "Running make with xcodebuild version:" $(XCODEBUILD_VERSION)
 else
 	$(error Failed to run make, incompatible xcodebuild version (requires v7+))
 endif
 
-all: check-xcode-version clean art
-	make all-no-clean -f $(SUBMAKE_FILE_PATH)makefile.ios
-	#make all-no-clean -f makefile.ios-extension
-	#make all-no-clean -f makefile.tvos
-	#make all-no-clean -f $(SUBMAKE_FILE_PATH)makefile.watchos
+all: check-xcode-version clean arm64 armv7s armv7 x86_64 i386 lipo copy-files
 
-build-shallow: art
-	make build-shallow -f $(SUBMAKE_FILE_PATH)makefile.ios
-	#make build-shallow -f makefile.ios-extension
-	#make build-shallow -f makefile.tvos
-	#make build-shallow -f $(SUBMAKE_FILE_PATH)makefile.watchos
+all-no-clean: arm64 armv7s armv7 i386 x86_64 lipo copy-files
 
-disable-code-coverage:
-	make disable-code-coverage -f $(SUBMAKE_FILE_PATH)makefile.ios
+setup: update-pods
+
+update: update-pods
+
+build: clean build-shallow
+
+test: unit-test
+
+update-pods:
+	(pod repo update && pod update)
+
+build-shallow: check-xcode-version x86_64
+
+armv7:
+	@echo "######################################################################"
+	@echo "### Building: "$@
+	@echo "######################################################################"
+	$(XCODEBUILD) $(RELEASE) \
+		-workspace $(WORKSPACE_NAME) \
+		-scheme $(BUILD_SCHEME) \
+		-sdk $(SDK_IOS) \
+		-arch $(ARCH_ARMV7) \
+		-derivedDataPath $(BUILD_TEMP_DIR) \
+		$(BUILD_IOS_TARGET_VERSION) $(BUILDFLAGS_BITCODE) $(BUILDFLAGS)
+	mv $(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME)-$(ARCH_ARMV7).a
+
+armv7s:
+	@echo "######################################################################"
+	@echo "### Building: "$@
+	@echo "######################################################################"
+	$(XCODEBUILD) $(RELEASE) \
+		-workspace $(WORKSPACE_NAME) \
+		-scheme $(BUILD_SCHEME) \
+		-sdk $(SDK_IOS) \
+		-arch $(ARCH_ARMV7S) \
+		-derivedDataPath $(BUILD_TEMP_DIR) \
+		$(BUILD_IOS_TARGET_VERSION) $(BUILDFLAGS_BITCODE) $(BUILDFLAGS)
+	mv $(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME)-$(ARCH_ARMV7S).a
+
+arm64:
+	@echo "######################################################################"
+	@echo "### Building: "$@
+	@echo "######################################################################"
+	$(XCODEBUILD) $(RELEASE) \
+		-workspace $(WORKSPACE_NAME) \
+		-scheme $(BUILD_SCHEME) \
+		-sdk $(SDK_IOS) \
+		-arch $(ARCH_ARM64) \
+		-derivedDataPath $(BUILD_TEMP_DIR) \
+		$(BUILD_IOS_TARGET_VERSION) $(BUILDFLAGS_BITCODE) $(BUILDFLAGS)
+	mv $(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME)-$(ARCH_ARM64).a
+
+i386:
+	@echo "######################################################################"
+	@echo "### Building: "$@
+	@echo "######################################################################"
+	$(XCODEBUILD) $(RELEASE) \
+	  -workspace $(WORKSPACE_NAME) \
+		-scheme $(BUILD_SCHEME) \
+		-sdk $(SDK_IOS_SIMULATOR) \
+		-arch $(ARCH_I386) \
+		-derivedDataPath $(BUILD_TEMP_DIR) \
+		$(BUILD_IOS_TARGET_VERSION) $(BUILDFLAGS)
+	mv $(BUILD_TEMP_DIR)$(RELEASE_DIR_SIMULATOR)$(LIB_BASE_NAME).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_SIMULATOR)$(LIB_BASE_NAME)-$(ARCH_I386).a
+
+x86_64:
+	@echo "######################################################################"
+	@echo "### Building: "$@
+	@echo "######################################################################"
+	$(XCODEBUILD) $(RELEASE) \
+		-workspace $(WORKSPACE_NAME) \
+		-scheme $(BUILD_SCHEME) \
+		-sdk $(SDK_IOS_SIMULATOR) \
+		-arch $(ARCH_X86_64) \
+		-derivedDataPath $(BUILD_TEMP_DIR) \
+		$(BUILD_IOS_TARGET_VERSION) $(BUILDFLAGS)
+	mv $(BUILD_TEMP_DIR)$(RELEASE_DIR_SIMULATOR)$(LIB_BASE_NAME).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_SIMULATOR)$(LIB_BASE_NAME)-$(ARCH_X86_64).a
+
+lipo:
+	@echo "######################################################################"
+	@echo "### Running: "$@
+	@echo "######################################################################"
+	xcrun lipo -create \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME)-$(ARCH_ARMV7S).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME)-$(ARCH_ARMV7).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_IPHONE)$(LIB_BASE_NAME)-$(ARCH_ARM64).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_SIMULATOR)$(LIB_BASE_NAME)-$(ARCH_X86_64).a \
+		$(BUILD_TEMP_DIR)$(RELEASE_DIR_SIMULATOR)$(LIB_BASE_NAME)-$(ARCH_I386).a \
+		-output $(BIN_DIR)$(LIB_BASE_NAME).a
+	@echo "============================================================"
+	@echo "Universal binary created:"
+	@echo $(LIB_BASE_NAME).a
+	lipo -info $(BIN_DIR)$(LIB_BASE_NAME).a
+	@echo "============================================================"
 
 unit-test:
-	make unit-test -f $(SUBMAKE_FILE_PATH)makefile.ios
-
-functional-test:
-	#make functional-test -f $(SUBMAKE_FILE_PATH)makefile.ios
+	@echo "######################################################################"
+	@echo "### Unit Testing iOS"
+	@echo "######################################################################"
+	$(XCODEBUILD) $(TEST) \
+		-workspace $(WORKSPACE_NAME) \
+		-scheme $(BUILD_SCHEME) \
+		$(TEST_DESTINATION) \
+		$(TEST_DERIVED_DATA)
 
 coverage:
-	make coverage -f $(SUBMAKE_FILE_PATH)makefile.ios
+	@echo "######################################################################"
+	@echo "### Unit Test Coverage iOS"
+	@echo "######################################################################"
+	rm -rf $(TEST_DERIVED_DATA_PATH)/coverage
+	mkdir $(TEST_DERIVED_DATA_PATH)/coverage
 
-release:
-	make all -f $(SUBMAKE_FILE_PATH)makefile.ios
+	# capture coverage from object files
+	lcov --capture --directory \
+		$(TEST_DERIVED_DATA_PATH)/Build/Intermediates.noindex/$(EXTENSION_NAME).build/Test-iphonesimulator/$(EXTENSION_NAME)_iOS.build/ \
+		--output-file $(TEST_DERIVED_DATA_PATH)/coverage/test.info
+
+	# remove non-source results
+	lcov --remove $(TEST_DERIVED_DATA_PATH)/coverage/test.info '*/code/unitTests/*' '*/tools/*' '*/v1/*' '*/usr/include/*' \
+		'/Applications/Xcode.app/*' '*/bourbon-core-cpp/*' '*/bourbon-ios-unit-tests/util/*' \
+		-o $(TEST_DERIVED_DATA_PATH)/coverage/all.info
+
+	# generate html report from results
+	genhtml $(TEST_DERIVED_DATA_PATH)/coverage/all.info \
+		--output-directory $(TEST_DERIVED_DATA_PATH)/reports/coverage
 
 clean:
-	make clean -f $(SUBMAKE_FILE_PATH)makefile.ios
-	make clean -f $(SUBMAKE_FILE_PATH)makefile.ios-extension
-	make clean -f $(SUBMAKE_FILE_PATH)makefile.tvos
-	make clean -f $(SUBMAKE_FILE_PATH)makefile.watchos
-
-internalPod:
-	@echo ${LIB_VERSION}
-	make release
-	sh ../../tools/cocoapod-uploader/spec_new_pod.sh ${LIB_VERSION} ACPPlacesMonitor places-monitor
-
-
-sourcedrop: clean art
 	@echo "######################################################################"
-	@echo "### source drop"
+	@echo "### Cleaning..."
 	@echo "######################################################################"
-
-	make sourcedrop -f $(SUBMAKE_FILE_PATH)makefile.ios
-	make sourcedrop -f $(SUBMAKE_FILE_PATH)makefile.ios-extension
-	make sourcedrop -f $(SUBMAKE_FILE_PATH)makefile.tvos
-	make sourcedrop -f $(SUBMAKE_FILE_PATH)makefile.watchos
-
-	mkdir $(COMBINED_SRC_ZIP_DIR)
-	cp $(ROOT_DIR)/bin/AdobeMobileLibrary-$(SDK_VERSION)-iOS-src.zip $(COMBINED_SRC_ZIP_DIR)
-	cp $(ROOT_DIR)/bin/AdobeMobileLibrary-$(SDK_VERSION)-iOS-extension-src.zip $(COMBINED_SRC_ZIP_DIR)
-	cp $(ROOT_DIR)/bin/AdobeMobileLibrary-$(SDK_VERSION)-tvOS-src.zip $(COMBINED_SRC_ZIP_DIR)
-	cp $(ROOT_DIR)/bin/AdobeMobileLibrary-$(SDK_VERSION)-watchOS-src.zip $(COMBINED_SRC_ZIP_DIR)
-
-	@echo "### Must Supply ZIP Password for Source Drop"
-	cd $(ROOT_DIR)/bin && zip -erXq $(ZIP_DIR).zip $(ZIP_DIR)/
-
-	-rm -rf $(COMBINED_SRC_ZIP_DIR)
-
-art:
-	@echo "                                                                      "
-	@echo "////==============================================================////"
-	@echo "//------------------------------------------------------------------//"
-	@echo "|                                                                    |"
-	@echo "|              %%%%%%%%%     ##%%%%%%       ##      %%               |"
-	@echo "|             ##             ##     %%      ##    %%                 |"
-	@echo "|             ##             ##      %%     ##  %%                   |"
-	@echo "|              %%%%%%%%      ##      %%     ##%%                     |"
-	@echo "|                     ##     ##      %%     ##  %%                   |"
-	@echo "|                     ##     ##     %%      ##    %%                 |"
-	@echo "|             %%%%%%%%%      ##%%%%%%       ##      %%  (v5)         |"
-	@echo "|                                                                    |"
-	@echo "//------------------------------------------------------------------//"
-	@echo "////==============================================================////"
-	@echo "                                                                      "
-	@echo "      .--..--..--..--..--..--.        __________________________      "
-	@echo "    .' \  (\`._   (_)     _   \       |                          |    "
-	@echo "  .'    |  '._)         (_)  |       |  BUILD IT.  BUILD IT!!!  |     "
-	@echo "  \ _.')\      .----..---.   /       |   _______________________|     "
-	@echo "  |(_.'  |    /    .-\-.  \  |       / /                              "
-	@echo "  \     0|    |   ( O| O) | o|      / /                               "
-	@echo "   |  _  |  .--.____.'._.-.  |     /_/                                "
-	@echo "   \ (_) | o         -\` .-\`  |                                      "
-	@echo "    |    \   |\`-._ _ _ _ _\ /                                        "
-	@echo "    \    |   |  \`. |_||_|   |                                        "
-	@echo "    | o  |    \_      \     |     -.   .-.                            "
-	@echo "    |.-.  \     \`--..-'   O |     \`.\`-' .'                         "
-	@echo "  _.'  .' |     \`-.-'      /-.__   ' .-'                             "
-	@echo ".' \`-.\` '.|='=.='=.='=.='=|._/_ \`-'.'                              "
-	@echo "\`-._  \`.  |________/\_____|    \`-.'                                "
-	@echo "   .'   ).| '=' '='\/ '=' |                                           "
-	@echo "   \`._.\`  '---------------'                                         "
-	@echo "           //___\   //___\\                                           "
-	@echo "             ||       ||                                              "
-	@echo "             ||_.-.   ||_.-.                                          "
-	@echo "            (_.--__) (_.--__)                                         "
-	@echo "                                                                      "
-	@echo "______________________________________________________________________"
+	-rm -rf $(BUILD_TEMP_DIR)
+	-rm -rf $(BIN_DIR)$(LIBRARY_NAME)
