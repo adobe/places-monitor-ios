@@ -14,13 +14,38 @@
 // ACPPlacesQueue.h
 //
 
-#import "ACPExtensionEvent.h"
+#import <Foundation/Foundation.h>
+
+@class ACPExtensionEvent;
 
 @interface ACPPlacesQueue : NSObject
 
+/**
+ * @brief Adds an event to the end queue
+ *
+ * @param event the ACPExtensionEvent to be added to the queue
+ */
 - (void) add: (nonnull ACPExtensionEvent*) event;
+
+/**
+ * @brief Retrieve the event from the top of the queue
+ *
+ * @return the ACPExtensionEvent that was at the top of the queue or nil if the queue is empty
+ */
 - (ACPExtensionEvent* _Nonnull) peek;
+
+/**
+ * @brief Retrieve the event from the top of the queue and remove it from the queue
+ *
+ * @return the ACPExtensionEvent that was at the top of the queue or nil if the queue is empty
+ */
 - (ACPExtensionEvent* _Nonnull) poll;
+
+/**
+ * @brief Determine if there is another event in the queue
+ *
+ * @return a bool indicating whether there is another event in the queue
+ */
 - (bool) hasNext;
 
 @end

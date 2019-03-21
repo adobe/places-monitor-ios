@@ -14,27 +14,42 @@
 // ACPPlacesMonitorLocationDelegate.m
 //
 
+#import "ACPCore.h"
+#import "ACPPlaces.h"
 #import "ACPPlacesMonitorConstants.h"
 #import "ACPPlacesMonitorInternal.h"
 #import "ACPPlacesMonitorLocationDelegate.h"
-#import "ACPPlacesMonitorLogger.h"
-#import "ACPPlaces.h"
 
+/**
+ * @class ACPPlacesMonitorLocationDelegate
+ *
+ * @discussion This class implements all the delegate methods in the CLLocationManagerDelegate protocol.
+ *
+ * More information about each method can be found in Apple's documentation:
+ * https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate?language=objc
+ */
 @implementation ACPPlacesMonitorLocationDelegate
 
 #pragma mark - location methods
 - (void) locationManager: (CLLocationManager*) manager didUpdateLocations: (NSArray<CLLocation*>*) locations {
-    ACPPlacesMonitorLogDebug(@"%s - location:%@", __PRETTY_FUNCTION__, [locations lastObject]);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"%s - location:%@", __PRETTY_FUNCTION__, [locations lastObject]]];
     [_parent postLocationUpdate:[locations lastObject]];
 }
 
 - (void) locationManager: (CLLocationManager*) manager didFailWithError: (NSError*) error {
-    ACPPlacesMonitorLogDebug(@"%s - error:%@", __PRETTY_FUNCTION__, error);
+    [ACPCore log:ACPMobileLogLevelWarning
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"%s - error:%@", __PRETTY_FUNCTION__, error]];
 
     // if we get this error, all location activity should end
     if (error.code == kCLErrorDenied) {
         [_parent stopAllMonitoring];
-        ACPPlacesMonitorLogDebug(@"Places functionality has been suspended due to a monitoring failure: %@", error);
+        [ACPCore log:ACPMobileLogLevelDebug
+                 tag:ACPPlacesMonitorExtensionName
+             message:[NSString stringWithFormat:@"Places functionality has been suspended due to a monitoring failure: %@", error]];
+        ACPPlacesMonitorLogDebug();
     }
 }
 
@@ -47,14 +62,18 @@
     }
 
     // post the notification and add the region to our membership list
-    ACPPlacesMonitorLogDebug(@"Entry event detected for region: %@", region);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"Entry event detected for region: %@", region]];
     [_parent postRegionUpdate:region withEventType:ACPRegionEventTypeEntry];
     [_parent addDeviceToRegion:region];
 
     // if this is a beacon region, we should begin ranging when we enter
     if ([region isKindOfClass:[CLBeaconRegion class]]) {
         if ([CLLocationManager isRangingAvailable]) {
-            ACPPlacesMonitorLogDebug(@"Started ranging beacons in region: %@", region);
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:[NSString stringWithFormat:@"Started ranging beacons in region: %@", region]];
             [manager startRangingBeaconsInRegion:(CLBeaconRegion*)region];
         }
     }
@@ -67,29 +86,39 @@
     }
 
     // post the notification and remove the region from our membership list
-    ACPPlacesMonitorLogDebug(@"Exit event detected for region: %@", region);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"Exit event detected for region: %@", region]];
     [_parent postRegionUpdate:region withEventType:ACPRegionEventTypeExit];
     [_parent removeDeviceFromRegion:region];
 
     // if this is a beacon region, we should stop ranging upon exit
     if ([region isKindOfClass:[CLBeaconRegion class]]) {
         if ([CLLocationManager isRangingAvailable]) {
-            ACPPlacesMonitorLogDebug(@"Stopped ranging beacons in region: %@", region);
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:[NSString stringWithFormat:@"Stopped ranging beacons in region: %@", region]];
             [manager stopRangingBeaconsInRegion:(CLBeaconRegion*)region];
         }
     }
 }
 
 - (void) locationManager: (CLLocationManager*) manager didDetermineState: (CLRegionState) state forRegion: (CLRegion*) region {
-    ACPPlacesMonitorLogDebug(@"%s - region:%@ - state:%d", __PRETTY_FUNCTION__, region, state);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"%s - region:%@ - state:%d", __PRETTY_FUNCTION__, region, state]];
 }
 
 - (void) locationManager: (CLLocationManager*) manager monitoringDidFailForRegion: (CLRegion*) region withError: (NSError*) error {
-    ACPPlacesMonitorLogDebug(@"%s - region:%@ - error:%@", __PRETTY_FUNCTION__, region, error);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"%s - region:%@ - error:%@", __PRETTY_FUNCTION__, region, error]];
 }
 
 - (void) locationManager: (CLLocationManager*) manager didStartMonitoringForRegion: (CLRegion*) region {
-    ACPPlacesMonitorLogDebug(@"Started monitoring region: %@", region);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"Started monitoring region: %@", region]];
 }
 #endif
 
@@ -99,26 +128,36 @@
 #pragma mark - ranging methods (beacons)
 #if BEACONS_SUPPORTED
 - (void) locationManager: (CLLocationManager*) manager didRangeBeacons: (NSArray<CLBeacon*>*) beacons inRegion: (CLBeaconRegion*) region {
-    ACPPlacesMonitorLogDebug(@"%s - region:%@ - beacons:%@", __PRETTY_FUNCTION__, region, beacons);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"%s - region:%@ - beacons:%@", __PRETTY_FUNCTION__, region, beacons]];
 }
 
 - (void) locationManager: (CLLocationManager*) manager rangingBeaconsDidFailForRegion: (CLBeaconRegion*) region withError: (NSError*) error {
-    ACPPlacesMonitorLogDebug(@"%s - region:%@ - error:%@", __PRETTY_FUNCTION__, region, error);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"%s - region:%@ - error:%@", __PRETTY_FUNCTION__, region, error]];
 }
 #endif
 
 #pragma mark - configuration delegate methods
 - (void) locationManager: (CLLocationManager*) manager didChangeAuthorizationStatus: (CLAuthorizationStatus) status {
-    ACPPlacesMonitorLogDebug(@"Authorization status changed: %@", [self authStatusString:status]);
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"Authorization status changed: %@", [self authStatusString:status]]];
 }
 
 #pragma mark - other delegate methods
 - (void) locationManagerDidPauseLocationUpdates: (CLLocationManager*) manager {
-    ACPPlacesMonitorLogDebug(@"Location updates paused");
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:@"Location updates paused"];
 }
 
 - (void) locationManagerDidResumeLocationUpdates: (CLLocationManager*) manager {
-    ACPPlacesMonitorLogDebug(@"Location updates resumed");
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:@"Location updates resumed"];
 }
 
 #pragma mark - private methods

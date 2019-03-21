@@ -15,15 +15,17 @@
 //
 
 #import <CoreLocation/CoreLocation.h>
+#import "ACPCore.h"
+#import "ACPExtensionEvent.h"
 #import "ACPPlaces.h"
 #import "ACPPlacesMonitor.h"
 #import "ACPPlacesMonitorConstants.h"
 #import "ACPPlacesMonitorInternal.h"
 #import "ACPPlacesMonitorListener.h"
 #import "ACPPlacesMonitorLocationDelegate.h"
-#import "ACPPlacesMonitorLogger.h"
-#import "ACPExtensionEvent.h"
 #import "ACPPlacesQueue.h"
+
+#pragma mark - ACPPlacesMonitorInternal private properties
 
 @interface ACPPlacesMonitorInternal()
 @property(nonatomic, strong) ACPPlacesQueue* eventQueue;
@@ -37,14 +39,36 @@
 @implementation ACPPlacesMonitorInternal
 
 #pragma mark - ACPExtension methods
+/**
+ * @brief Returns the name of the extension
+ *
+ * @return NSString containing the name of the ACPExtension
+ */
 - (nullable NSString*) name {
     return ACPPlacesMonitorExtensionName;
 }
 
+/**
+ * @brief Returns the version of the extension
+ *
+ * @return NSString containing the version of the ACPExtension
+ */
 - (NSString*) version {
     return ACPPlacesMonitorExtensionVersion;
 }
 
+/**
+ * @brief Initializes the ACPPlacesMonitorInternal object
+ *
+ * @discussion The init method is called by the AEP SDK as part of the extension registration process. This method
+ * performs the following tasks:
+ *   - Registers listeners for various events
+ *   - Loads data from persistence
+ *   - Initializes all class properties
+ *   - Assigns its locationDelegate property as a delegate to the shared CLLocationManager
+ *
+ * @return A new instance of ACPPlacesMonitorInternal
+ */
 - (instancetype) init {
     if (self = [super init]) {
         // register a listener for shared state changes
@@ -54,30 +78,42 @@
                              eventType:ACPPlacesMonitorEventTypeHub
                            eventSource:ACPPlacesMonitorEventSourceSharedState
                                  error:&error]) {
-            ACPPlacesMonitorLogDebug(@"Listener successfully registered for Event Hub shared state events");
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"Listener successfully registered for Event Hub shared state events"];
         } else {
-            ACPPlacesMonitorLogError(@"There was an error registering for Event Hub shared state events: %@",
-                                     error.localizedDescription ? : @"unknown");
+            [ACPCore log:ACPMobileLogLevelError
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"There was an error registering for Event Hub shared state events: %@",
+             error.localizedDescription ? : @"unknown"];
         }
 
         if ([self.api registerListener:[ACPPlacesMonitorListener class]
                              eventType:ACPPlacesMonitorEventTypePlaces
                            eventSource:ACPPlacesMonitorEventSourceResponseContent
                                  error:&error]) {
-            ACPPlacesMonitorLogDebug(@"Listener successfully registered for Places response events");
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"Listener successfully registered for Places response events"];
         } else {
-            ACPPlacesMonitorLogError(@"There was an error registering for Places response events: %@",
-                                     error.localizedDescription ? : @"unknown");
+            [ACPCore log:ACPMobileLogLevelError
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"There was an error registering for Places response events: %@",
+             error.localizedDescription ? : @"unknown"];
         }
 
         if ([self.api registerListener:[ACPPlacesMonitorListener class]
                              eventType:ACPPlacesMonitorEventTypeMonitor
                            eventSource:ACPPlacesMonitorEventSourceRequestContent
                                  error:&error]) {
-            ACPPlacesMonitorLogDebug(@"Listener successfully registered for Places Monitor request events");
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"Listener successfully registered for Places Monitor request events"];
         } else {
-            ACPPlacesMonitorLogError(@"There was an error registering for Places Monitor request events: %@",
-                                     error.localizedDescription ? : @"unknown");
+            [ACPCore log:ACPMobileLogLevelError
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"There was an error registering for Places Monitor request events: %@",
+             error.localizedDescription ? : @"unknown"];
         }
 
         [self loadPersistedValues];
@@ -107,6 +143,9 @@
     return self;
 }
 
+/**
+ * @brief Called when the extension is unregistered with the AEP SDK's EventHub
+ */
 - (void) onUnregister {
     [super onUnregister];
 
@@ -115,6 +154,11 @@
     [[self api] clearSharedEventStates:nil];
 }
 
+/**
+ * @brief Called by the AEP SDK in the event of an unexpected error
+ *
+ * @param error The NSError object containing information about the unexpected error
+ */
 - (void) unexpectedError: (NSError*) error {
     [super unexpectedError:error];
 }
@@ -140,13 +184,17 @@
 
         // NOTE: configuration is mandatory for processing the event, so if shared state is null stop processing events
         if (!configSharedState) {
-            ACPPlacesMonitorLogDebug(@"Waiting to process event, configuration shared state is pending");
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"Waiting to process event, configuration shared state is pending"];
             return;
         }
 
         if (error != nil) {
-            ACPPlacesMonitorLogWarning(@"Could not process event, an error occured while retrieving configuration shared state %ld",
-                                       [error code]);
+            [ACPCore log:ACPMobileLogLevelWarning
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"Could not process event, an error occured while retrieving configuration shared state %ld",
+             [error code]];
             return;
         }
 
@@ -186,7 +234,9 @@
 
     // if the user has denied location services, bail early
     if ([self userHasDeclinedLocationPermission:auth]) {
-        ACPPlacesMonitorLogDebug(@"Permission to use location data has been denied by the user");
+        [ACPCore log:ACPMobileLogLevelDebug
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"Permission to use location data has been denied by the user"];
         return;
     }
 
@@ -269,10 +319,14 @@
         [self resetMonitoredGeofences];
 
         if (nearbyPoi.count) {
-            ACPPlacesMonitorLogDebug(@"Received a new list of POIs from Places: %@", nearbyPoi);
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:[NSString stringWithFormat:@"Received a new list of POIs from Places: %@", nearbyPoi]];
             [self startMonitoringGeoFences:nearbyPoi];
         } else {
-            ACPPlacesMonitorLogDebug(@"Response from Places indicates there are no nearby POIs currently");
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"No nearby Places were retrieved due to a network issue or no POIs near the device location."];
         }
 
         [self removeNonMonitoredRegionsFromUserWithinRegions];
@@ -335,7 +389,9 @@
 
     // make sure the device support monitoring geofences
     if (![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
-        ACPPlacesMonitorLogDebug(@"This device's GPS capabilities do not support monitoring geofence regions");
+        [ACPCore log:ACPMobileLogLevelDebug
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"This device's GPS capabilities do not support monitoring geofence regions"];
         return;
     }
 
@@ -398,14 +454,18 @@
 - (void) startMonitoringSignificantLocationChanges {
     if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
         [_locationManager startMonitoringSignificantLocationChanges];
-        ACPPlacesMonitorLogDebug(@"Significant location collection is enabled");
+        [ACPCore log:ACPMobileLogLevelDebug
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"Significant location collection is enabled"];
     }
 }
 
 - (void) stopMonitoringSignificantLocationChanges {
     if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
         [_locationManager stopMonitoringSignificantLocationChanges];
-        ACPPlacesMonitorLogDebug(@"Significant location collection is disabled");
+        [ACPCore log:ACPMobileLogLevelDebug
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"Significant location collection is disabled"];
     }
 }
 #endif
@@ -419,13 +479,17 @@
     // this method is available on iOS and starting with watchOS3
     if ([_locationManager respondsToSelector:@selector(startUpdatingLocation)]) {
         [_locationManager startUpdatingLocation];
-        ACPPlacesMonitorLogDebug(@"Continuous location collection is enabled");
+        [ACPCore log:ACPMobileLogLevelDebug
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"Continuous location collection is enabled"];
     }
 }
 
 - (void) stopMonitoringContinuousLocationChanges {
     [_locationManager stopUpdatingLocation];
-    ACPPlacesMonitorLogDebug(@"Continuous location collection is disabled");
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:@"Continuous location collection is disabled"];
 }
 #endif
 

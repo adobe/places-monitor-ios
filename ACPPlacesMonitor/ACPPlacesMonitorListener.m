@@ -14,10 +14,10 @@
 // ACPPlacesMonitorListener.m
 //
 
+#import "ACPCore.h"
 #import "ACPPlacesMonitorConstants.h"
 #import "ACPPlacesMonitorInternal.h"
 #import "ACPPlacesMonitorListener.h"
-#import "ACPPlacesMonitorLogger.h"
 
 @implementation ACPPlacesMonitorListener
 
@@ -37,11 +37,18 @@
 #pragma GCC diagnostic pop
 #endif
 
+/**
+ * @brief Called when the AEP EventHub processes an Event for which the ACPPlacesMonitor is listening
+ *
+ * @param event the ACPExtensionEvent processed by the AEP SDK's EventHub
+ */
 - (void) hear: (ACPExtensionEvent*) event {
     ACPPlacesMonitorInternal* parentExtension = [self getParentExtension];
 
     if (parentExtension == nil) {
-        ACPPlacesMonitorLogError(@"The parent extension is nil, unable to process the event: %@", event.eventName);
+        [ACPCore log:ACPMobileLogLevelError
+                 tag:ACPPlacesMonitorExtensionName
+             message:[NSString stringWithFormat:@"The parent extension is nil, unable to process the event: %@", event.eventName]];
         return;
     }
 
@@ -67,7 +74,9 @@
 }
 
 /**
- * Returns the parent extension that owns this listener
+ * @brief Returns the parent extension that owns this listener
+ *
+ * @return an ACPPlacesMonitorInternal object that owns this listener
  */
 - (ACPPlacesMonitorInternal*) getParentExtension {
     ACPPlacesMonitorInternal* parentExtension = nil;

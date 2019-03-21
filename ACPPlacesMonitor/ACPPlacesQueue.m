@@ -14,6 +14,7 @@
 // ACPPlacesQueue.m
 //
 
+#import "ACPExtensionEvent.h"
 #import "ACPPlacesQueue.h"
 
 @interface ACPPlacesQueue()
@@ -45,7 +46,7 @@
 }
 
 - (ACPExtensionEvent*) peek {
-    return [_queuedEvents objectAtIndex:0];
+    return [self hasNext] ? [_queuedEvents objectAtIndex:0] : nil;
 }
 
 - (bool) hasNext {

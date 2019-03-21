@@ -14,12 +14,11 @@
 // ACPPlacesMonitor.m
 //
 
-#import "ACPPlacesMonitor.h"
-#import "ACPPlacesMonitorInternal.h"
-#import "ACPPlacesMonitorConstants.h"
-#import "ACPPlacesMonitorLogger.h"
-#import "ACPExtensionEvent.h"
 #import "ACPCore.h"
+#import "ACPExtensionEvent.h"
+#import "ACPPlacesMonitor.h"
+#import "ACPPlacesMonitorConstants.h"
+#import "ACPPlacesMonitorInternal.h"
 
 @implementation ACPPlacesMonitor
 
@@ -31,15 +30,15 @@
     NSError* error = nil;
 
     if ([ACPCore registerExtension:[ACPPlacesMonitorInternal class] error:&error]) {
-        ACPPlacesMonitorLogDebug(@"The ACPPlacesMonitor extension was successfully registered");
+        [ACPCore log:ACPMobileLogLevelDebug
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"The ACPPlacesMonitor extension was successfully registered"];
     } else {
-        ACPPlacesMonitorLogError(@"An error occurred while attempting to register the ACPPlacesMonitor extension: %@",
-                                 [error localizedDescription] ? : @"unknown error");
+        [ACPCore log:ACPMobileLogLevelError
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"An error occurred while attempting to register the ACPPlacesMonitor extension: %@",
+         [error localizedDescription] ? : @"unknown error"];
     }
-}
-
-+ (void) setLoggingEnabled: (BOOL) loggingEnabled {
-    ACPPlacesMonitorSetDebugLogging(loggingEnabled);
 }
 
 + (void) setPlacesMonitorMode: (ACPPlacesMonitorMode) monitorMode {
@@ -69,16 +68,20 @@
                                                                    error:&eventCreationError];
 
     if (!event) {
-        ACPPlacesMonitorLogWarning(@"An error occurred while creating event '%@': %@", eventName,
-                                   [eventCreationError localizedDescription] ? : @"unknown error");
+        [ACPCore log:ACPMobileLogLevelWarning
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"An error occurred while creating event '%@': %@", eventName,
+         [eventCreationError localizedDescription] ? : @"unknown error"];
         return;
     }
 
     NSError* dispatchError = nil;
 
     if (![ACPCore dispatchEvent:event error:&dispatchError]) {
-        ACPPlacesMonitorLogWarning(@"An error occurred while dispatching event '%@': %@", eventName,
-                                   [dispatchError localizedDescription] ? : @"unknown error");
+        [ACPCore log:ACPMobileLogLevelWarning
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"An error occurred while dispatching event '%@': %@", eventName,
+         [dispatchError localizedDescription] ? : @"unknown error"];
     }
 }
 

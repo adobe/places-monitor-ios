@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2402892E220E48ED007E6D6E /* ACPPlacesMonitorLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 2402892D220E48ED007E6D6E /* ACPPlacesMonitorLogger.m */; };
 		2429BC1E21C1CAD3003DB1A5 /* ACPPlacesMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFA90061FFD9C6E0069ACAC /* ACPPlacesMonitor.m */; };
 		243E663321FF66A400482882 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F04CF4EF1FCF7C060071CD3D /* libc++.tbd */; };
 		2488B3C921C4558F00E160DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0DE361FC36BA000E96578 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -43,8 +42,6 @@
 
 /* Begin PBXFileReference section */
 		039965AAF189DF1496DD10BB /* libPods-ACPPlacesMonitor-iOS-unit-tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ACPPlacesMonitor-iOS-unit-tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2402892A220E3B77007E6D6E /* ACPPlacesMonitorLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACPPlacesMonitorLogger.h; sourceTree = "<group>"; };
-		2402892D220E48ED007E6D6E /* ACPPlacesMonitorLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorLogger.m; sourceTree = "<group>"; };
 		240B0ABC2241985A00D2089C /* ACPPlacesMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACPPlacesMonitor.h; sourceTree = "<group>"; };
 		240B0B162241A76600D2089C /* TestablePlacesMonitorListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestablePlacesMonitorListener.h; path = mocks/TestablePlacesMonitorListener.h; sourceTree = "<group>"; };
 		2429BC1421C1CA38003DB1A5 /* libACPPlacesMonitor_iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libACPPlacesMonitor_iOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -335,8 +332,6 @@
 				24D8BEAA21CC04EF00D168EC /* ACPPlacesMonitorListener.m */,
 				24D8BECB21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.h */,
 				24D8BECC21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.m */,
-				2402892A220E3B77007E6D6E /* ACPPlacesMonitorLogger.h */,
-				2402892D220E48ED007E6D6E /* ACPPlacesMonitorLogger.m */,
 				24D8BE9F21CC002D00D168EC /* ACPPlacesQueue.h */,
 				24D8BEA021CC002D00D168EC /* ACPPlacesQueue.m */,
 			);
@@ -501,7 +496,6 @@
 				2429BC1E21C1CAD3003DB1A5 /* ACPPlacesMonitor.m in Sources */,
 				24D8BECD21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.m in Sources */,
 				24D8BEA421CC00E400D168EC /* ACPPlacesMonitorConstants.m in Sources */,
-				2402892E220E48ED007E6D6E /* ACPPlacesMonitorLogger.m in Sources */,
 				24D8BEAB21CC04EF00D168EC /* ACPPlacesMonitorListener.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

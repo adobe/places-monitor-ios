@@ -75,13 +75,6 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorMode) {
 + (void) setPlacesMonitorMode: (ACPPlacesMonitorMode) monitorMode;
 
 /**
- * @brief Enable or disable logging from the ACPPlacesMonitor Extension
- *
- * @param loggingEnabled set to YES if you want the ACPPlacesMonitor to log to the console
- */
-+ (void) setLoggingEnabled: (BOOL) loggingEnabled;
-
-/**
  * @brief Start tracking the device's location and monitoring their nearby Places
  *
  * @discussion When called, the Places Monitor will do the following:
