@@ -62,9 +62,9 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "F0D206CA1FCF78F10013D96D"
-                     BuildableName = "bourbon-ios-unit-tests.xctest"
-                     BlueprintName = "bourbon-ios-unit-tests"
-                     ReferencedContainer = "container:bourbon-ios.xcodeproj">
+                     BuildableName = "ACPPlacesMonitor-iOS-unit-tests.xctest"
+                     BlueprintName = "ACPPlacesMonitor-iOS-unit-tests"
+                     ReferencedContainer = "container:ACPPlacesMonitor.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
             </ActionContent>

@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @param event an ACPExtensionEvent which needs to be queued
  */
-- (void) queueEvent: (ACPExtensionEvent*) event;
+- (void) queueEvent: (nonnull ACPExtensionEvent*) event;
 
 /**
  * @brief Indicates to the monitor that it should start processing events

@@ -22,8 +22,6 @@
 #import "ACPPlacesMonitorConstantsTests.h"
 #import "TestablePlacesMonitorListener.h"
 
-// private methods exposed for testing
-
 
 @interface ACPPlacesMonitorListenerTests : XCTestCase
 
