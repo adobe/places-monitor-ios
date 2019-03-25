@@ -7,8 +7,6 @@ source 'git@git.corp.adobe.com:dms-mobile/v5-podspecs.git'
 workspace 'ACPPlacesMonitor'
 project 'ACPPlacesMonitor.xcodeproj'
 
-use_frameworks!
-
 target 'ACPPlacesMonitor_iOS' do
   #TODO: change me before release!!!
   # pod 'ACPCore'

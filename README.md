@@ -25,24 +25,35 @@ We look forward to working with you!
 
 ## Environment setup
 
+The first time you clone or download the project, you should run the following from the root directory to setup the environment:
+
 ~~~~
 make setup
 ~~~~
+
+Subsequently, you can make sure your environment is updated by running the following:
 
 ~~~~
 make update
 ~~~~
 
 #### Open the Xcode workspace
-You can open the workspace in Xcode by running the following command:
+
+Open the workspace in Xcode by running the following command from the root directory of the repository:
+
 ~~~
 open ACPPlacesMonitor.xcworkspace
 ~~~
 
 #### Command line integration
+
+From command line you can build the project by running the following command:
+
 ~~~~
 make build
 ~~~~
+
+You can also run the unit test suite from command line:
 
 ~~~~
 make test
