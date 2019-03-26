@@ -12,7 +12,7 @@
 
 //
 // ACPPlacesMonitor.h
-// Places Monitor Version: 0.0.2
+// Places Monitor Version: 1.0.0
 //
 
 #import <Foundation/Foundation.h>
