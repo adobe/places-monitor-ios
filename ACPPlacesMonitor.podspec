@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
                    The Places monitor provides native geolocation functionality, enabling use of the Places product in the V5 Adobe Experience Cloud SDK.
                    DESC
 
-  s.homepage     = "https://git.corp.adobe.com/dms-mobile/v5-podspecs"
+  s.homepage     = "https://github.com/adobe/ACPPlacesMonitor"
 
   s.license      = "Apache License, Version 2.0"
   s.author       = "Adobe Experience Platform SDK Team"
