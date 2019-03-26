@@ -194,7 +194,7 @@
             [ACPCore log:ACPMobileLogLevelWarning
                      tag:ACPPlacesMonitorExtensionName
                  message:[NSString stringWithFormat:@"Could not process event, an error occured while retrieving configuration shared state %ld",
-             [error code]]];
+                          (long)[error code]]];
             return;
         }
 
