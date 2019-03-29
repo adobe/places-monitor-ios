@@ -39,10 +39,6 @@
     _event = [ACPExtensionEvent extensionEventWithName:@"name" type:@"type" source:@"source" data:nil error:nil];
 }
 
-- (void) tearDown {
-    
-}
-
 - (void) testInit {
     XCTAssertNotNil(_queue);
     XCTAssertNotNil(_queue.queuedEvents);

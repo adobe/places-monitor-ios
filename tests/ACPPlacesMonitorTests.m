@@ -40,10 +40,6 @@
     _coreMock = OCMClassMock([ACPCore class]);
 }
 
-- (void) tearDown {
-    
-}
-
 - (void) testExtensionVersion {
     NSString *result = [ACPPlacesMonitor extensionVersion];
     XCTAssertEqual(ACPPlacesMonitorExtensionVersion_Test, result);
