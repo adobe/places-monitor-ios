@@ -59,6 +59,7 @@
 		24C1F986224A8CB6000DF424 /* ACPPlacesMonitorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorTests.m; sourceTree = "<group>"; };
 		24C1F988224A8CEA000DF424 /* ACPPlacesMonitorLocationDelegateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorLocationDelegateTests.m; sourceTree = "<group>"; };
 		24C1F98A224A8D03000DF424 /* ACPPlacesQueueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesQueueTests.m; sourceTree = "<group>"; };
+		24CC5670224ECE20000F4168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24D2E59C21C80E5E002F65DA /* ACPPlaces_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ACPPlaces_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D8BE9F21CC002D00D168EC /* ACPPlacesQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPPlacesQueue.h; sourceTree = "<group>"; };
 		24D8BEA021CC002D00D168EC /* ACPPlacesQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesQueue.m; sourceTree = "<group>"; };
@@ -188,6 +189,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2481A69D224ECEBC009AD09C /* supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				24CC5670224ECE20000F4168 /* Info.plist */,
+			);
+			name = "supporting files";
+			sourceTree = "<group>";
+		};
 		24D8BEC721DEBE2200D168EC /* mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +355,7 @@
 			isa = PBXGroup;
 			children = (
 				24D8BEC721DEBE2200D168EC /* mocks */,
+				2481A69D224ECEBC009AD09C /* supporting files */,
 				2488B3D121C46FBE00E160DD /* ACPPlacesMonitorInternalTests.m */,
 				24D8BEAC21CC12D000D168EC /* ACPPlacesMonitorListenerTests.m */,
 				24C1F988224A8CEA000DF424 /* ACPPlacesMonitorLocationDelegateTests.m */,
@@ -823,6 +833,7 @@
 					"ACPPlacesMonitor/**",
 					"tests/**",
 				);
+				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -856,6 +867,7 @@
 					"ACPPlacesMonitor/**",
 					"tests/**",
 				);
+				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -887,6 +899,7 @@
 					"ACPPlacesMonitor/**",
 					"tests/**",
 				);
+				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
