@@ -14,6 +14,9 @@
 		2488B3C921C4558F00E160DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0DE361FC36BA000E96578 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2488B3CC21C459EA00E160DD /* ACPPlacesMonitorInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 2488B3CB21C459EA00E160DD /* ACPPlacesMonitorInternal.m */; };
 		2488B3D321C4704200E160DD /* ACPPlacesMonitorInternalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2488B3D121C46FBE00E160DD /* ACPPlacesMonitorInternalTests.m */; };
+		24C1F987224A8CB6000DF424 /* ACPPlacesMonitorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C1F986224A8CB6000DF424 /* ACPPlacesMonitorTests.m */; };
+		24C1F989224A8CEA000DF424 /* ACPPlacesMonitorLocationDelegateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C1F988224A8CEA000DF424 /* ACPPlacesMonitorLocationDelegateTests.m */; };
+		24C1F98B224A8D03000DF424 /* ACPPlacesQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C1F98A224A8D03000DF424 /* ACPPlacesQueueTests.m */; };
 		24D8BEA121CC002D00D168EC /* ACPPlacesQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D8BEA021CC002D00D168EC /* ACPPlacesQueue.m */; };
 		24D8BEA421CC00E400D168EC /* ACPPlacesMonitorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D8BEA321CC00E400D168EC /* ACPPlacesMonitorConstants.m */; };
 		24D8BEAB21CC04EF00D168EC /* ACPPlacesMonitorListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D8BEAA21CC04EF00D168EC /* ACPPlacesMonitorListener.m */; };
@@ -53,6 +56,9 @@
 		2488B3CA21C459EA00E160DD /* ACPPlacesMonitorInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACPPlacesMonitorInternal.h; sourceTree = "<group>"; };
 		2488B3CB21C459EA00E160DD /* ACPPlacesMonitorInternal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorInternal.m; sourceTree = "<group>"; };
 		2488B3D121C46FBE00E160DD /* ACPPlacesMonitorInternalTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorInternalTests.m; sourceTree = "<group>"; };
+		24C1F986224A8CB6000DF424 /* ACPPlacesMonitorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorTests.m; sourceTree = "<group>"; };
+		24C1F988224A8CEA000DF424 /* ACPPlacesMonitorLocationDelegateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorLocationDelegateTests.m; sourceTree = "<group>"; };
+		24C1F98A224A8D03000DF424 /* ACPPlacesQueueTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesQueueTests.m; sourceTree = "<group>"; };
 		24D2E59C21C80E5E002F65DA /* ACPPlaces_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ACPPlaces_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D8BE9F21CC002D00D168EC /* ACPPlacesQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPPlacesQueue.h; sourceTree = "<group>"; };
 		24D8BEA021CC002D00D168EC /* ACPPlacesQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesQueue.m; sourceTree = "<group>"; };
@@ -62,7 +68,7 @@
 		24D8BEAA21CC04EF00D168EC /* ACPPlacesMonitorListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorListener.m; sourceTree = "<group>"; };
 		24D8BEAC21CC12D000D168EC /* ACPPlacesMonitorListenerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorListenerTests.m; sourceTree = "<group>"; };
 		24D8BEAE21DE846F00D168EC /* ACPCore_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ACPCore_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		24D8BEC321DEB9AB00D168EC /* ACPPlacesMonitorConstantsTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACPPlacesMonitorConstantsTests.h; sourceTree = "<group>"; };
+		24D8BEC321DEB9AB00D168EC /* ACPPlacesMonitorConstantsTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ACPPlacesMonitorConstantsTests.h; path = mocks/ACPPlacesMonitorConstantsTests.h; sourceTree = "<group>"; };
 		24D8BEC421DEBB6400D168EC /* libAdobeMarketingMobileUnitTestsHarness.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libAdobeMarketingMobileUnitTestsHarness.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		24D8BECB21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ACPPlacesMonitorLocationDelegate.h; sourceTree = "<group>"; };
 		24D8BECC21DED35F00D168EC /* ACPPlacesMonitorLocationDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ACPPlacesMonitorLocationDelegate.m; sourceTree = "<group>"; };
@@ -342,6 +348,9 @@
 				24D8BEC721DEBE2200D168EC /* mocks */,
 				2488B3D121C46FBE00E160DD /* ACPPlacesMonitorInternalTests.m */,
 				24D8BEAC21CC12D000D168EC /* ACPPlacesMonitorListenerTests.m */,
+				24C1F988224A8CEA000DF424 /* ACPPlacesMonitorLocationDelegateTests.m */,
+				24C1F986224A8CB6000DF424 /* ACPPlacesMonitorTests.m */,
+				24C1F98A224A8D03000DF424 /* ACPPlacesQueueTests.m */,
 			);
 			name = ACPPlacesMonitorUnitTests;
 			path = tests;
@@ -503,7 +512,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				24D8BEAD21CC12D000D168EC /* ACPPlacesMonitorListenerTests.m in Sources */,
+				24C1F98B224A8D03000DF424 /* ACPPlacesQueueTests.m in Sources */,
+				24C1F989224A8CEA000DF424 /* ACPPlacesMonitorLocationDelegateTests.m in Sources */,
 				2488B3D321C4704200E160DD /* ACPPlacesMonitorInternalTests.m in Sources */,
+				24C1F987224A8CB6000DF424 /* ACPPlacesMonitorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -809,6 +821,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"ACPPlacesMonitor/**",
+					"tests/**",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -841,6 +854,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"ACPPlacesMonitor/**",
+					"tests/**",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -871,6 +885,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"ACPPlacesMonitor/**",
+					"tests/**",
 				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
