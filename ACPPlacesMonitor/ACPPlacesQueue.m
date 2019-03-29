@@ -32,7 +32,9 @@
 }
 
 - (void) add: (ACPExtensionEvent*) event {
-    [_queuedEvents addObject:event];
+    if (event) {
+        [_queuedEvents addObject:event];
+    }
 }
 
 - (ACPExtensionEvent*) poll {

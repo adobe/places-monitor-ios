@@ -11,17 +11,31 @@
  */
 
 //
-// TestablePlacesMonitorListener.h
+// ACPPlacesMonitorLocationDelegateTests.m
 //
 
-#ifndef TestablePlacesMonitorListener_h
-#define TestablePlacesMonitorListener_h
+#import <XCTest/XCTest.h>
+#import "OCMock.h"
+#import <Foundation/Foundation.h>
+#import "ACPPlacesMonitorLocationDelegate.h"
 
-#import "ACPPlacesMonitorListener.h"
+@interface ACPPlacesMonitorLocationDelegateTests : XCTestCase
 
-@interface ACPPlacesMonitorListener()
-- (nullable instancetype) initForTesting: (ACPExtension*_Nonnull) extension;
-- (ACPPlacesMonitorInternal*_Nonnull) getParentExtension;
+
 @end
 
-#endif /* TestablePlacesMonitorListener_h */
+@implementation ACPPlacesMonitorLocationDelegateTests
+
+- (void) setUp {
+    
+}
+
+- (void) tearDown {
+    
+}
+
+- (void) testInit {
+    
+}
+
+@end
