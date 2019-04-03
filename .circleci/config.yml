@@ -1,0 +1,101 @@
+# iOS CircleCI 2.0 configuration file
+workflows:
+  version: 2
+  setup-build-test:
+    jobs:
+      - setup
+      # - build:
+      #     requires:
+      #       - setup
+      # - test:
+      #     requires:
+      #       - setup
+
+version: 2
+jobs:
+  setup:
+    # Specify the Xcode version to use
+    macos:
+      xcode: "10.0.0" # indicate our selected version of Xcode
+
+    steps:
+      - checkout
+
+      # pre-start the simulator to prevent timeouts
+      - run:
+          name: pre-start simulator
+          command: xcrun instruments -w "iPhone 8 (10.0) [" || true
+
+      # make a workspace directory
+      # - run: mkdir -p ./ci-workspace
+
+      # restore pods related caches
+      - restore_cache:
+          keys:
+            - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Podfile.lock" }}
+            - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}
+            - cocoapods-cache-v1
+            - 1-gems-{{ checksum "Gemfile.lock" }}
+
+      # make sure we're on the right version of cocoapods
+      - run: bundle check || bundle install --path vendor/bundle
+
+      # update CocoaPods
+      - run: (bundle exec pod repo update && bundle exec pod update)
+      # - run: make setup
+
+      # save pods related files
+      - save_cache:
+          # name: Cache Pods
+          key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Podfile.lock" }}
+          paths:
+            - ./Pods
+            - ~/.cocoapods
+
+      # save cocoapods version gem data
+      - save_cache:
+          # name: Cache Cocoapods Version
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      # build
+      - run: make build
+
+      # test
+      - run: make test
+
+
+
+      # persist settings to the workspace
+      # - persist_to_workspace:
+      #     root: ./ci-workspace
+      #     paths:
+      #       - echo-output
+
+  build:
+    # Specify the Xcode version to use
+    macos:
+      xcode: "10.0.0" # indicate our selected version of Xcode
+
+    steps:
+      # - checkout
+
+      # attach the workspace from the setup job
+      # - attach_workspace:
+      #     at: ci-workspace
+      - run: make build
+
+  test:
+    macos:
+      xcode: "10.0.0"
+
+    steps:
+      # - checkout
+
+      # attach the workspace from the setup job
+      # - attach_workspace:
+      #     at: ci-workspace
+
+      # build project
+      - run: make test

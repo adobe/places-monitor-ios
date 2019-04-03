@@ -17,6 +17,7 @@
 #import <XCTest/XCTest.h>
 #import "OCMock.h"
 #import <Foundation/Foundation.h>
+#import "ACPCore.h"
 #import "ACPPlacesMonitorInternal.h"
 #import "ACPPlacesMonitorListener.h"
 #import "ACPPlacesMonitorConstantsTests.h"
@@ -27,6 +28,7 @@
 
 @property (nonatomic, strong) ACPPlacesMonitorListener* listener;
 @property (nonatomic, strong) id parentMock;
+@property (nonatomic, strong) id coreMock;
 @property (nonatomic) int counterProcessEventsCalled;
 @property (nonatomic) int counterQueueEventCalled;
 
@@ -46,6 +48,7 @@
     });
     
     _listener = [[ACPPlacesMonitorListener alloc] initForTesting:_parentMock];
+    _coreMock = OCMClassMock([ACPCore class]);
 }
 
 - (void) tearDown {
@@ -140,6 +143,46 @@
     XCTAssertEqual(1, _counterProcessEventsCalled);
     XCTAssertEqual(1, _counterQueueEventCalled);
 }
+
+- (void) testMonitorRequestContentEventHappy {
+    // setup
+    NSError* error;
+    ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:@"test"
+                                                                    type:ACPPlacesMonitorEventTypeMonitor_Test
+                                                                  source:ACPPlacesMonitorEventSourceRequestContent_Test
+                                                                    data:@ {}
+                                                                   error: &error];
+    
+    // execute
+    [_listener hear:event];
+    
+    // verify
+    XCTAssertEqual(1, _counterProcessEventsCalled);
+    XCTAssertEqual(1, _counterQueueEventCalled);
+}
+
+- (void) testHearNoParentExtension {
+    // setup
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    _listener = [[ACPPlacesMonitorListener alloc] initForTesting:nil];
+#pragma clang diagnostic pop
+    NSError* error;
+    ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:@"test"
+                                                                    type:ACPPlacesMonitorEventTypePlaces_Test
+                                                                  source:ACPPlacesMonitorEventSourceResponseContent_Test
+                                                                    data:@ {}
+                                                                   error: &error];
+    
+    // test
+    [_listener hear:event];
+    
+    // verify
+    OCMVerify([_coreMock log:ACPMobileLogLevelError
+                         tag:ACPPlacesMonitorExtensionName_Test
+                     message:@"The parent extension is nil, unable to process the event: test"]);
+}
+
 
 - (void) testGetParentExtensionHappy {
     XCTAssertEqual(_parentMock, [_listener getParentExtension]);

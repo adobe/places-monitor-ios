@@ -38,7 +38,9 @@ xcuserdata/
 #
 
 Pods/
-Podfile.lock
+
+# removing Podfile.lock so we can cache more efficiently in CircleCI builds
+# Podfile.lock
 
 # fastlane
 #

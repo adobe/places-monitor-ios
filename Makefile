@@ -43,7 +43,7 @@ LIBRARY_NAME = $(LIB_BASE_NAME)/
 PRODUCTS_DIR = Products/
 RELEASE_DIR_IPHONE = $(BUILD_DIR)$(PRODUCTS_DIR)Release-$(SDK_IOS)/
 RELEASE_DIR_SIMULATOR = $(BUILD_DIR)$(PRODUCTS_DIR)Release-$(SDK_IOS_SIMULATOR)/
-ROOT_DIR = $(shell git rev-parse --show-toplevel)
+ROOT_DIR = .
 
 # environments
 WORKSPACE_NAME = $(EXTENSION_NAME).xcworkspace
