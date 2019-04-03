@@ -43,9 +43,9 @@ jobs:
 
       # persist settings to the workspace
       - persist_to_workspace:
-        root: ci-workspace
-        paths:
-          - echo-output
+          root: ci-workspace
+          paths:
+            - echo-output
 
   test:
     macos:
