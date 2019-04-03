@@ -1,15 +1,15 @@
 # iOS CircleCI 2.0 configuration file
 workflows:
   version: 2
-  setup-build--test:
+  setup-build-test:
     jobs:
       - setup
-      - build:
-          requires:
-            - setup
-      - test:
-          requires:
-            - setup
+      # - build:
+      #     requires:
+      #       - setup
+      # - test:
+      #     requires:
+      #       - setup
 
 version: 2
 jobs:
@@ -30,21 +30,29 @@ jobs:
       # - run: mkdir -p ./ci-workspace
 
       # restore pods related caches
-      # - restore_cache:
-      #     keys:
-      #       - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "build/xcode/Podfile.lock" }}
-      #       - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}
-      #       - cocoapods-cache-v1
+      - restore_cache:
+          keys:
+            - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Podfile.lock" }}
+            - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}
+            - cocoapods-cache-v1
 
       # update CocoaPods
       - run: make setup
 
       # save pods related files
-      # - save_cache:
-      #     key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "build/xcode/Podfile.lock" }}
-      #     paths:
-      #       - build/xcode/Pods
-      #       - ~/.cocoapods
+      - save_cache:
+          key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Podfile.lock" }}
+          paths:
+            - ./Pods
+            - ~/.cocoapods
+
+      # build
+      - run: make build
+
+      # test
+      - run: make test
+
+
 
       # persist settings to the workspace
       # - persist_to_workspace:
