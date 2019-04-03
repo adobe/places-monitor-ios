@@ -18,6 +18,7 @@
 #import "OCMock.h"
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "ACPCore.h"
 #import "ACPPlaces.h"
 #import "ACPPlacesMonitor.h"
 #import "ACPPlacesMonitorConstantsTests.h"
@@ -33,6 +34,7 @@
 @property(nonatomic, strong) NSMutableArray<NSString*>* currentlyMonitoredRegions;
 @property(nonatomic, strong) NSMutableArray<NSString*>* userWithinRegions;
 @property(nonatomic) ACPPlacesMonitorMode monitorMode;
+- (void) startMonitoring;
 @end
 
 @interface ACPPlacesMonitorInternalTests : XCTestCase
@@ -40,6 +42,7 @@
 @property (nonatomic, strong) ACPPlacesMonitorInternal* monitor;
 @property (nonatomic, strong) id placesMock;
 @property (nonatomic, strong) id extensionApiMock;
+@property (nonatomic, strong) id coreMock;
 @property (nonatomic, strong) NSDictionary *validPlacesConfig;
 
 @end
@@ -52,6 +55,7 @@
     ACPPlacesMonitorInternal *tempMonitor = [[ACPPlacesMonitorInternal alloc] init];
     _monitor = OCMPartialMock(tempMonitor);
     _placesMock = OCMClassMock([ACPPlaces class]);
+    _coreMock = OCMClassMock([ACPCore class]);
     _extensionApiMock = OCMClassMock([ACPExtensionApi class]);
     NSError *error = nil;
     OCMStub([_extensionApiMock getSharedEventState:ACPPlacesMonitorConfigurationSharedState_Test
@@ -75,8 +79,45 @@
 }
 
 - (void) testInit {
+    // setup
+    NSError *error = nil;
+    OCMStub([_extensionApiMock registerListener:[OCMArg any]
+                                      eventType:[OCMArg any]
+                                    eventSource:[OCMArg any]
+                                          error:[OCMArg setTo:error]]).andReturn(YES);
+    
     // test
     ACPPlacesMonitorInternal *monitor = [[ACPPlacesMonitorInternal alloc] init];
+    
+    // verify
+    XCTAssertNotNil(monitor);
+    XCTAssertNotNil(monitor.eventQueue);
+    XCTAssertEqual(ACPPlacesMonitorModeSignificantChanges, monitor.monitorMode);
+    XCTAssertNotNil(monitor.currentlyMonitoredRegions);
+    XCTAssertEqual(0, monitor.currentlyMonitoredRegions.count);
+    XCTAssertNotNil(monitor.userWithinRegions);
+    XCTAssertEqual(0, monitor.userWithinRegions.count);
+    XCTAssertNotNil(monitor.locationManager);
+    XCTAssertNotNil(monitor.locationManager.delegate);
+    XCTAssertTrue([monitor.locationManager.delegate isKindOfClass:ACPPlacesMonitorLocationDelegate.class]);
+    XCTAssertEqual(100, monitor.locationManager.distanceFilter);
+    XCTAssertEqual(kCLLocationAccuracyBest, monitor.locationManager.desiredAccuracy);
+    XCTAssertEqual(monitor, monitor.locationDelegate.parent);
+}
+
+- (void) testInitFromBackgroundThread {
+    // setup
+    NSError *error = nil;
+    OCMStub([_extensionApiMock registerListener:[OCMArg any]
+                                      eventType:[OCMArg any]
+                                    eventSource:[OCMArg any]
+                                          error:[OCMArg setTo:error]]).andReturn(YES);
+    
+    // test
+    __block ACPPlacesMonitorInternal *monitor;
+    dispatch_sync(dispatch_queue_create("testqueue", 0), ^{
+        monitor = [[ACPPlacesMonitorInternal alloc] init];
+    });
     
     // verify
     XCTAssertNotNil(monitor);
@@ -129,6 +170,24 @@
     XCTAssertEqual(monitor, monitor.locationDelegate.parent);
 }
 
+- (void) testOnUnregister {
+    // test
+    [_monitor onUnregister];
+    
+    // verify
+    OCMVerify([_extensionApiMock clearSharedEventStates:nil]);
+}
+
+- (void) testUnexpectedError {
+    // setup
+    NSError *error = [[NSError alloc] initWithDomain:NSCocoaErrorDomain
+                                                code:kCLErrorLocationUnknown
+                                            userInfo:nil];
+    
+    // test
+    [_monitor unexpectedError:error];
+}
+
 - (void) testQueueEvent {
     // setup
     ACPExtensionEvent *event = [[ACPExtensionEvent alloc] init];
@@ -159,6 +218,64 @@
     XCTAssertNil([_monitor.eventQueue peek]);
 }
 
+- (void) testProcessEventsNoConfig {
+    // setup
+    ACPPlacesMonitorInternal *tempMonitor = [[ACPPlacesMonitorInternal alloc] init];
+    _monitor = OCMPartialMock(tempMonitor);
+    _placesMock = OCMClassMock([ACPPlaces class]);
+    _coreMock = OCMClassMock([ACPCore class]);
+    _extensionApiMock = OCMClassMock([ACPExtensionApi class]);
+    NSError *error = nil;
+    OCMStub([_extensionApiMock getSharedEventState:ACPPlacesMonitorConfigurationSharedState_Test
+                                             event:[OCMArg any]
+                                             error:[OCMArg setTo:error]]).andReturn(@{});
+    OCMStub([_monitor api]).andReturn(_extensionApiMock);
+    
+    NSError* eventCreationError = nil;
+    ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:ACPPlacesMonitorEventNameStart_Test
+                                                                    type:ACPPlacesMonitorEventTypeMonitor_Test
+                                                                  source:ACPPlacesMonitorEventSourceRequestContent_Test
+                                                                    data:nil
+                                                                   error:&eventCreationError];
+    [_monitor.eventQueue add:event];
+    
+    // test
+    [_monitor processEvents];
+    
+    // verify
+    XCTAssertNotNil([_monitor.eventQueue peek]);
+}
+
+- (void) testProcessEventsErrorFromGetSharedState {
+    // setup
+    ACPPlacesMonitorInternal *tempMonitor = [[ACPPlacesMonitorInternal alloc] init];
+    _monitor = OCMPartialMock(tempMonitor);
+    _placesMock = OCMClassMock([ACPPlaces class]);
+    _coreMock = OCMClassMock([ACPCore class]);
+    _extensionApiMock = OCMClassMock([ACPExtensionApi class]);
+    NSError *error = [[NSError alloc] initWithDomain:NSCocoaErrorDomain
+                                                code:kCLErrorLocationUnknown
+                                            userInfo:nil];
+    OCMStub([_extensionApiMock getSharedEventState:ACPPlacesMonitorConfigurationSharedState_Test
+                                             event:[OCMArg any]
+                                             error:[OCMArg setTo:error]]).andReturn(_validPlacesConfig);
+    OCMStub([_monitor api]).andReturn(_extensionApiMock);
+    
+    NSError* eventCreationError = nil;
+    ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:ACPPlacesMonitorEventNameStart_Test
+                                                                    type:ACPPlacesMonitorEventTypeMonitor_Test
+                                                                  source:ACPPlacesMonitorEventSourceRequestContent_Test
+                                                                    data:nil
+                                                                   error:&eventCreationError];
+    [_monitor.eventQueue add:event];
+    
+    // test
+    [_monitor processEvents];
+    
+    // verify
+    XCTAssertNotNil([_monitor.eventQueue peek]);
+}
+
 - (void) testProcessEventsStartEvent {
     // setup
     NSError* eventCreationError = nil;
@@ -174,6 +291,7 @@
     
     // verify
     XCTAssertNil([_monitor.eventQueue peek]);
+    OCMVerify([_monitor startMonitoring]);
 }
 
 - (void) testProcessRegionUpdate {

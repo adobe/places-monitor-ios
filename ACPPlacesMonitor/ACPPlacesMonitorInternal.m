@@ -178,12 +178,12 @@
         ACPExtensionEvent* eventToProcess = [self.eventQueue peek];
 
         NSError* error = nil;
-        NSDictionary* configSharedState = [self.api getSharedEventState:ACPPlacesMonitorConfigurationSharedState
+        NSDictionary* configSharedState = [[self api] getSharedEventState:ACPPlacesMonitorConfigurationSharedState
                                                                   event:eventToProcess
                                                                   error:&error];
 
         // NOTE: configuration is mandatory for processing the event, so if shared state is null stop processing events
-        if (!configSharedState) {
+        if (!configSharedState.count) {
             [ACPCore log:ACPMobileLogLevelDebug
                      tag:ACPPlacesMonitorExtensionName
                  message:@"Waiting to process event, configuration shared state is pending"];
