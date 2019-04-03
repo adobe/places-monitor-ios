@@ -1,16 +1,19 @@
 # iOS CircleCI 2.0 configuration file
 workflows:
   version: 2
-  build-then-test:
+  setup-build--test:
     jobs:
-      - build
+      - setup
+      - build:
+          requires:
+            - setup
       - test:
           requires:
-            - build
+            - setup
 
 version: 2
 jobs:
-  build:
+  setup:
     # Specify the Xcode version to use
     macos:
       xcode: "10.0.0" # indicate our selected version of Xcode
@@ -31,9 +34,6 @@ jobs:
       # update CocoaPods
       - run: make setup
 
-      # build project
-      - run: make build
-
       # save pods related files
       - save_cache:
           key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "build/xcode/Podfile.lock" }}
@@ -47,6 +47,18 @@ jobs:
           paths:
             - echo-output
 
+  build:
+    # Specify the Xcode version to use
+    macos:
+      xcode: "10.0.0" # indicate our selected version of Xcode
+
+    steps:
+      - checkout
+
+      # attach the workspace from the setup job
+      - attach_workspace:
+          at: ci-workspace
+
   test:
     macos:
       xcode: "10.0.0"
@@ -54,9 +66,9 @@ jobs:
     steps:
       - checkout
 
-      # attach the workspace from the build job
+      # attach the workspace from the setup job
       - attach_workspace:
-        at: ci-workspace
+          at: ci-workspace
 
       # build project
       - run: make test
