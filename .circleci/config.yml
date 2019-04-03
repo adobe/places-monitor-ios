@@ -63,6 +63,7 @@ jobs:
       # attach the workspace from the setup job
       # - attach_workspace:
       #     at: ci-workspace
+      - run: make build
 
   test:
     macos:
