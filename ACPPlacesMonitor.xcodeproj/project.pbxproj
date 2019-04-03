@@ -237,7 +237,6 @@
 				7E8713A537B2A1B91BAB19E7 /* Pods-ACPPlacesMonitor_iOS.test.xcconfig */,
 			);
 			path = Pods;
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		C83299381F674238008E2D50 /* Frameworks */ = {
