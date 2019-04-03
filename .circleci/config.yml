@@ -21,31 +21,36 @@ jobs:
     steps:
       - checkout
 
+      # pre-start the simulator to prevent timeouts
+      - run:
+          name: pre-start simulator
+          command: xcrun instruments -w "iPhone 8 (10.0) [" || true
+
       # make a workspace directory
-      - run: mkdir -p ci-workspace
+      # - run: mkdir -p ./ci-workspace
 
       # restore pods related caches
-      - restore_cache:
-          keys:
-            - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "build/xcode/Podfile.lock" }}
-            - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}
-            - cocoapods-cache-v1
+      # - restore_cache:
+      #     keys:
+      #       - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "build/xcode/Podfile.lock" }}
+      #       - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}
+      #       - cocoapods-cache-v1
 
       # update CocoaPods
       - run: make setup
 
       # save pods related files
-      - save_cache:
-          key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "build/xcode/Podfile.lock" }}
-          paths:
-            - build/xcode/Pods
-            - ~/.cocoapods
+      # - save_cache:
+      #     key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "build/xcode/Podfile.lock" }}
+      #     paths:
+      #       - build/xcode/Pods
+      #       - ~/.cocoapods
 
       # persist settings to the workspace
-      - persist_to_workspace:
-          root: ci-workspace
-          paths:
-            - echo-output
+      # - persist_to_workspace:
+      #     root: ./ci-workspace
+      #     paths:
+      #       - echo-output
 
   build:
     # Specify the Xcode version to use
@@ -53,22 +58,22 @@ jobs:
       xcode: "10.0.0" # indicate our selected version of Xcode
 
     steps:
-      - checkout
+      # - checkout
 
       # attach the workspace from the setup job
-      - attach_workspace:
-          at: ci-workspace
+      # - attach_workspace:
+      #     at: ci-workspace
 
   test:
     macos:
       xcode: "10.0.0"
 
     steps:
-      - checkout
+      # - checkout
 
       # attach the workspace from the setup job
-      - attach_workspace:
-          at: ci-workspace
+      # - attach_workspace:
+      #     at: ci-workspace
 
       # build project
       - run: make test
