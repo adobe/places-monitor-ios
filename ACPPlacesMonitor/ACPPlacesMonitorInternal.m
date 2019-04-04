@@ -229,51 +229,6 @@
 #endif
 }
 
-- (void) startMonitoring {
-    CLAuthorizationStatus auth = [CLLocationManager authorizationStatus];
-
-    // if the user has denied location services, bail early
-    if ([self userHasDeclinedLocationPermission:auth]) {
-        [ACPCore log:ACPMobileLogLevelDebug
-                 tag:ACPPlacesMonitorExtensionName
-             message:@"Permission to use location data has been denied by the user"];
-        return;
-    }
-
-    // if the user hasn't been asked yet, we need to ask for permission to use location
-    if (auth == kCLAuthorizationStatusNotDetermined) {
-        if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [_locationManager requestAlwaysAuthorization];
-        }
-    }
-
-    [self beginTrackingLocation];
-}
-
-- (void) beginTrackingLocation {
-#if CONTINUOUS_LOCATION_SUPPORTED
-
-    if (_monitorMode & ACPPlacesMonitorModeContinuous) {
-        [self startMonitoringContinuousLocationChanges];
-    } else {
-        [self stopMonitoringContinuousLocationChanges];
-    }
-
-#endif
-
-#if SIGNIFICANT_LOCATION_CHANGE_MONITORING_SUPPORTED
-
-    if (_monitorMode & ACPPlacesMonitorModeSignificantChanges) {
-        [self startMonitoringSignificantLocationChanges];
-    } else {
-        [self stopMonitoringSignificantLocationChanges];
-    }
-
-#endif
-
-    [self updateLocationNow];
-}
-
 - (void) addDeviceToRegion: (CLRegion*) region {
     [_userWithinRegions addObject:region.identifier];
     [self updateUserWithinRegionsInPersistence];
@@ -379,6 +334,51 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     // a call to refresh how we are monitoring based on the new mode
+    [self beginTrackingLocation];
+}
+
+- (void) beginTrackingLocation {
+#if CONTINUOUS_LOCATION_SUPPORTED
+    
+    if (_monitorMode & ACPPlacesMonitorModeContinuous) {
+        [self startMonitoringContinuousLocationChanges];
+    } else {
+        [self stopMonitoringContinuousLocationChanges];
+    }
+    
+#endif
+    
+#if SIGNIFICANT_LOCATION_CHANGE_MONITORING_SUPPORTED
+    
+    if (_monitorMode & ACPPlacesMonitorModeSignificantChanges) {
+        [self startMonitoringSignificantLocationChanges];
+    } else {
+        [self stopMonitoringSignificantLocationChanges];
+    }
+    
+#endif
+    
+    [self updateLocationNow];
+}
+
+- (void) startMonitoring {
+    CLAuthorizationStatus auth = [CLLocationManager authorizationStatus];
+    
+    // if the user has denied location services, bail early
+    if ([self userHasDeclinedLocationPermission:auth]) {
+        [ACPCore log:ACPMobileLogLevelDebug
+                 tag:ACPPlacesMonitorExtensionName
+             message:@"Permission to use location data has been denied by the user"];
+        return;
+    }
+    
+    // if the user hasn't been asked yet, we need to ask for permission to use location
+    if (auth == kCLAuthorizationStatusNotDetermined) {
+        if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [_locationManager requestAlwaysAuthorization];
+        }
+    }
+    
     [self beginTrackingLocation];
 }
 

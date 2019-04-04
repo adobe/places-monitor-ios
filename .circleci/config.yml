@@ -11,7 +11,7 @@ jobs:
 
       # pre-start the simulator to prevent timeouts
       - run:
-          name: pre-start simulator
+          name: Pre-start Simulator
           command: xcrun instruments -w "iPhone 8 (10.0) [" || true
 
       # make a workspace directory
@@ -26,10 +26,14 @@ jobs:
             - 1-gems-{{ checksum "Gemfile.lock" }}
 
       # make sure we're on the right version of cocoapods
-      - run: bundle check || bundle install --path vendor/bundle
+      - run:
+          name: Verify Cocoapods Version
+          command: bundle check || bundle install --path vendor/bundle
 
       # update CocoaPods
-      - run: (bundle exec pod repo update && bundle exec pod update)
+      - run:
+          name: Update Cocoapods
+          command: (bundle exec pod repo update && bundle exec pod update)
 
       # save pods related files
       - save_cache:
@@ -47,7 +51,11 @@ jobs:
             - vendor/bundle
 
       # build
-      - run: make build
+      - run:
+          name: Building ACPPlacesMonitor
+          command: make build
 
       # test
-      - run: make test
+      - run:
+          name: Unit Testing ACPPlacesMonitor
+          command: make test
