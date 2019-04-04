@@ -1,19 +1,7 @@
 # iOS CircleCI 2.0 configuration file
-workflows:
-  version: 2
-  setup-build-test:
-    jobs:
-      - setup
-      # - build:
-      #     requires:
-      #       - setup
-      # - test:
-      #     requires:
-      #       - setup
-
 version: 2
 jobs:
-  setup:
+  build:
     # Specify the Xcode version to use
     macos:
       xcode: "10.0.0" # indicate our selected version of Xcode
@@ -42,7 +30,6 @@ jobs:
 
       # update CocoaPods
       - run: (bundle exec pod repo update && bundle exec pod update)
-      # - run: make setup
 
       # save pods related files
       - save_cache:
@@ -63,39 +50,4 @@ jobs:
       - run: make build
 
       # test
-      - run: make test
-
-
-
-      # persist settings to the workspace
-      # - persist_to_workspace:
-      #     root: ./ci-workspace
-      #     paths:
-      #       - echo-output
-
-  build:
-    # Specify the Xcode version to use
-    macos:
-      xcode: "10.0.0" # indicate our selected version of Xcode
-
-    steps:
-      # - checkout
-
-      # attach the workspace from the setup job
-      # - attach_workspace:
-      #     at: ci-workspace
-      - run: make build
-
-  test:
-    macos:
-      xcode: "10.0.0"
-
-    steps:
-      # - checkout
-
-      # attach the workspace from the setup job
-      # - attach_workspace:
-      #     at: ci-workspace
-
-      # build project
       - run: make test
