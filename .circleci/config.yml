@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.4
 jobs:
   build:
     # Specify the Xcode version to use
@@ -57,6 +59,8 @@ jobs:
           command: make test
 
       # code coverage
-      - run:
-          name: Upload to Codecov
-          command: bash <(curl -s https://codecov.io/bash)
+      - codecov/upload:
+          file: "./ACPPlacesMonitor/out/Logs/Test/Test-ACPPlacesMonitor_iOS-*.xcresult/1_Test/action.xccovreport"
+
+      - codecov/upload:
+          file: "./ACPPlacesMonitor/out/Build/Products/Test-iphonesimulator/ACPPlacesMonitor-iOS-unit-tests.xctest"
