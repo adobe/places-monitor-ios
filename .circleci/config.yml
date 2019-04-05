@@ -59,8 +59,5 @@ jobs:
           command: make test
 
       # code coverage
-      - codecov/upload:
-          file: "./ACPPlacesMonitor/out/Logs/Test/Test-ACPPlacesMonitor_iOS-*.xcresult/1_Test/action.xccovreport"
-
-      - codecov/upload:
-          file: "./ACPPlacesMonitor/out/Build/Products/Test-iphonesimulator/ACPPlacesMonitor-iOS-unit-tests.xctest"
+      - codecov/upload
+          
