@@ -59,5 +59,7 @@ jobs:
           command: make test
 
       # code coverage
-      - codecov/upload
-          
+      - run:
+          name: Upload Code Coverage Report
+          command: bash <(curl -s https://codecov.io/bash) -D -c "./ACPPlacesMonitor/out"
+      # - codecov/upload

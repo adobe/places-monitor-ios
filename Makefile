@@ -23,7 +23,7 @@ BUILDFLAGS = GCC_TREAT_WARNINGS_AS_ERRORS=YES GCC_GENERATE_DEBUGGING_SYMBOLS=NO 
 CORE_LIB_NAME = lib$(EXTENSION_NAME)_iOS.a
 DERIVED_DATA = -derivedDataPath
 DESTINATION = -destination
-ENABLE_COVERAGE = -enableCodeCoverage=YES
+ENABLE_COVERAGE = -enableCodeCoverage YES
 EXTENSION_NAME = ACPPlacesMonitor
 RELEASE = -configuration Release
 SDK_VERSION = $(shell grep 'NSString\* const ACPPlacesMonitorExtensionVersion' $(ROOT_DIR)/ACPPlacesMonitor/ACPPlacesMonitorConstants.m | sed 's/.*NSString\* const ACPPlacesMonitorExtensionVersion.*=.*\@\"\(.*\)\".*/\1/')
@@ -158,7 +158,7 @@ x86_64:
 		-scheme $(BUILD_SCHEME) \
 		-sdk $(SDK_IOS_SIMULATOR) \
 		-arch $(ARCH_X86_64) \
-		-derivedDataPath $(BUILD_TEMP_DIR) \
+		-derivedDataPath $(BUILD_TEMP_DIR) \		
 		$(BUILD_IOS_TARGET_VERSION) $(BUILDFLAGS)
 	mv $(BUILD_TEMP_DIR)$(RELEASE_DIR_SIMULATOR)$(LIB_BASE_NAME).a \
 		$(BUILD_TEMP_DIR)$(RELEASE_DIR_SIMULATOR)$(LIB_BASE_NAME)-$(ARCH_X86_64).a
