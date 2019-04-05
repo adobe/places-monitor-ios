@@ -1,5 +1,6 @@
-# iOS CircleCI 2.0 configuration file
-version: 2
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     # Specify the Xcode version to use
@@ -13,9 +14,6 @@ jobs:
       - run:
           name: Pre-start Simulator
           command: xcrun instruments -w "iPhone 8 (10.0) [" || true
-
-      # make a workspace directory
-      # - run: mkdir -p ./ci-workspace
 
       # restore pods related caches
       - restore_cache:
@@ -59,3 +57,7 @@ jobs:
       - run:
           name: Unit Testing ACPPlacesMonitor
           command: make test
+
+      # code coverage
+      - codecov/upload:
+          file: {{ coverage_report_filepath }}
