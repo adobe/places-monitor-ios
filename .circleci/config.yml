@@ -1,11 +1,9 @@
 version: 2.1
-orbs:
-  codecov: codecov/codecov@1.0.4
 jobs:
   build:
     # Specify the Xcode version to use
     macos:
-      xcode: "10.0.0" # indicate our selected version of Xcode
+      xcode: "10.0.0"
 
     steps:
       - checkout
@@ -28,6 +26,12 @@ jobs:
           name: Verify Cocoapods Version
           command: bundle check || bundle install --path vendor/bundle
 
+      # save cocoapods version gem data
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
       # update CocoaPods
       - run:
           name: Update Cocoapods
@@ -35,18 +39,10 @@ jobs:
 
       # save pods related files
       - save_cache:
-          # name: Cache Pods
           key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Podfile.lock" }}
           paths:
             - ./Pods
             - ~/.cocoapods
-
-      # save cocoapods version gem data
-      - save_cache:
-          # name: Cache Cocoapods Version
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
 
       # build
       - run:
@@ -62,4 +58,3 @@ jobs:
       - run:
           name: Upload Code Coverage Report
           command: bash <(curl -s https://codecov.io/bash) -c -D "./ACPPlacesMonitor/out"
-      # - codecov/upload
