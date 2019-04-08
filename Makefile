@@ -23,6 +23,7 @@ BUILDFLAGS = GCC_TREAT_WARNINGS_AS_ERRORS=YES GCC_GENERATE_DEBUGGING_SYMBOLS=NO 
 CORE_LIB_NAME = lib$(EXTENSION_NAME)_iOS.a
 DERIVED_DATA = -derivedDataPath
 DESTINATION = -destination
+ENABLE_COVERAGE = -enableCodeCoverage YES
 EXTENSION_NAME = ACPPlacesMonitor
 RELEASE = -configuration Release
 SDK_VERSION = $(shell grep 'NSString\* const ACPPlacesMonitorExtensionVersion' $(ROOT_DIR)/ACPPlacesMonitor/ACPPlacesMonitorConstants.m | sed 's/.*NSString\* const ACPPlacesMonitorExtensionVersion.*=.*\@\"\(.*\)\".*/\1/')
@@ -187,7 +188,8 @@ unit-test:
 		-workspace $(WORKSPACE_NAME) \
 		-scheme $(BUILD_SCHEME) \
 		$(TEST_DESTINATION) \
-		$(TEST_DERIVED_DATA)
+		$(TEST_DERIVED_DATA) \
+		$(ENABLE_COVERAGE)
 
 coverage:
 	@echo "######################################################################"
