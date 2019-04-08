@@ -1,10 +1,9 @@
-# iOS CircleCI 2.0 configuration file
-version: 2
+version: 2.1
 jobs:
   build:
     # Specify the Xcode version to use
     macos:
-      xcode: "10.0.0" # indicate our selected version of Xcode
+      xcode: "10.0.0"
 
     steps:
       - checkout
@@ -13,9 +12,6 @@ jobs:
       - run:
           name: Pre-start Simulator
           command: xcrun instruments -w "iPhone 8 (10.0) [" || true
-
-      # make a workspace directory
-      # - run: mkdir -p ./ci-workspace
 
       # restore pods related caches
       - restore_cache:
@@ -30,6 +26,12 @@ jobs:
           name: Verify Cocoapods Version
           command: bundle check || bundle install --path vendor/bundle
 
+      # save cocoapods version gem data
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
       # update CocoaPods
       - run:
           name: Update Cocoapods
@@ -37,18 +39,10 @@ jobs:
 
       # save pods related files
       - save_cache:
-          # name: Cache Pods
           key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Podfile.lock" }}
           paths:
             - ./Pods
             - ~/.cocoapods
-
-      # save cocoapods version gem data
-      - save_cache:
-          # name: Cache Cocoapods Version
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
 
       # build
       - run:
@@ -59,3 +53,8 @@ jobs:
       - run:
           name: Unit Testing ACPPlacesMonitor
           command: make test
+
+      # code coverage
+      - run:
+          name: Upload Code Coverage Report
+          command: bash <(curl -s https://codecov.io/bash) -c -D "./ACPPlacesMonitor/out"

@@ -11,11 +11,14 @@ Table of Contents
 
 ## About this project
 
-The ACPPlacesMonitor for iOS library is used to manage the integration between iOS's CLLocationManager and the [ACPPlaces extension](https://cocoapods.org/pods/ACPPlaces) for the [Adobe Experience Platform SDK](https://github.com/Adobe-Marketing-Cloud/acp-sdks).
+The ACPPlacesMonitor for iOS is used to manage the integration between iOS's CLLocationManager and the [ACPPlaces extension](https://cocoapods.org/pods/ACPPlaces) for the [Adobe Experience Platform SDK](https://github.com/Adobe-Marketing-Cloud/acp-sdks).
 
 ## Current version
 
-[![Cocoapods](https://img.shields.io/cocoapods/v/ACPPlacesMonitor.svg?color=orange&label=ACPPlacesMonitor&logo=apple&logoColor=white&style=flat-square)](https://cocoapods.org/pods/ACPPlacesMonitor)
+[![Cocoapods](https://img.shields.io/cocoapods/v/ACPPlacesMonitor.svg?color=orange&label=ACPPlacesMonitor&logo=apple&logoColor=white)](https://cocoapods.org/pods/ACPPlacesMonitor)
+[![CircleCI](https://img.shields.io/circleci/project/github/adobe/places-monitor-ios/master.svg?logo=circleci)](https://circleci.com/gh/adobe/workflows/places-monitor-ios)
+[![Code Coverage](https://img.shields.io/codecov/c/github/adobe/places-monitor-ios/master.svg?logo=codecov)](https://codecov.io/gh/sbenedicadb/places-monitor-ios/branch/master)
+
 
 ## Contributing to the project
 
@@ -58,3 +61,6 @@ You can also run the unit test suite from command line:
 ~~~~
 make test
 ~~~~
+
+## Licensing
+This project is licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.
