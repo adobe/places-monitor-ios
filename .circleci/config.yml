@@ -61,5 +61,5 @@ jobs:
       # code coverage
       - run:
           name: Upload Code Coverage Report
-          command: bash <(curl -s https://codecov.io/bash) -D -c "./ACPPlacesMonitor/out"
+          command: bash <(curl -s https://codecov.io/bash) -c -D "./ACPPlacesMonitor/out"
       # - codecov/upload
