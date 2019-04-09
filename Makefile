@@ -23,6 +23,7 @@ BUILDFLAGS = GCC_TREAT_WARNINGS_AS_ERRORS=YES GCC_GENERATE_DEBUGGING_SYMBOLS=NO 
 CORE_LIB_NAME = lib$(EXTENSION_NAME)_iOS.a
 DERIVED_DATA = -derivedDataPath
 DESTINATION = -destination
+ENABLE_COVERAGE = -enableCodeCoverage YES
 EXTENSION_NAME = ACPPlacesMonitor
 RELEASE = -configuration Release
 SDK_VERSION = $(shell grep 'NSString\* const ACPPlacesMonitorExtensionVersion' $(ROOT_DIR)/ACPPlacesMonitor/ACPPlacesMonitorConstants.m | sed 's/.*NSString\* const ACPPlacesMonitorExtensionVersion.*=.*\@\"\(.*\)\".*/\1/')
@@ -43,7 +44,7 @@ LIBRARY_NAME = $(LIB_BASE_NAME)/
 PRODUCTS_DIR = Products/
 RELEASE_DIR_IPHONE = $(BUILD_DIR)$(PRODUCTS_DIR)Release-$(SDK_IOS)/
 RELEASE_DIR_SIMULATOR = $(BUILD_DIR)$(PRODUCTS_DIR)Release-$(SDK_IOS_SIMULATOR)/
-ROOT_DIR = $(shell git rev-parse --show-toplevel)
+ROOT_DIR = .
 
 # environments
 WORKSPACE_NAME = $(EXTENSION_NAME).xcworkspace
@@ -187,7 +188,8 @@ unit-test:
 		-workspace $(WORKSPACE_NAME) \
 		-scheme $(BUILD_SCHEME) \
 		$(TEST_DESTINATION) \
-		$(TEST_DERIVED_DATA)
+		$(TEST_DERIVED_DATA) \
+		$(ENABLE_COVERAGE)
 
 coverage:
 	@echo "######################################################################"
