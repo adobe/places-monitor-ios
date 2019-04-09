@@ -1,0 +1,60 @@
+version: 2.1
+jobs:
+  build:
+    # Specify the Xcode version to use
+    macos:
+      xcode: "10.0.0"
+
+    steps:
+      - checkout
+
+      # pre-start the simulator to prevent timeouts
+      - run:
+          name: Pre-start Simulator
+          command: xcrun instruments -w "iPhone 8 (10.0) [" || true
+
+      # restore pods related caches
+      - restore_cache:
+          keys:
+            - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Podfile.lock" }}
+            - cocoapods-cache-v1-{{ arch }}-{{ .Branch }}
+            - cocoapods-cache-v1
+            - 1-gems-{{ checksum "Gemfile.lock" }}
+
+      # make sure we're on the right version of cocoapods
+      - run:
+          name: Verify Cocoapods Version
+          command: bundle check || bundle install --path vendor/bundle
+
+      # save cocoapods version gem data
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      # update CocoaPods
+      - run:
+          name: Update Cocoapods
+          command: (bundle exec pod repo update && bundle exec pod update)
+
+      # save pods related files
+      - save_cache:
+          key: cocoapods-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Podfile.lock" }}
+          paths:
+            - ./Pods
+            - ~/.cocoapods
+
+      # build
+      - run:
+          name: Building ACPPlacesMonitor
+          command: make build
+
+      # test
+      - run:
+          name: Unit Testing ACPPlacesMonitor
+          command: make test
+
+      # code coverage
+      - run:
+          name: Upload Code Coverage Report
+          command: bash <(curl -s https://codecov.io/bash) -c -D "./ACPPlacesMonitor/out" -y "./.circleci"
