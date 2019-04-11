@@ -23,8 +23,8 @@ coverage:
         paths: null
 
   ignore:
-    - "tests/**/*"
-    - "tests/.*"
+    - "./tests/**/*"
+    - "./tests/.*"
 
 parsers:
   gcov:
