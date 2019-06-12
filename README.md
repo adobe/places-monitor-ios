@@ -22,7 +22,9 @@ The ACPPlacesMonitor for iOS is used to manage the integration between iOS's CLL
 
 ## Contributing to the project
 
-Looking to contribute to this project?  Please review our [Contributing guidelines](.github/CONTRIBUTING.md), prior to opening a pull request.  We look forward to working with you.
+Looking to contribute to this project?  Please review our [Contributing guidelines](.github/CONTRIBUTING.md) prior to opening a pull request.  
+
+We look forward to working with you!
 
 ## Environment setup
 
