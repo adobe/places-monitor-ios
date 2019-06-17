@@ -1,3 +1,6 @@
+Unreleased
+- Update to contributing guidelines and readme 
+
 1.0.1 (9 Apr, 2019)
 - Added full unit test coverage
 - CI integration (CircleCI)
