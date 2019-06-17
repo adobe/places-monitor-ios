@@ -22,7 +22,7 @@ The ACPPlacesMonitor for iOS is used to manage the integration between iOS's CLL
 
 ## Contributing to the project
 
-Adobe is not currently accepting external contributions for this project, as it is still in the process of being fully set up. It is our desire to open this project to external contributions in the near future.
+Looking to contribute to this project?  Please review our [Contributing guidelines](.github/CONTRIBUTING.md) prior to opening a pull request.  
 
 We look forward to working with you!
 
