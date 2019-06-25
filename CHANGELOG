@@ -1,5 +1,6 @@
-Unreleased
-- Update to contributing guidelines and readme 
+1.0.2 (25 Jun, 2019)
+- GitHub issue #25 - update logs to be more helpful
+- Update to contributing guidelines and readme, now accepting pull requests!
 
 1.0.1 (9 Apr, 2019)
 - Added full unit test coverage

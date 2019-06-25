@@ -12,7 +12,7 @@
 
 //
 // ACPPlacesMonitor.h
-// Places Monitor Version: 1.0.1
+// Places Monitor Version: 1.0.2
 //
 
 #import <Foundation/Foundation.h>
@@ -82,6 +82,10 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorMode) {
  * 2. If available (based on device capabilities), the Places Monitor will begin tracking the user's location
  *    based on the currently set ACPPlacesMonitorMode.  By default, the monitor will use:
  *    ACPPlacesMonitorModeSignificantChanges.
+ *
+ * This method should be called as soon as the application needs access to the device's location. If access is needed
+ * immediately as the app is launching, call this method from the callback provided as a parameter to the "start"
+ * method in the ACPCore class.
  */
 + (void) start;
 
