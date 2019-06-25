@@ -219,7 +219,7 @@
     [_locationDelegate locationManager:_manager didDetermineState:CLRegionStateInside forRegion:_fakeRegion];
     
     // verify
-    OCMVerify([_coreMock log:ACPMobileLogLevelDebug
+    OCMVerify([_coreMock log:ACPMobileLogLevelVerbose
                          tag:ACPPlacesMonitorExtensionName_Test
                      message:[OCMArg any]]);
 }
@@ -229,7 +229,7 @@
     [_locationDelegate locationManager:_manager monitoringDidFailForRegion:_fakeRegion withError:_fakeErrorLocationUnknown];
     
     // verify
-    OCMVerify([_coreMock log:ACPMobileLogLevelDebug
+    OCMVerify([_coreMock log:ACPMobileLogLevelWarning
                          tag:ACPPlacesMonitorExtensionName_Test
                      message:[OCMArg any]]);
 }
