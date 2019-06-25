@@ -78,7 +78,7 @@
                              eventType:ACPPlacesMonitorEventTypeHub
                            eventSource:ACPPlacesMonitorEventSourceSharedState
                                  error:&error]) {
-            [ACPCore log:ACPMobileLogLevelDebug
+            [ACPCore log:ACPMobileLogLevelVerbose
                      tag:ACPPlacesMonitorExtensionName
                  message:@"Listener successfully registered for Event Hub shared state events"];
         } else {
@@ -92,7 +92,7 @@
                              eventType:ACPPlacesMonitorEventTypePlaces
                            eventSource:ACPPlacesMonitorEventSourceResponseContent
                                  error:&error]) {
-            [ACPCore log:ACPMobileLogLevelDebug
+            [ACPCore log:ACPMobileLogLevelVerbose
                      tag:ACPPlacesMonitorExtensionName
                  message:@"Listener successfully registered for Places response events"];
         } else {
@@ -106,7 +106,7 @@
                              eventType:ACPPlacesMonitorEventTypeMonitor
                            eventSource:ACPPlacesMonitorEventSourceRequestContent
                                  error:&error]) {
-            [ACPCore log:ACPMobileLogLevelDebug
+            [ACPCore log:ACPMobileLogLevelVerbose
                      tag:ACPPlacesMonitorExtensionName
                  message:@"Listener successfully registered for Places Monitor request events"];
         } else {
@@ -137,6 +137,10 @@
 
         if ([self.locationManager respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)]) {
             self.locationManager.allowsBackgroundLocationUpdates = [self backgroundLocationUpdatesEnabledInBundle];
+        } else {
+            [ACPCore log:ACPMobileLogLevelDebug
+                     tag:ACPPlacesMonitorExtensionName
+                 message:@"Background location updates are not enabled for this app. If you are doing background region monitoring, you must enable this capability."];
         }
     }
 
@@ -417,9 +421,15 @@
         [_currentlyMonitoredRegions addObject:currentCLRegion.identifier];
 
         // send an entry event if we had one and we know the user was not already in the region
-        if (currentRegion.userIsWithin && ![_userWithinRegions containsObject:currentRegion.identifier]) {
-            [self addDeviceToRegion:currentCLRegion];
-            [ACPPlaces processRegionEvent:currentCLRegion forRegionEventType:ACPRegionEventTypeEntry];
+        if (currentRegion.userIsWithin) {
+            if ([_userWithinRegions containsObject:currentRegion.identifier]) {
+                [ACPCore log:ACPMobileLogLevelDebug
+                         tag:ACPPlacesMonitorExtensionName
+                     message:[NSString stringWithFormat:@"Suppressing an entry event for region %@, the device is already known to be in this region", currentRegion.identifier]];
+            } else {
+                [self addDeviceToRegion:currentCLRegion];
+                [ACPPlaces processRegionEvent:currentCLRegion forRegionEventType:ACPRegionEventTypeEntry];
+            }
         }
     }
 
