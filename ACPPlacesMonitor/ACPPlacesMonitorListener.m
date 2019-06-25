@@ -51,6 +51,10 @@
              message:[NSString stringWithFormat:@"The parent extension is nil, unable to process the event: %@", event.eventName]];
         return;
     }
+    
+    [ACPCore log:ACPMobileLogLevelVerbose
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"ACPPlacesMonitor heard event '%@' (type:%@ - source:%@)", event.eventName, event.eventType, event.eventSource]];
 
     // handle SharedState events
     if ([event.eventType isEqualToString:ACPPlacesMonitorEventTypeHub] && [event.eventSource isEqualToString:ACPPlacesMonitorEventSourceSharedState]) {

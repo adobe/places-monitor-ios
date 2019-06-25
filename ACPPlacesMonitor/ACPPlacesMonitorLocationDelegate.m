@@ -33,7 +33,7 @@
 - (void) locationManager: (CLLocationManager*) manager didFailWithError: (NSError*) error {
     [ACPCore log:ACPMobileLogLevelWarning
              tag:ACPPlacesMonitorExtensionName
-         message:[NSString stringWithFormat:@"%s - error:%@", __PRETTY_FUNCTION__, error]];
+         message:[NSString stringWithFormat:@"%s - error:%@. Have you set values for NSLocationWhenInUseUsageDescription and NSLocationAlwaysAndWhenInUseUsageDescription in your Info.plist file?", __PRETTY_FUNCTION__, error]];
 
     // if we get this error, all location activity should end
     if (error.code == kCLErrorDenied) {
@@ -95,13 +95,13 @@
 }
 
 - (void) locationManager: (CLLocationManager*) manager didDetermineState: (CLRegionState) state forRegion: (CLRegion*) region {
-    [ACPCore log:ACPMobileLogLevelDebug
+    [ACPCore log:ACPMobileLogLevelVerbose
              tag:ACPPlacesMonitorExtensionName
          message:[NSString stringWithFormat:@"%s - region:%@ - state:%ld", __PRETTY_FUNCTION__, region, (long)state]];
 }
 
 - (void) locationManager: (CLLocationManager*) manager monitoringDidFailForRegion: (CLRegion*) region withError: (NSError*) error {
-    [ACPCore log:ACPMobileLogLevelDebug
+    [ACPCore log:ACPMobileLogLevelWarning
              tag:ACPPlacesMonitorExtensionName
          message:[NSString stringWithFormat:@"%s - region:%@ - error:%@", __PRETTY_FUNCTION__, region, error]];
 }
