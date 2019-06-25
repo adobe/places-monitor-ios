@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ACPPlacesMonitor"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "Places monitor for Adobe Experience Cloud SDK. Written and maintained by Adobe."
   s.description  = <<-DESC
                    The Places monitor provides native geolocation functionality, enabling use of the Places product in the V5 Adobe Experience Cloud SDK.
@@ -18,8 +18,8 @@ Pod::Spec.new do |s|
 
   s.static_framework = true
 
-  s.dependency "ACPCore", ">= 2.1.0"
-  s.dependency "ACPPlaces", ">= 1.0.0"
+  s.dependency "ACPCore", ">= 2.3.2"
+  s.dependency "ACPPlaces", ">= 1.1.0"
 
   s.subspec "iOS" do |ios|
     ios.public_header_files = "ACPPlacesMonitor/ACPPlacesMonitor.h"
