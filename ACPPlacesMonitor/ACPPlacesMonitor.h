@@ -12,7 +12,7 @@
 
 //
 // ACPPlacesMonitor.h
-// Places Monitor Version: 1.0.2
+// Places Monitor Version: 2.0.0
 //
 
 #import <Foundation/Foundation.h>
@@ -91,8 +91,17 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorMode) {
 
 /**
  * @brief Stop tracking the device's location
+ *
+ * @discussion Calling this method will stop tracking the customer's location.  Additionally, it will unregister
+ * all previously registered regions.  Optionally, you may purge client-side data by passing in YES for the clearData
+ * parameter.
+ *
+ * Calling this method with YES for clearData will purge the data even if the monitor is not actively tracking
+ * the device's location.
+ *
+ * @param clearData pass YES to clear all client-side Places data from the device.
  */
-+ (void) stop;
++ (void) stop: (BOOL) clearData;
 
 /**
  * @brief Immediately gets an update for the device's location

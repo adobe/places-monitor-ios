@@ -323,13 +323,13 @@
     OCMVerify([_monitor startMonitoring]);
 }
 
-- (void) testProcessEventsStopEvent {
+- (void) testProcessEventsStopEventWithClear {
     // setup
     NSError* eventCreationError = nil;
     ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:ACPPlacesMonitorEventNameStop_Test
                                                                     type:ACPPlacesMonitorEventTypeMonitor_Test
                                                                   source:ACPPlacesMonitorEventSourceRequestContent_Test
-                                                                    data:nil
+                                                                    data:@{ACPPlacesMonitorEventDataClear:@(YES)}
                                                                    error:&eventCreationError];
     [_monitor.eventQueue add:event];
     
@@ -338,7 +338,25 @@
     
     // verify
     XCTAssertNil([_monitor.eventQueue peek]);
-    OCMVerify([_monitor stopAllMonitoring]);
+    OCMVerify([_monitor stopAllMonitoring:YES]);
+}
+
+- (void) testProcessEventsStopEventWithoutClear {
+    // setup
+    NSError* eventCreationError = nil;
+    ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:ACPPlacesMonitorEventNameStop_Test
+                                                                    type:ACPPlacesMonitorEventTypeMonitor_Test
+                                                                  source:ACPPlacesMonitorEventSourceRequestContent_Test
+                                                                    data:@{ACPPlacesMonitorEventDataClear:@(NO)}
+                                                                   error:&eventCreationError];
+    [_monitor.eventQueue add:event];
+    
+    // test
+    [_monitor processEvents];
+    
+    // verify
+    XCTAssertNil([_monitor.eventQueue peek]);
+    OCMVerify([_monitor stopAllMonitoring:NO]);
 }
 
 - (void) testProcessEventsUpdateLocationNowEvent {
@@ -395,11 +413,23 @@
     OCMVerify([_monitor setMonitorMode:ACPPlacesMonitorModeSignificantChanges]);
 }
 
-- (void) testStopAllMonitoring {
+- (void) testStopAllMonitoringWithClear {
     // test
-    [_monitor stopAllMonitoring];
+    [_monitor stopAllMonitoring:YES];
     
     // verify
+    OCMVerify([_placesMock clear]);
+    OCMVerify([_monitor stopMonitoringContinuousLocationChanges]);
+    OCMVerify([_monitor stopMonitoringSignificantLocationChanges]);
+    OCMVerify([_monitor stopMonitoringGeoFences]);
+}
+
+- (void) testStopAllMonitoringWithoutClear {
+    // test
+    [_monitor stopAllMonitoring:NO];
+    
+    // verify
+    OCMReject([_placesMock clear]);
     OCMVerify([_monitor stopMonitoringContinuousLocationChanges]);
     OCMVerify([_monitor stopMonitoringSignificantLocationChanges]);
     OCMVerify([_monitor stopMonitoringGeoFences]);

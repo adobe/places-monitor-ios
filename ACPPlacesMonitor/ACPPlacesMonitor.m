@@ -50,8 +50,10 @@
     [ACPPlacesMonitor dispatchMonitorEvent:ACPPlacesMonitorEventNameStart withData:@ {}];
 }
 
-+ (void) stop {
-    [ACPPlacesMonitor dispatchMonitorEvent:ACPPlacesMonitorEventNameStop withData:@ {}];
++ (void) stop:(BOOL) clearData {
+    [ACPPlacesMonitor dispatchMonitorEvent:ACPPlacesMonitorEventNameStop withData:@ {
+        ACPPlacesMonitorEventDataClear : @(clearData)
+    }];
 }
 
 + (void) updateLocationNow {
