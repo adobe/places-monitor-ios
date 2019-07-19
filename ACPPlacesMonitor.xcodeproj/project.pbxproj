@@ -11,7 +11,7 @@
 		154F7EF41F8E892A2B2DF51A /* libPods-ACPPlacesMonitor_iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2A0A78BDE10C42B75E2C830 /* libPods-ACPPlacesMonitor_iOS.a */; };
 		2429BC1E21C1CAD3003DB1A5 /* ACPPlacesMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DAFA90061FFD9C6E0069ACAC /* ACPPlacesMonitor.m */; };
 		243E663321FF66A400482882 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F04CF4EF1FCF7C060071CD3D /* libc++.tbd */; };
-		2488B3C921C4558F00E160DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0DE361FC36BA000E96578 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		2488B3C921C4558F00E160DD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54E0DE361FC36BA000E96578 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		2488B3CC21C459EA00E160DD /* ACPPlacesMonitorInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 2488B3CB21C459EA00E160DD /* ACPPlacesMonitorInternal.m */; };
 		2488B3D321C4704200E160DD /* ACPPlacesMonitorInternalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2488B3D121C46FBE00E160DD /* ACPPlacesMonitorInternalTests.m */; };
 		24C1F987224A8CB6000DF424 /* ACPPlacesMonitorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C1F986224A8CB6000DF424 /* ACPPlacesMonitorTests.m */; };
@@ -413,7 +413,7 @@
 			attributes = {
 				DefaultBuildSystemTypeForWorkspace = Original;
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Adobe Systems Incorporated";
 				TargetAttributes = {
 					2429BC1321C1CA38003DB1A5 = {
@@ -432,6 +432,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -634,6 +635,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -697,6 +699,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -753,6 +756,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";

@@ -37,7 +37,7 @@
 
     // if we get this error, all location activity should end
     if (error.code == kCLErrorDenied) {
-        [_parent stopAllMonitoring];
+        [_parent stopAllMonitoring:YES];
         [ACPCore log:ACPMobileLogLevelDebug
                  tag:ACPPlacesMonitorExtensionName
              message:[NSString stringWithFormat:@"Places functionality has been suspended due to a monitoring failure: %@", error]];
