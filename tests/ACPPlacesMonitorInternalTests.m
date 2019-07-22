@@ -557,7 +557,7 @@
         OCMVerify([self.monitor resetMonitoredGeofences]);
         OCMVerify([self.coreMock log:ACPMobileLogLevelDebug
                              tag:ACPPlacesMonitorExtensionName_Test
-                         message:@"No nearby Places were retrieved due to a network issue or no POIs near the device location."]);
+                         message:@"There are no POIs near the device location."]);
         OCMVerify([self.monitor removeNonMonitoredRegionsFromUserWithinRegions]);
     });
     
