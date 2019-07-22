@@ -294,7 +294,7 @@
                                     } else {
                                         [ACPCore log:ACPMobileLogLevelDebug
                                                  tag:ACPPlacesMonitorExtensionName
-                                             message:@"No nearby Places were retrieved due to a network issue or no POIs near the device location."];
+                                             message:@"There are no POIs near the device location."];
                                     }
                                     
                                     [self removeNonMonitoredRegionsFromUserWithinRegions];
