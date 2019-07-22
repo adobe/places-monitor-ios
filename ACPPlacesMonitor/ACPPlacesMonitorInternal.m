@@ -205,7 +205,8 @@
         if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameStart]) {
             [self startMonitoring];
         } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameStop]) {
-            [self stopAllMonitoring];
+            bool clearData = [[eventToProcess.eventData objectForKey:ACPPlacesMonitorEventDataClear] boolValue] ?: NO;
+            [self stopAllMonitoring:clearData];
         } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameUpdateLocationNow]) {
             [self updateLocationNow];
         } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameUpdateMonitorConfiguration]) {
@@ -219,7 +220,16 @@
 }
 
 #pragma mark - Location Settings and State
-- (void) stopAllMonitoring {
+- (void) stopAllMonitoring: (BOOL) clearData {
+    [ACPCore log:ACPMobileLogLevelVerbose
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"Stopping all monitoring. Client-side data will %@be purged",
+                  clearData ? @"" : @"not "]];
+    
+    if (clearData) {
+        [ACPPlaces clear];
+    }
+    
 #if CONTINUOUS_LOCATION_SUPPORTED
     [self stopMonitoringContinuousLocationChanges];
 #endif
