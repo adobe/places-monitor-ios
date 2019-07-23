@@ -312,7 +312,8 @@
     NSString *errorString = nil;
     switch (error) {
         case ACPPlacesRequestErrorConfigurationError:
-            errorString = @"Missing Places configuration. Is the Places extension registered?";
+            errorString = @"Missing Places configuration.";
+            [self stopAllMonitoring:YES];
             break;
         case ACPPlacesRequestErrorConnectivityError:
             errorString = @"No network connectivity.";

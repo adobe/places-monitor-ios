@@ -628,10 +628,11 @@
     [_monitor handlePlacesRequestError:ACPPlacesRequestErrorConfigurationError];
     
     // verify
-    NSString *errorString = @"An error occurred while attempting to retrieve nearby points of interest: Missing Places configuration. Is the Places extension registered?";
+    NSString *errorString = @"An error occurred while attempting to retrieve nearby points of interest: Missing Places configuration.";
     OCMVerify([self.coreMock log:ACPMobileLogLevelWarning
                              tag:ACPPlacesMonitorExtensionName_Test
                          message:errorString]);
+    OCMVerify([_monitor stopAllMonitoring:YES]);
 }
 
 - (void) testHandlePlacesRequestErrorConnectivity {
