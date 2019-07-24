@@ -228,6 +228,7 @@
     
     if (clearData) {
         [ACPPlaces clear];
+        [self clearMonitorData];
     }
     
 #if CONTINUOUS_LOCATION_SUPPORTED
@@ -548,6 +549,17 @@
          message:@"Continuous location collection is disabled"];
 }
 #endif
+
+/**
+ * @brief Removes all objects from currently monitored regions and user within regions, also clears them from persistence.
+ */
+- (void) clearMonitorData {
+    [_currentlyMonitoredRegions removeAllObjects];
+    [self updateCurrentlyMonitoredRegionsInPersistence];
+    
+    [_userWithinRegions removeAllObjects];
+    [self updateUserWithinRegionsInPersistence];
+}
 
 - (BOOL) userHasDeclinedLocationPermission: (CLAuthorizationStatus) status {
     return status == kCLAuthorizationStatusRestricted || status == kCLAuthorizationStatusDenied;
