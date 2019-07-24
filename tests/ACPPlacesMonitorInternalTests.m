@@ -34,22 +34,26 @@
 @property(nonatomic, strong) NSMutableArray<NSString*>* currentlyMonitoredRegions;
 @property(nonatomic, strong) NSMutableArray<NSString*>* userWithinRegions;
 @property(nonatomic) ACPPlacesMonitorMode monitorMode;
+
+- (BOOL) backgroundLocationUpdatesEnabledInBundle;
+- (void) beginTrackingLocation;
+- (void) clearMonitorData;
+- (void) handlePlacesRequestError:(ACPPlacesRequestError) error;
 - (void) loadPersistedValues;
+- (void) removeNonMonitoredRegionsFromUserWithinRegions;
 - (void) resetMonitoredGeofences;
 - (void) setMonitorMode: (ACPPlacesMonitorMode) monitorMode;
-- (void) beginTrackingLocation;
-- (void) updateUserWithinRegionsInPersistence;
-- (void) updateCurrentlyMonitoredRegionsInPersistence;
 - (void) startMonitoring;
-- (void) startMonitoringGeoFences: (NSArray*) newGeoFences;
-- (void) stopMonitoringGeoFences;
-- (void) removeNonMonitoredRegionsFromUserWithinRegions;
-- (void) startMonitoringSignificantLocationChanges;
-- (void) stopMonitoringSignificantLocationChanges;
 - (void) startMonitoringContinuousLocationChanges;
+- (void) startMonitoringGeoFences: (NSArray*) newGeoFences;
+- (void) startMonitoringSignificantLocationChanges;
 - (void) stopMonitoringContinuousLocationChanges;
+- (void) stopMonitoringGeoFences;
+- (void) stopMonitoringSignificantLocationChanges;
+- (void) updateCurrentlyMonitoredRegionsInPersistence;
+- (void) updateUserWithinRegionsInPersistence;
 - (BOOL) userHasDeclinedLocationPermission: (CLAuthorizationStatus) status;
-- (BOOL) backgroundLocationUpdatesEnabledInBundle;
+
 @end
 
 @interface ACPPlacesMonitorInternalTests : XCTestCase
@@ -419,6 +423,7 @@
     
     // verify
     OCMVerify([_placesMock clear]);
+    OCMVerify([_monitor clearMonitorData]);
     OCMVerify([_monitor stopMonitoringContinuousLocationChanges]);
     OCMVerify([_monitor stopMonitoringSignificantLocationChanges]);
     OCMVerify([_monitor stopMonitoringGeoFences]);
@@ -430,6 +435,7 @@
     
     // verify
     OCMReject([_placesMock clear]);
+    OCMReject([_monitor clearMonitorData]);
     OCMVerify([_monitor stopMonitoringContinuousLocationChanges]);
     OCMVerify([_monitor stopMonitoringSignificantLocationChanges]);
     OCMVerify([_monitor stopMonitoringGeoFences]);
@@ -542,7 +548,8 @@
     // setup
     OCMStub([_placesMock getNearbyPointsOfInterest:_fakeLocation
                                              limit:ACPPlacesMonitorDefaultMaxMonitoredRegionCount_Test
-                                          callback:[OCMArg any]]).andDo(^(NSInvocation *invocation) {
+                                          callback:[OCMArg any]
+                                     errorCallback:[OCMArg any]]).andDo(^(NSInvocation *invocation) {
         // get a reference to the Places callback
         void (^testableCallback)(NSArray<ACPPlacesPoi*>* _Nullable nearbyPoi);
         [invocation getArgument:&testableCallback atIndex:4];
@@ -553,7 +560,7 @@
         OCMVerify([self.monitor resetMonitoredGeofences]);
         OCMVerify([self.coreMock log:ACPMobileLogLevelDebug
                              tag:ACPPlacesMonitorExtensionName_Test
-                         message:@"No nearby Places were retrieved due to a network issue or no POIs near the device location."]);
+                         message:@"There are no POIs near the device location."]);
         OCMVerify([self.monitor removeNonMonitoredRegionsFromUserWithinRegions]);
     });
     
@@ -565,7 +572,8 @@
     // setup
     OCMStub([_placesMock getNearbyPointsOfInterest:_fakeLocation
                                              limit:ACPPlacesMonitorDefaultMaxMonitoredRegionCount_Test
-                                          callback:[OCMArg any]]).andDo((^(NSInvocation *invocation) {
+                                          callback:[OCMArg any]
+                                     errorCallback:[OCMArg any]]).andDo((^(NSInvocation *invocation) {
         // get a reference to the Places callback
         void (^testableCallback)(NSArray<ACPPlacesPoi*>* _Nullable nearbyPoi);
         [invocation getArgument:&testableCallback atIndex:4];
@@ -586,6 +594,103 @@
     
     // test
     [_monitor postLocationUpdate:_fakeLocation];
+}
+
+- (void) testPostLocationUpdateConnectivityError {
+    // setup
+    OCMStub([_placesMock getNearbyPointsOfInterest:_fakeLocation
+                                             limit:ACPPlacesMonitorDefaultMaxMonitoredRegionCount_Test
+                                          callback:[OCMArg any]
+                                     errorCallback:[OCMArg any]]).andDo((^(NSInvocation *invocation) {
+        // get a reference to the Places callback
+        void (^errorCallback)(ACPPlacesRequestError result);
+        [invocation getArgument:&errorCallback atIndex:5];
+        
+        errorCallback(ACPPlacesRequestErrorConnectivityError);
+        
+        // verify after callback processes
+        OCMVerify([self.monitor handlePlacesRequestError:ACPPlacesRequestErrorConnectivityError]);
+    }));
+    
+    // test
+    [_monitor postLocationUpdate:_fakeLocation];
+}
+
+- (void) testHandlePlacesRequestErrorNone {
+    // test
+    [_monitor handlePlacesRequestError:ACPPlacesRequestErrorNone];
+    
+    // verify
+    OCMReject([self.coreMock log:ACPMobileLogLevelWarning
+                             tag:ACPPlacesMonitorExtensionName_Test
+                         message:[OCMArg any]]);
+}
+
+- (void) testHandlePlacesRequestErrorConfiguration {
+    // test
+    [_monitor handlePlacesRequestError:ACPPlacesRequestErrorConfigurationError];
+    
+    // verify
+    NSString *errorString = @"An error occurred while attempting to retrieve nearby points of interest: Missing Places configuration.";
+    OCMVerify([self.coreMock log:ACPMobileLogLevelWarning
+                             tag:ACPPlacesMonitorExtensionName_Test
+                         message:errorString]);
+    OCMVerify([_monitor stopAllMonitoring:YES]);
+}
+
+- (void) testHandlePlacesRequestErrorConnectivity {
+    // test
+    [_monitor handlePlacesRequestError:ACPPlacesRequestErrorConnectivityError];
+    
+    // verify
+    NSString *errorString = @"An error occurred while attempting to retrieve nearby points of interest: No network connectivity.";
+    OCMVerify([self.coreMock log:ACPMobileLogLevelWarning
+                             tag:ACPPlacesMonitorExtensionName_Test
+                         message:errorString]);
+}
+
+- (void) testHandlePlacesRequestErrorInvalidLatLon {
+    // test
+    [_monitor handlePlacesRequestError:ACPPlacesRequestErrorInvalidLatLongError];
+    
+    // verify
+    NSString *errorString = @"An error occurred while attempting to retrieve nearby points of interest: An invalid latitude and/or longitude was provided.  Valid values are -90 to 90 (lat) and -180 to 180 (lon).";
+    OCMVerify([self.coreMock log:ACPMobileLogLevelWarning
+                             tag:ACPPlacesMonitorExtensionName_Test
+                         message:errorString]);
+}
+
+- (void) testHandlePlacesRequestErrorQueryServiceUnavailable {
+    // test
+    [_monitor handlePlacesRequestError:ACPPlacesRequestErrorQueryServiceUnavailable];
+    
+    // verify
+    NSString *errorString = @"An error occurred while attempting to retrieve nearby points of interest: The Places Query Service is unavailable. Try again later.";
+    OCMVerify([self.coreMock log:ACPMobileLogLevelWarning
+                             tag:ACPPlacesMonitorExtensionName_Test
+                         message:errorString]);
+}
+
+- (void) testHandlePlacesRequestErrorServerResponseError {
+    // test
+    [_monitor handlePlacesRequestError:ACPPlacesRequestErrorServerResponseError];
+    
+    // verify
+    NSString *errorString = @"An error occurred while attempting to retrieve nearby points of interest: There is an error in the response from the server.";
+    OCMVerify([self.coreMock log:ACPMobileLogLevelWarning
+                             tag:ACPPlacesMonitorExtensionName_Test
+                         message:errorString]);
+}
+
+- (void) testHandlePlacesRequestErrorUnknownError {
+    // test
+    [_monitor handlePlacesRequestError:ACPPlacesRequestErrorUnknownError];
+    
+    // verify
+    NSString *errorString = @"An error occurred while attempting to retrieve nearby points of interest: Unknown error.";
+    OCMVerify([self.coreMock log:ACPMobileLogLevelWarning
+                             tag:ACPPlacesMonitorExtensionName_Test
+                         message:errorString]);
 }
 
 - (void) testUpdateLocationNow {
@@ -1099,6 +1204,21 @@
     
     // verify
     XCTAssertFalse(result);
+}
+
+- (void) testClearMonitorData {
+    // setup
+    [_monitor.userWithinRegions addObject:_fakeRegion.identifier];
+    [_monitor.currentlyMonitoredRegions addObject:@"5678"];
+    
+    // test
+    [_monitor clearMonitorData];
+    
+    // verify
+    XCTAssertEqual(0, _monitor.currentlyMonitoredRegions.count);
+    OCMVerify([_monitor updateCurrentlyMonitoredRegionsInPersistence]);
+    XCTAssertEqual(0, _monitor.userWithinRegions.count);
+    OCMVerify([_monitor updateUserWithinRegionsInPersistence]);
 }
 
 @end
