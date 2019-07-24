@@ -37,6 +37,7 @@
 
 - (BOOL) backgroundLocationUpdatesEnabledInBundle;
 - (void) beginTrackingLocation;
+- (void) clearMonitorData;
 - (void) handlePlacesRequestError:(ACPPlacesRequestError) error;
 - (void) loadPersistedValues;
 - (void) removeNonMonitoredRegionsFromUserWithinRegions;
@@ -422,6 +423,7 @@
     
     // verify
     OCMVerify([_placesMock clear]);
+    OCMVerify([_monitor clearMonitorData]);
     OCMVerify([_monitor stopMonitoringContinuousLocationChanges]);
     OCMVerify([_monitor stopMonitoringSignificantLocationChanges]);
     OCMVerify([_monitor stopMonitoringGeoFences]);
@@ -433,6 +435,7 @@
     
     // verify
     OCMReject([_placesMock clear]);
+    OCMReject([_monitor clearMonitorData]);
     OCMVerify([_monitor stopMonitoringContinuousLocationChanges]);
     OCMVerify([_monitor stopMonitoringSignificantLocationChanges]);
     OCMVerify([_monitor stopMonitoringGeoFences]);
@@ -1201,6 +1204,21 @@
     
     // verify
     XCTAssertFalse(result);
+}
+
+- (void) testClearMonitorData {
+    // setup
+    [_monitor.userWithinRegions addObject:_fakeRegion.identifier];
+    [_monitor.currentlyMonitoredRegions addObject:@"5678"];
+    
+    // test
+    [_monitor clearMonitorData];
+    
+    // verify
+    XCTAssertEqual(0, _monitor.currentlyMonitoredRegions.count);
+    OCMVerify([_monitor updateCurrentlyMonitoredRegionsInPersistence]);
+    XCTAssertEqual(0, _monitor.userWithinRegions.count);
+    OCMVerify([_monitor updateUserWithinRegionsInPersistence]);
 }
 
 @end
