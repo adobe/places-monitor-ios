@@ -205,7 +205,8 @@
         if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameStart]) {
             [self startMonitoring];
         } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameStop]) {
-            [self stopAllMonitoring];
+            bool clearData = [[eventToProcess.eventData objectForKey:ACPPlacesMonitorEventDataClear] boolValue] ?: NO;
+            [self stopAllMonitoring:clearData];
         } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameUpdateLocationNow]) {
             [self updateLocationNow];
         } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameUpdateMonitorConfiguration]) {
@@ -219,7 +220,17 @@
 }
 
 #pragma mark - Location Settings and State
-- (void) stopAllMonitoring {
+- (void) stopAllMonitoring: (BOOL) clearData {
+    [ACPCore log:ACPMobileLogLevelVerbose
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:@"Stopping all monitoring. Client-side data will %@be purged",
+                  clearData ? @"" : @"not "]];
+    
+    if (clearData) {
+        [ACPPlaces clear];
+        [self clearMonitorData];
+    }
+    
 #if CONTINUOUS_LOCATION_SUPPORTED
     [self stopMonitoringContinuousLocationChanges];
 #endif
@@ -274,22 +285,58 @@
     [ACPPlaces getNearbyPointsOfInterest:currentLocation
                                    limit:ACPPlacesMonitorDefaultMaxMonitoredRegionCount
                                 callback: ^ (NSArray<ACPPlacesPoi*>* _Nullable nearbyPoi) {
+                                    [self resetMonitoredGeofences];
+                                    
+                                    if (nearbyPoi.count) {
+                                        [ACPCore log:ACPMobileLogLevelDebug
+                                                 tag:ACPPlacesMonitorExtensionName
+                                             message:[NSString stringWithFormat:@"Received a new list of POIs from Places: %@", nearbyPoi]];
+                                        [self startMonitoringGeoFences:nearbyPoi];
+                                    } else {
+                                        [ACPCore log:ACPMobileLogLevelDebug
+                                                 tag:ACPPlacesMonitorExtensionName
+                                             message:@"There are no POIs near the device location."];
+                                    }
+                                    
+                                    [self removeNonMonitoredRegionsFromUserWithinRegions];
+                                } errorCallback:^(ACPPlacesRequestError result) {
+                                    [self handlePlacesRequestError:result];
+                                }];
+}
 
-        [self resetMonitoredGeofences];
-
-        if (nearbyPoi.count) {
-            [ACPCore log:ACPMobileLogLevelDebug
-                     tag:ACPPlacesMonitorExtensionName
-                 message:[NSString stringWithFormat:@"Received a new list of POIs from Places: %@", nearbyPoi]];
-            [self startMonitoringGeoFences:nearbyPoi];
-        } else {
-            [ACPCore log:ACPMobileLogLevelDebug
-                     tag:ACPPlacesMonitorExtensionName
-                 message:@"No nearby Places were retrieved due to a network issue or no POIs near the device location."];
-        }
-
-        [self removeNonMonitoredRegionsFromUserWithinRegions];
-    }];
+- (void) handlePlacesRequestError:(ACPPlacesRequestError) error {
+    if (error == ACPPlacesRequestErrorNone) {
+        return;
+    }
+    
+    NSString *message = @"An error occurred while attempting to retrieve nearby points of interest: %@";
+    NSString *errorString = nil;
+    switch (error) {
+        case ACPPlacesRequestErrorConfigurationError:
+            errorString = @"Missing Places configuration.";
+            [self stopAllMonitoring:YES];
+            break;
+        case ACPPlacesRequestErrorConnectivityError:
+            errorString = @"No network connectivity.";
+            break;
+        case ACPPlacesRequestErrorInvalidLatLongError:
+            errorString = @"An invalid latitude and/or longitude was provided.  Valid values are -90 to 90 (lat) and -180 to 180 (lon).";
+            break;
+        case ACPPlacesRequestErrorQueryServiceUnavailable:
+            errorString = @"The Places Query Service is unavailable. Try again later.";
+            break;
+        case ACPPlacesRequestErrorServerResponseError:
+            errorString = @"There is an error in the response from the server.";
+            break;
+        case ACPPlacesRequestErrorUnknownError:
+        default:
+            errorString = @"Unknown error.";
+            break;
+    }
+    
+    [ACPCore log:ACPMobileLogLevelWarning
+             tag:ACPPlacesMonitorExtensionName
+         message:[NSString stringWithFormat:message, errorString]];
 }
 
 - (void) updateLocationNow {
@@ -502,6 +549,17 @@
          message:@"Continuous location collection is disabled"];
 }
 #endif
+
+/**
+ * @brief Removes all objects from currently monitored regions and user within regions, also clears them from persistence.
+ */
+- (void) clearMonitorData {
+    [_currentlyMonitoredRegions removeAllObjects];
+    [self updateCurrentlyMonitoredRegionsInPersistence];
+    
+    [_userWithinRegions removeAllObjects];
+    [self updateUserWithinRegionsInPersistence];
+}
 
 - (BOOL) userHasDeclinedLocationPermission: (CLAuthorizationStatus) status {
     return status == kCLAuthorizationStatusRestricted || status == kCLAuthorizationStatusDenied;

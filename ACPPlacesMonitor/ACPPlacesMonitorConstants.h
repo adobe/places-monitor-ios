@@ -59,6 +59,7 @@ FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameStop;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameUpdateLocationNow;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameUpdateMonitorConfiguration;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataMonitorMode;
+FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataClear;
 
 
 #pragma mark - capability definitions by platform
