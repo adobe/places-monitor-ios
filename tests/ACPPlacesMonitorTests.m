@@ -108,13 +108,22 @@
                                         withData:@{}]);
 }
 
-- (void) testStop {
+- (void) testStopWithClear {
     // test
-    [ACPPlacesMonitor stop];
+    [ACPPlacesMonitor stop:YES];
     
     // verify
     OCMVerify([_monitorMock dispatchMonitorEvent:ACPPlacesMonitorEventNameStop_Test
-                                        withData:@{}]);
+                                        withData:@{ACPPlacesMonitorEventDataClear: @(YES)}]);
+}
+
+- (void) testStopWithoutClear {
+    // test
+    [ACPPlacesMonitor stop:NO];
+    
+    // verify
+    OCMVerify([_monitorMock dispatchMonitorEvent:ACPPlacesMonitorEventNameStop_Test
+                                        withData:@{ACPPlacesMonitorEventDataClear: @(NO)}]);
 }
 
 - (void) testUpdateLocationNow {

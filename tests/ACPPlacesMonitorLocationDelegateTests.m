@@ -104,7 +104,7 @@
     OCMVerify([_coreMock log:ACPMobileLogLevelWarning
                          tag:ACPPlacesMonitorExtensionName_Test
                      message:[OCMArg any]]);
-    OCMVerify([_placesMock stopAllMonitoring]);
+    OCMVerify([_placesMock stopAllMonitoring:YES]);
     OCMVerify([_coreMock log:ACPMobileLogLevelDebug
                          tag:ACPPlacesMonitorExtensionName_Test
                      message:[OCMArg any]]);
