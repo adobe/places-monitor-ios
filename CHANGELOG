@@ -1,7 +1,0 @@
-1.0.1 (9 Apr, 2019)
-- Added full unit test coverage
-- CI integration (CircleCI)
-- Code coverage integration (codecov)
-
-1.0.0 (25 Mar, 2019)
-- Initial release of ACPPlacesMonitor

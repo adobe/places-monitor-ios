@@ -42,8 +42,17 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Location Settings and State
 /**
  * @brief Immediately causing the monitor to stop tracking the device's location and monitoring regions
+ *
+ * @discussion Calling this method will stop tracking the customer's location.  Additionally, it will unregister
+ * all previously registered regions.  Optionally, you may purge client-side data by passing in YES for the clearData
+ * parameter.
+ *
+ * Calling this method with YES for clearData will purge the data even if the monitor is not actively tracking
+ * the device's location.
+ *
+ * @param clearData pass YES to clear all client-side Places data from the device.
  */
-- (void) stopAllMonitoring;
+- (void) stopAllMonitoring: (BOOL) clearData;
 
 /**
  * @brief Adds the provided region to a list of regions that the device is currently within

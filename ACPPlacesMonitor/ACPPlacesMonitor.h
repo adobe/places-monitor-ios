@@ -12,7 +12,7 @@
 
 //
 // ACPPlacesMonitor.h
-// Places Monitor Version: 1.0.1
+// Places Monitor Version: 2.0.0
 //
 
 #import <Foundation/Foundation.h>
@@ -82,13 +82,26 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorMode) {
  * 2. If available (based on device capabilities), the Places Monitor will begin tracking the user's location
  *    based on the currently set ACPPlacesMonitorMode.  By default, the monitor will use:
  *    ACPPlacesMonitorModeSignificantChanges.
+ *
+ * This method should be called as soon as the application needs access to the device's location. If access is needed
+ * immediately as the app is launching, call this method from the callback provided as a parameter to the "start"
+ * method in the ACPCore class.
  */
 + (void) start;
 
 /**
  * @brief Stop tracking the device's location
+ *
+ * @discussion Calling this method will stop tracking the customer's location.  Additionally, it will unregister
+ * all previously registered regions.  Optionally, you may purge client-side data by passing in YES for the clearData
+ * parameter.
+ *
+ * Calling this method with YES for clearData will purge the data even if the monitor is not actively tracking
+ * the device's location.
+ *
+ * @param clearData pass YES to clear all client-side Places data from the device.
  */
-+ (void) stop;
++ (void) stop: (BOOL) clearData;
 
 /**
  * @brief Immediately gets an update for the device's location
