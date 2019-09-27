@@ -25,6 +25,8 @@ static int const ACPPlacesMonitorDefaultMaxMonitoredRegionCount_Test = 20;
 static NSString* const ACPPlacesMonitorDefaultsMonitoredRegions_Test = @"acpplacesmonitor.monitoredregions";
 static NSString* const ACPPlacesMonitorDefaultsUserWithinRegions_Test = @"acpplacesmonitor.userwithinregions";
 static NSString* const ACPPlacesMonitorDefaultsMonitorMode_Test = @"acpplacesmonitor.monitormode";
+static NSString* const ACPPlacesMonitorDefaultsRequestAuthorizationLevel_Test = @"acpplacesmonitor.requestauthorizationlevel";
+static NSString* const ACPPlacesMonitorDefaultsIsMonitoringStarted_Test = @"acpplacesmonitor.ismonitoringstarted";
 
 #pragma mark - Event Data Keys
 // event sources
@@ -57,7 +59,10 @@ static NSString* const ACPPlacesMonitorEventNameStart_Test = @"start monitoring"
 static NSString* const ACPPlacesMonitorEventNameStop_Test = @"stop monitoring";
 static NSString* const ACPPlacesMonitorEventNameUpdateLocationNow_Test = @"update location now";
 static NSString* const ACPPlacesMonitorEventNameUpdateMonitorConfiguration_Test = @"update monitor configuration";
+static NSString* const ACPPlacesMonitorEventNameSetRequestAuthorizationLevel_Test = @"set request authorization level";
+
 static NSString* const ACPPlacesMonitorEventDataMonitorMode_Test = @"monitormode";
-static NSString* const ACPPlacesMonitorEventDataClear = @"clearclientdata";
+static NSString* const ACPPlacesMonitorEventDataClear_Test = @"clearclientdata";
+static NSString* const ACPPlacesMonitorEventDataRequestAuthorizationLevel_Test = @"requestauthorizationlevel";
 
 #endif /* ACPPlacesMonitorConstantsTests_h */

@@ -99,6 +99,20 @@
                                         withData:testData]);
 }
 
+- (void) testSetRequestAuthorizationLevel {
+    // setup
+    ACPPlacesRequestAuthorizationLevel authLevel = ACPPlacesRequestAuthorizationLevelWhenInUse;
+    NSDictionary *testData = @{ACPPlacesMonitorEventDataRequestAuthorizationLevel_Test: @(authLevel)};
+    
+    // test
+    [ACPPlacesMonitor setRequestAuthorizationLevel:authLevel];
+    
+    // verify
+    OCMVerify([_monitorMock dispatchMonitorEvent:ACPPlacesMonitorEventNameSetRequestAuthorizationLevel_Test
+                                        withData:testData]);
+}
+
+
 - (void) testStart {
     // test
     [ACPPlacesMonitor start];
@@ -114,7 +128,7 @@
     
     // verify
     OCMVerify([_monitorMock dispatchMonitorEvent:ACPPlacesMonitorEventNameStop_Test
-                                        withData:@{ACPPlacesMonitorEventDataClear: @(YES)}]);
+                                        withData:@{ACPPlacesMonitorEventDataClear_Test: @(YES)}]);
 }
 
 - (void) testStopWithoutClear {
@@ -123,7 +137,7 @@
     
     // verify
     OCMVerify([_monitorMock dispatchMonitorEvent:ACPPlacesMonitorEventNameStop_Test
-                                        withData:@{ACPPlacesMonitorEventDataClear: @(NO)}]);
+                                        withData:@{ACPPlacesMonitorEventDataClear_Test: @(NO)}]);
 }
 
 - (void) testUpdateLocationNow {
