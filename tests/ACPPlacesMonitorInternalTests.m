@@ -34,6 +34,9 @@
 @property(nonatomic, strong) NSMutableArray<NSString*>* currentlyMonitoredRegions;
 @property(nonatomic, strong) NSMutableArray<NSString*>* userWithinRegions;
 @property(nonatomic) ACPPlacesMonitorMode monitorMode;
+@property(nonatomic) ACPPlacesRequestAuthorizationLevel requestAuthroizationLevel;
+@property(nonatomic) bool isMonitoringStarted;
+
 
 - (BOOL) backgroundLocationUpdatesEnabledInBundle;
 - (void) beginTrackingLocation;
@@ -42,7 +45,8 @@
 - (void) loadPersistedValues;
 - (void) removeNonMonitoredRegionsFromUserWithinRegions;
 - (void) resetMonitoredGeofences;
-- (void) setMonitorMode: (ACPPlacesMonitorMode) monitorMode;
+- (void) updateMonitorMode: (ACPPlacesMonitorMode) monitorMode;
+- (void) updateRequestAuthroizationLevel: (ACPPlacesRequestAuthorizationLevel) requestAuthorizationLevel;
 - (void) startMonitoring;
 - (void) startMonitoringContinuousLocationChanges;
 - (void) startMonitoringGeoFences: (NSArray*) newGeoFences;
@@ -53,6 +57,7 @@
 - (void) updateCurrentlyMonitoredRegionsInPersistence;
 - (void) updateUserWithinRegionsInPersistence;
 - (BOOL) userHasDeclinedLocationPermission: (CLAuthorizationStatus) status;
+- (void) persistMonitoringStatus;
 
 @end
 
@@ -101,6 +106,9 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:ACPPlacesMonitorDefaultsMonitorMode_Test];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:ACPPlacesMonitorDefaultsMonitoredRegions_Test];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:ACPPlacesMonitorDefaultsUserWithinRegions_Test];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:ACPPlacesMonitorDefaultsIsMonitoringStarted_Test];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel_Test];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void) testGetName {
@@ -333,7 +341,7 @@
     ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:ACPPlacesMonitorEventNameStop_Test
                                                                     type:ACPPlacesMonitorEventTypeMonitor_Test
                                                                   source:ACPPlacesMonitorEventSourceRequestContent_Test
-                                                                    data:@{ACPPlacesMonitorEventDataClear:@(YES)}
+                                                                    data:@{ACPPlacesMonitorEventDataClear_Test:@(YES)}
                                                                    error:&eventCreationError];
     [_monitor.eventQueue add:event];
     
@@ -351,7 +359,7 @@
     ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:ACPPlacesMonitorEventNameStop_Test
                                                                     type:ACPPlacesMonitorEventTypeMonitor_Test
                                                                   source:ACPPlacesMonitorEventSourceRequestContent_Test
-                                                                    data:@{ACPPlacesMonitorEventDataClear:@(NO)}
+                                                                    data:@{ACPPlacesMonitorEventDataClear_Test:@(NO)}
                                                                    error:&eventCreationError];
     [_monitor.eventQueue add:event];
     
@@ -396,7 +404,7 @@
     
     // verify
     XCTAssertNil([_monitor.eventQueue peek]);
-    OCMVerify([_monitor setMonitorMode:ACPPlacesMonitorModeContinuous]);
+    OCMVerify([_monitor updateMonitorMode:ACPPlacesMonitorModeContinuous]);
 }
 
 - (void) testProcessEventsConfigurationEventNoModeInEventData {
@@ -414,7 +422,43 @@
     
     // verify
     XCTAssertNil([_monitor.eventQueue peek]);
-    OCMVerify([_monitor setMonitorMode:ACPPlacesMonitorModeSignificantChanges]);
+    OCMVerify([_monitor updateMonitorMode:ACPPlacesMonitorModeSignificantChanges]);
+}
+
+- (void) testProcessEventsSetRequestAuthorizationLevelEventWhenInUse {
+    // setup
+    NSError* eventCreationError = nil;
+    ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:ACPPlacesMonitorEventNameSetRequestAuthorizationLevel_Test
+                                                                    type:ACPPlacesMonitorEventTypeMonitor_Test
+                                                                  source:ACPPlacesMonitorEventSourceRequestContent_Test
+                                                                    data:@{ACPPlacesMonitorEventDataRequestAuthorizationLevel_Test:@(1)}
+                                                                   error:&eventCreationError];
+    [_monitor.eventQueue add:event];
+    
+    // test
+    [_monitor processEvents];
+    
+    // verify
+    XCTAssertNil([_monitor.eventQueue peek]);
+    OCMVerify([_monitor updateRequestAuthroizationLevel:ACPPlacesRequestAuthorizationLevelWhenInUse]);
+}
+
+- (void) testProcessEventsSetRequestAuthorizationLevelWhenNoEventData {
+    // setup
+    NSError* eventCreationError = nil;
+    ACPExtensionEvent* event = [ACPExtensionEvent extensionEventWithName:ACPPlacesMonitorEventNameSetRequestAuthorizationLevel_Test
+                                                                    type:ACPPlacesMonitorEventTypeMonitor_Test
+                                                                  source:ACPPlacesMonitorEventSourceRequestContent_Test
+                                                                    data:nil
+                                                                   error:&eventCreationError];
+    [_monitor.eventQueue add:event];
+    
+    // test
+    [_monitor processEvents];
+    
+    // verify
+    XCTAssertNil([_monitor.eventQueue peek]);
+    OCMVerify([_monitor updateRequestAuthroizationLevel:ACPPlacesRequestAuthorizationLevelAlways]);
 }
 
 - (void) testStopAllMonitoringWithClear {
@@ -719,20 +763,42 @@
     [_monitor.currentlyMonitoredRegions removeAllObjects];
     [_monitor.userWithinRegions removeAllObjects];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:@(ACPPlacesMonitorModeSignificantChanges) forKey:ACPPlacesMonitorDefaultsMonitorMode_Test];
+    [defaults setObject:@(ACPPlacesRequestAuthorizationLevelWhenInUse) forKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel_Test];
+    [defaults setObject:@(ACPPlacesMonitorModeContinuous) forKey:ACPPlacesMonitorDefaultsMonitorMode_Test];
     [defaults setObject:@[_fakeRegion.identifier] forKey:ACPPlacesMonitorDefaultsMonitoredRegions_Test];
     [defaults setObject:@[_fakeRegion.identifier] forKey:ACPPlacesMonitorDefaultsUserWithinRegions_Test];
+    [defaults setBool:true forKey:ACPPlacesMonitorDefaultsIsMonitoringStarted_Test];
     [defaults synchronize];
     
     // test
     [_monitor loadPersistedValues];
     
     // verify
-    XCTAssertEqual(ACPPlacesMonitorModeSignificantChanges, _monitor.monitorMode);
+    XCTAssertEqual(ACPPlacesRequestAuthorizationLevelWhenInUse, _monitor.requestAuthroizationLevel);
+    XCTAssertEqual(ACPPlacesMonitorModeContinuous, _monitor.monitorMode);
+    XCTAssertEqual(true, _monitor.isMonitoringStarted);
     XCTAssertEqual(1, _monitor.currentlyMonitoredRegions.count);
     XCTAssertTrue([_fakeRegion.identifier isEqualToString:_monitor.currentlyMonitoredRegions[0]]);
     XCTAssertEqual(1, _monitor.userWithinRegions.count);
     XCTAssertTrue([_fakeRegion.identifier isEqualToString:_monitor.userWithinRegions[0]]);
+}
+
+
+- (void) testLoadPersistedValuesReturnsDefaultValuesWhenNothingSet {
+    // setup
+    _monitor.monitorMode = ACPPlacesMonitorModeContinuous;
+    [_monitor.currentlyMonitoredRegions removeAllObjects];
+    [_monitor.userWithinRegions removeAllObjects];
+
+    // test
+    [_monitor loadPersistedValues];
+    
+    // verify
+    XCTAssertEqual(ACPPlacesRequestAuthorizationLevelAlways, _monitor.requestAuthroizationLevel);
+    XCTAssertEqual(ACPPlacesMonitorModeSignificantChanges, _monitor.monitorMode);
+    XCTAssertEqual(false, _monitor.isMonitoringStarted);
+    XCTAssertEqual(0, _monitor.currentlyMonitoredRegions.count);
+    XCTAssertEqual(0, _monitor.userWithinRegions.count);
 }
 
 - (void) testResetMonitoredGeofencesNoMonitoredRegions {
@@ -783,20 +849,54 @@
     OCMVerify([_monitor updateCurrentlyMonitoredRegionsInPersistence]);
 }
 
-- (void) testSetMonitorMode {
+- (void) testUpdateMonitorMode {
     // setup
     [[NSUserDefaults standardUserDefaults] setInteger:ACPPlacesMonitorModeSignificantChanges
                                                forKey:ACPPlacesMonitorDefaultsMonitorMode_Test];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     // test
-    [_monitor setMonitorMode:ACPPlacesMonitorModeContinuous];
+    [_monitor updateMonitorMode:ACPPlacesMonitorModeContinuous];
     
     // verify
     OCMVerify([_monitor beginTrackingLocation]);
     XCTAssertEqual(ACPPlacesMonitorModeContinuous, [[NSUserDefaults standardUserDefaults]
                                                     integerForKey:ACPPlacesMonitorDefaultsMonitorMode_Test]);
 }
+
+
+- (void) testUpdateRequestAuthroizationLevel {
+    // setup
+    [[NSUserDefaults standardUserDefaults] setInteger:ACPPlacesRequestAuthorizationLevelAlways
+                                               forKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel_Test];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    //test
+    [_monitor updateRequestAuthroizationLevel:ACPPlacesRequestAuthorizationLevelWhenInUse];
+    
+    //verify
+    OCMReject([_monitor startMonitoring]);
+    XCTAssertEqual(ACPPlacesRequestAuthorizationLevelWhenInUse, [[NSUserDefaults standardUserDefaults]
+                                                    integerForKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel_Test]);
+}
+
+
+- (void) testUpdateRequestAuthroizationLevelWhenMontoringHasStarted {
+    // setup
+    _monitor.isMonitoringStarted = true;
+    [[NSUserDefaults standardUserDefaults] setInteger:ACPPlacesRequestAuthorizationLevelWhenInUse
+                                               forKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel_Test];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    //test
+    [_monitor updateRequestAuthroizationLevel:ACPPlacesRequestAuthorizationLevelAlways];
+    
+    //verify
+    OCMVerify([_monitor startMonitoring]);
+    XCTAssertEqual(ACPPlacesRequestAuthorizationLevelAlways, [[NSUserDefaults standardUserDefaults]
+                                                    integerForKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel_Test]);
+}
+
 
 - (void) testBeginTrackingLocationContinuous {
     // setup
@@ -808,6 +908,7 @@
     // verify
     OCMVerify([_monitor startMonitoringContinuousLocationChanges]);
     OCMVerify([_monitor stopMonitoringSignificantLocationChanges]);
+    OCMVerify([_monitor persistMonitoringStatus]);
     OCMVerify([_monitor updateLocationNow]);
 }
 
@@ -821,6 +922,7 @@
     // verify
     OCMVerify([_monitor stopMonitoringContinuousLocationChanges]);
     OCMVerify([_monitor startMonitoringSignificantLocationChanges]);
+    OCMVerify([_monitor persistMonitoringStatus]);
     OCMVerify([_monitor updateLocationNow]);
 }
 
@@ -834,6 +936,7 @@
     // verify
     OCMVerify([_monitor startMonitoringContinuousLocationChanges]);
     OCMVerify([_monitor startMonitoringSignificantLocationChanges]);
+    OCMVerify([_monitor persistMonitoringStatus]);
     OCMVerify([_monitor updateLocationNow]);
 }
 
@@ -851,20 +954,76 @@
                      message:@"Permission to use location data has been denied by the user"]);
 }
 
-- (void) testStartMonitoringStatusNotDetermined {
+- (void) testStartMonitoringStatusNotDeterminedAndRequestWhenInUseAuthorization {
     // setup
     id locationManagerMock = OCMClassMock([CLLocationManager class]);
     OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusNotDetermined);
     _monitor.locationManager = locationManagerMock;
     OCMStub([_monitor userHasDeclinedLocationPermission:kCLAuthorizationStatusNotDetermined]).andReturn(NO);
+    _monitor.requestAuthroizationLevel = ACPPlacesRequestAuthorizationLevelWhenInUse;
     
     // test
     [_monitor startMonitoring];
     
     // verify
     OCMVerify([_monitor beginTrackingLocation]);
+    OCMVerify([locationManagerMock requestWhenInUseAuthorization]);
+    OCMReject([locationManagerMock requestAlwaysAuthorization]);
+}
+
+
+- (void) testStartMonitoringStatusNotDeterminedAndRequestAlwaysAllowAuthorization {
+    // setup
+    id locationManagerMock = OCMClassMock([CLLocationManager class]);
+    OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusNotDetermined);
+    _monitor.locationManager = locationManagerMock;
+    OCMStub([_monitor userHasDeclinedLocationPermission:kCLAuthorizationStatusNotDetermined]).andReturn(NO);
+    _monitor.requestAuthroizationLevel = ACPPlacesRequestAuthorizationLevelAlways;
+    
+    // test
+    [_monitor startMonitoring];
+    
+    // verify
+    OCMVerify([_monitor beginTrackingLocation]);
+    OCMReject([locationManagerMock requestWhenInUseAuthorization]);
     OCMVerify([locationManagerMock requestAlwaysAuthorization]);
 }
+
+- (void) testStartMonitoringStatusWhenInUseAndRequestAlwaysAllowAuthorization {
+    // setup
+    id locationManagerMock = OCMClassMock([CLLocationManager class]);
+    OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusAuthorizedWhenInUse);
+    _monitor.locationManager = locationManagerMock;
+    OCMStub([_monitor userHasDeclinedLocationPermission:kCLAuthorizationStatusNotDetermined]).andReturn(NO);
+    _monitor.requestAuthroizationLevel = ACPPlacesRequestAuthorizationLevelAlways;
+    
+    // test
+    [_monitor startMonitoring];
+    
+    // verify
+    OCMVerify([_monitor beginTrackingLocation]);
+    OCMReject([locationManagerMock requestWhenInUseAuthorization]);
+    OCMVerify([locationManagerMock requestAlwaysAuthorization]);
+}
+
+
+- (void) testStartMonitoringStatusAlwaysAndRequestWhenInUseAuthorization {
+    // setup
+    id locationManagerMock = OCMClassMock([CLLocationManager class]);
+    OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusAuthorizedWhenInUse);
+    _monitor.locationManager = locationManagerMock;
+    OCMStub([_monitor userHasDeclinedLocationPermission:kCLAuthorizationStatusAuthorizedAlways]).andReturn(NO);
+    _monitor.requestAuthroizationLevel = ACPPlacesRequestAuthorizationLevelAlways;
+    
+    // test
+    [_monitor startMonitoring];
+    
+    // verify
+    OCMVerify([_monitor beginTrackingLocation]);
+    OCMReject([locationManagerMock requestAlwaysAuthorization]);
+    OCMReject([locationManagerMock requestWhenInUseAuthorization]);
+}
+
 
 - (void) testStartMonitoringGeoFencesNoPermission {
     // setup
@@ -1049,6 +1208,7 @@
     [_monitor startMonitoringSignificantLocationChanges];
     
     // verify
+    XCTAssertTrue(_monitor.isMonitoringStarted);
     OCMVerify([locationManagerMock startMonitoringSignificantLocationChanges]);
     OCMVerify([_coreMock log:ACPMobileLogLevelDebug
                          tag:ACPPlacesMonitorExtensionName_Test
@@ -1076,6 +1236,7 @@
     [_monitor stopMonitoringSignificantLocationChanges];
     
     // verify
+    XCTAssertFalse(_monitor.isMonitoringStarted);
     OCMVerify([locationManagerMock stopMonitoringSignificantLocationChanges]);
     OCMVerify([_coreMock log:ACPMobileLogLevelDebug
                          tag:ACPPlacesMonitorExtensionName_Test
@@ -1107,6 +1268,7 @@
     [_monitor startMonitoringContinuousLocationChanges];
     
     // verify
+    XCTAssertTrue(_monitor.isMonitoringStarted);
     [locationManagerMock verify];
     OCMVerify([_coreMock log:ACPMobileLogLevelDebug
                          tag:ACPPlacesMonitorExtensionName_Test
@@ -1135,6 +1297,7 @@
     [_monitor stopMonitoringContinuousLocationChanges];
     
     // verify
+    XCTAssertFalse(_monitor.isMonitoringStarted);
     OCMVerify([locationManagerMock stopUpdatingLocation]);
     OCMVerify([_coreMock log:ACPMobileLogLevelDebug
                          tag:ACPPlacesMonitorExtensionName_Test
@@ -1219,6 +1382,21 @@
     OCMVerify([_monitor updateCurrentlyMonitoredRegionsInPersistence]);
     XCTAssertEqual(0, _monitor.userWithinRegions.count);
     OCMVerify([_monitor updateUserWithinRegionsInPersistence]);
+}
+
+
+- (void) testPersistMonitoringStatus {
+    // test by setting "isMonitoringStarted" to false
+    _monitor.isMonitoringStarted = false;
+    [_monitor persistMonitoringStatus];
+    XCTAssertFalse([[NSUserDefaults standardUserDefaults]
+                                            boolForKey:ACPPlacesMonitorDefaultsIsMonitoringStarted_Test]);
+    
+    // test by switchting "isMonitoringStarted" to true
+    _monitor.isMonitoringStarted = true;
+    [_monitor persistMonitoringStatus];
+    XCTAssertTrue([[NSUserDefaults standardUserDefaults]
+                                            boolForKey:ACPPlacesMonitorDefaultsIsMonitoringStarted_Test]);
 }
 
 @end
