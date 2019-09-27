@@ -26,6 +26,8 @@ FOUNDATION_EXPORT int const ACPPlacesMonitorDefaultMaxMonitoredRegionCount;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorDefaultsMonitoredRegions;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorDefaultsUserWithinRegions;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorDefaultsMonitorMode;
+FOUNDATION_EXPORT NSString* const ACPPlacesMonitorDefaultsRequestAuthorizationLevel;
+FOUNDATION_EXPORT NSString* const ACPPlacesMonitorDefaultsIsMonitoringStarted;
 
 #pragma mark - Event Data Keys
 // event sources
@@ -53,12 +55,17 @@ FOUNDATION_EXPORT NSString* const ACPPlacesMonitorRulesTriggeredConsequence;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorRulesConsequenceType;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorRulesConsequenceDetail;
 
-// places monitor
+// places monitor event names
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameStart;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameStop;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameUpdateLocationNow;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameUpdateMonitorConfiguration;
+FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameSetRequestAuthorizationLevel;
+
+
+// places monitor eventData keys
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataMonitorMode;
+FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataRequestAuthorizationLevel;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataClear;
 
 
