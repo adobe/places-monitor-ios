@@ -93,18 +93,18 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesRequestAuthorizationLevel) {
 + (void) setPlacesMonitorMode: (ACPPlacesMonitorMode) monitorMode;
 
 /**
- * @brief Sets the type of location authorization request, which the user will be prompted during Places Monitor start.
- *
- * @discussion Call this method before the Places Monitor start to set the approriate authorization prompt to be made to the user.
- * Calling this method while actively monitoring will upgrade the location authorization level to the requested authorization value.
- * This method has no effect if the provided requested authorization level is either already provided or denied by the application user.
- * ACPPlacesRequestAuthorizationLevelAlways is the default request authorization value.
- *
- * The value provided in requestAuthorizationLevel will be persisted to NSUserDefaults for use cross-session.
- * Important: Your app must be in the foreground to show a location authorization prompt.
- *
- * @param requestAuthorizationLevel an ACPPlacesRequestAuthorizationLevel value
- */
+* @brief Sets the type of location authorization request, which the user will be prompted during Places Monitor start.
+*
+* @discussion Call this method before the Places Monitor start to set the appropriate authorization prompt to be shown to the user.
+* Calling this method while actively monitoring will upgrade the location authorization level to the requested authorization value.
+* This method has no effect if the requested authorization level is either already provided or denied by the application user.
+* ACPPlacesRequestAuthorizationLevelAlways is the default request authorization value.
+*
+* The value provided in requestAuthorizationLevel will be persisted to NSUserDefaults for use cross-session.
+* Important: Your app must be in the foreground to show a location authorization prompt.
+*
+* @param requestAuthorizationLevel an ACPPlacesRequestAuthorizationLevel value
+*/
 + (void) setRequestAuthorizationLevel: (ACPPlacesRequestAuthorizationLevel) requestAuthorizationLevel;
 
 /**

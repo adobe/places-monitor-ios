@@ -63,7 +63,7 @@ FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameUpdateMonitorConfigur
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventNameSetRequestAuthorizationLevel;
 
 
-// places monitor eventData keys
+// places monitor event data keys
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataMonitorMode;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataRequestAuthorizationLevel;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataClear;
