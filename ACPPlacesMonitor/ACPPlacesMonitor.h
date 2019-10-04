@@ -46,9 +46,9 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorMode) {
  *   keys in your app’s Info.plist file definining the text that will appear during the user prompt.
  *   see : https://developer.apple.com/documentation/corelocation/cllocationmanager/1620551-requestalwaysauthorization
 */
-typedef NS_OPTIONS(NSInteger, ACPPlacesRequestAuthorizationLevel) {
-    ACPPlacesRequestAuthorizationLevelWhenInUse = 1 << 0,           /*!< Enum value ACPPlacesRequestAuthorizationLevelWhenInUse */
-    ACPPlacesRequestAuthorizationLevelAlways = 1 << 1    /*!< Enum value ACPPlacesRequestAuthorizationLevelAlways */
+typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorRequestAuthorizationLevel) {
+    ACPPlacesMonitorRequestAuthorizationLevelWhenInUse = 1 << 0,           /*!< Enum value ACPPlacesMonitorRequestAuthorizationLevelWhenInUse */
+    ACPPlacesRequestMonitorAuthorizationLevelAlways = 1 << 1    /*!< Enum value ACPPlacesRequestMonitorAuthorizationLevelAlways */
 };
 
 
@@ -98,6 +98,7 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesRequestAuthorizationLevel) {
 * @discussion Call this method before the Places Monitor start to set the appropriate authorization prompt to be shown to the user.
 * Calling this method while actively monitoring will upgrade the location authorization level to the requested authorization value.
 * This method has no effect if the requested authorization level is either already provided or denied by the application user.
+* This method has no effect for the downgrade of permission from "Always" to "WhenInUse" authorization.
 * ACPPlacesRequestAuthorizationLevelAlways is the default request authorization value.
 *
 * The value provided in requestAuthorizationLevel will be persisted to NSUserDefaults for use cross-session.
@@ -105,7 +106,7 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesRequestAuthorizationLevel) {
 *
 * @param requestAuthorizationLevel an ACPPlacesRequestAuthorizationLevel value
 */
-+ (void) setRequestAuthorizationLevel: (ACPPlacesRequestAuthorizationLevel) requestAuthorizationLevel;
++ (void) setRequestAuthorizationLevel: (ACPPlacesMonitorRequestAuthorizationLevel) requestAuthorizationLevel;
 
 /**
  * @brief Start tracking the device's location and monitoring their nearby Places

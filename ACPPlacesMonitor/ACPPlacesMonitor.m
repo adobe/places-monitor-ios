@@ -46,7 +46,7 @@
     [ACPPlacesMonitor dispatchMonitorEvent:ACPPlacesMonitorEventNameUpdateMonitorConfiguration withData:data];
 }
 
-+ (void) setRequestAuthorizationLevel: (ACPPlacesRequestAuthorizationLevel) requestAuthorizationLevel {
++ (void) setRequestAuthorizationLevel: (ACPPlacesMonitorRequestAuthorizationLevel) requestAuthorizationLevel {
     NSDictionary* data = @ {ACPPlacesMonitorEventDataRequestAuthorizationLevel: @(requestAuthorizationLevel)};
     [ACPPlacesMonitor dispatchMonitorEvent:ACPPlacesMonitorEventNameSetRequestAuthorizationLevel withData:data];
 }
