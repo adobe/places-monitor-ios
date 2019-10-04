@@ -101,7 +101,7 @@
 
 - (void) testSetRequestAuthorizationLevel {
     // setup
-    ACPPlacesRequestAuthorizationLevel authLevel = ACPPlacesRequestAuthorizationLevelWhenInUse;
+    ACPPlacesMonitorRequestAuthorizationLevel authLevel = ACPPlacesMonitorRequestAuthorizationLevelWhenInUse;
     NSDictionary *testData = @{ACPPlacesMonitorEventDataRequestAuthorizationLevel_Test: @(authLevel)};
     
     // test

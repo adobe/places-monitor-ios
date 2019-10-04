@@ -34,7 +34,7 @@
 @property(nonatomic, strong) NSMutableArray<NSString*>* currentlyMonitoredRegions;
 @property(nonatomic, strong) NSMutableArray<NSString*>* userWithinRegions;
 @property(nonatomic) ACPPlacesMonitorMode monitorMode;
-@property(nonatomic) ACPPlacesRequestAuthorizationLevel requestAuthroizationLevel;
+@property(nonatomic) ACPPlacesMonitorRequestAuthorizationLevel requestAuthorizationLevel;
 @property(nonatomic) bool isMonitoringStarted;
 @end
 
@@ -217,8 +217,8 @@
             [self updateMonitorMode:newMode];
         } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameSetRequestAuthorizationLevel]) {
             NSNumber* requestAuthNumber = [eventToProcess.eventData objectForKey:ACPPlacesMonitorEventDataRequestAuthorizationLevel];
-            ACPPlacesRequestAuthorizationLevel newRequestAuthorizationLevel = requestAuthNumber ? [requestAuthNumber integerValue] : ACPPlacesRequestAuthorizationLevelAlways;
-            [self updateRequestAuthroizationLevel:newRequestAuthorizationLevel];
+            ACPPlacesMonitorRequestAuthorizationLevel newRequestAuthorizationLevel = requestAuthNumber ? [requestAuthNumber integerValue] : ACPPlacesRequestMonitorAuthorizationLevelAlways;
+            [self updateRequestAuthorizationLevel:newRequestAuthorizationLevel];
         }
 
         [self.eventQueue poll];
@@ -364,7 +364,7 @@
     }
     
     NSNumber* requestAuthorizationLevel = [[NSUserDefaults standardUserDefaults] objectForKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel];
-    self.requestAuthroizationLevel = requestAuthorizationLevel ? [requestAuthorizationLevel longValue] : ACPPlacesRequestAuthorizationLevelAlways;
+    self.requestAuthorizationLevel = requestAuthorizationLevel ? [requestAuthorizationLevel longValue] : ACPPlacesRequestMonitorAuthorizationLevelAlways;
     
     NSArray* persistedRegions = [[NSUserDefaults standardUserDefaults]
                                  arrayForKey:ACPPlacesMonitorDefaultsMonitoredRegions];
@@ -403,8 +403,8 @@
 }
 
 
-- (void) updateRequestAuthroizationLevel: (ACPPlacesRequestAuthorizationLevel) requestAuthorizationLevel {
-    _requestAuthroizationLevel = requestAuthorizationLevel;
+- (void) updateRequestAuthorizationLevel: (ACPPlacesMonitorRequestAuthorizationLevel) requestAuthorizationLevel {
+    _requestAuthorizationLevel = requestAuthorizationLevel;
     [[NSUserDefaults standardUserDefaults] setInteger:requestAuthorizationLevel forKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -441,33 +441,34 @@
 - (void) startMonitoring {
     CLAuthorizationStatus auth = [CLLocationManager authorizationStatus];
     
-    // if the user has denied location services, bail early
+    [ACPCore log:ACPMobileLogLevelDebug
+             tag:ACPPlacesMonitorExtensionName
+         message:@"Permission to use location data has been denied by the user"];
+    
+    // if the user has denied location services, bail out early
     if ([self userHasDeclinedLocationPermission:auth]) {
         [ACPCore log:ACPMobileLogLevelDebug
                  tag:ACPPlacesMonitorExtensionName
-             message:@"Permission to use location data has been denied by the user"];
+             message:@"Unable to start monitoring. Permission to use location data has been denied by the user"];
         return;
     }
     
-    
-    // For Request Authorization "whenInUse".
-    // verify
-    if(_requestAuthroizationLevel == ACPPlacesRequestAuthorizationLevelWhenInUse) {
-        // if the user hasn't been asked yet, we need to ask for permission to use location
+    // for Request Authorization "whenInUse"
+    if(_requestAuthorizationLevel == ACPPlacesMonitorRequestAuthorizationLevelWhenInUse) {
+        // Ask for "whenInUse" location permission, only if the user hasn't been asked for location permission yet.
         if (auth == kCLAuthorizationStatusNotDetermined) {
+            // attempt to request whenInUse authorization
             if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
                 [_locationManager requestWhenInUseAuthorization];
             }
-        } else {
-            [ACPCore log:ACPMobileLogLevelDebug
-                     tag:ACPPlacesMonitorExtensionName
-                 message:@"Cannot request WhenInUse location authorization request. Current "];
         }
-        
     }
     
-    if(_requestAuthroizationLevel == ACPPlacesRequestAuthorizationLevelAlways) {
+    // for Request Authorization "Always"
+    if(_requestAuthorizationLevel == ACPPlacesRequestMonitorAuthorizationLevelAlways) {        
+        // Ask for "always" location permission, only if the user hasn't been asked for location permission yet or has accepted "WhenInUse" authorization
         if (auth == kCLAuthorizationStatusNotDetermined || auth == kCLAuthorizationStatusAuthorizedWhenInUse) {
+             // attempt to request always authorization
             if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
                 [_locationManager requestAlwaysAuthorization];
             }
