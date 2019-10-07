@@ -951,7 +951,7 @@
     // verify
     OCMVerify([_coreMock log:ACPMobileLogLevelDebug
                          tag:ACPPlacesMonitorExtensionName_Test
-                     message:@"Permission to use location data has been denied by the user"]);
+                     message:@"Unable to start monitoring. Permission to use location data has been denied by the user"]);
 }
 
 - (void) testStartMonitoringStatusNotDeterminedAndRequestWhenInUseAuthorization {

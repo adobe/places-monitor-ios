@@ -358,10 +358,8 @@
     NSNumber* monitorMode = [[NSUserDefaults standardUserDefaults] objectForKey:ACPPlacesMonitorDefaultsMonitorMode];
     self.monitorMode = monitorMode ? [monitorMode longValue] : ACPPlacesMonitorModeSignificantChanges;
     
-    self.isMonitoringStarted = false;
-    if([[[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys] containsObject:ACPPlacesMonitorDefaultsIsMonitoringStarted]){
-        self.isMonitoringStarted = [[NSUserDefaults standardUserDefaults] boolForKey:ACPPlacesMonitorDefaultsIsMonitoringStarted];
-    }
+
+    self.isMonitoringStarted = [[NSUserDefaults standardUserDefaults] boolForKey:ACPPlacesMonitorDefaultsIsMonitoringStarted];
     
     NSNumber* requestAuthorizationLevel = [[NSUserDefaults standardUserDefaults] objectForKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel];
     self.requestAuthorizationLevel = requestAuthorizationLevel ? [requestAuthorizationLevel longValue] : ACPPlacesRequestMonitorAuthorizationLevelAlways;
@@ -440,11 +438,7 @@
 
 - (void) startMonitoring {
     CLAuthorizationStatus auth = [CLLocationManager authorizationStatus];
-    
-    [ACPCore log:ACPMobileLogLevelDebug
-             tag:ACPPlacesMonitorExtensionName
-         message:@"Permission to use location data has been denied by the user"];
-    
+        
     // if the user has denied location services, bail out early
     if ([self userHasDeclinedLocationPermission:auth]) {
         [ACPCore log:ACPMobileLogLevelDebug
@@ -454,7 +448,7 @@
     }
     
     // for Request Authorization "whenInUse"
-    if(_requestAuthorizationLevel == ACPPlacesMonitorRequestAuthorizationLevelWhenInUse) {
+    if (_requestAuthorizationLevel == ACPPlacesMonitorRequestAuthorizationLevelWhenInUse) {
         // Ask for "whenInUse" location permission, only if the user hasn't been asked for location permission yet.
         if (auth == kCLAuthorizationStatusNotDetermined) {
             // attempt to request whenInUse authorization
@@ -465,7 +459,7 @@
     }
     
     // for Request Authorization "Always"
-    if(_requestAuthorizationLevel == ACPPlacesRequestMonitorAuthorizationLevelAlways) {        
+    if (_requestAuthorizationLevel == ACPPlacesRequestMonitorAuthorizationLevelAlways) {
         // Ask for "always" location permission, only if the user hasn't been asked for location permission yet or has accepted "WhenInUse" authorization
         if (auth == kCLAuthorizationStatusNotDetermined || auth == kCLAuthorizationStatusAuthorizedWhenInUse) {
              // attempt to request always authorization
