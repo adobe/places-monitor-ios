@@ -34,6 +34,8 @@
 @property(nonatomic, strong) NSMutableArray<NSString*>* currentlyMonitoredRegions;
 @property(nonatomic, strong) NSMutableArray<NSString*>* userWithinRegions;
 @property(nonatomic) ACPPlacesMonitorMode monitorMode;
+@property(nonatomic) ACPPlacesMonitorRequestAuthorizationLevel requestAuthorizationLevel;
+@property(nonatomic) bool isMonitoringStarted;
 @end
 
 @implementation ACPPlacesMonitorInternal
@@ -212,7 +214,11 @@
         } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameUpdateMonitorConfiguration]) {
             NSNumber* modeNumber = [eventToProcess.eventData objectForKey:ACPPlacesMonitorEventDataMonitorMode];
             ACPPlacesMonitorMode newMode = modeNumber ? [modeNumber integerValue] : ACPPlacesMonitorModeSignificantChanges;
-            [self setMonitorMode:newMode];
+            [self updateMonitorMode:newMode];
+        } else if ([eventToProcess.eventName isEqualToString:ACPPlacesMonitorEventNameSetRequestAuthorizationLevel]) {
+            NSNumber* requestAuthNumber = [eventToProcess.eventData objectForKey:ACPPlacesMonitorEventDataRequestAuthorizationLevel];
+            ACPPlacesMonitorRequestAuthorizationLevel newRequestAuthorizationLevel = requestAuthNumber ? [requestAuthNumber integerValue] : ACPPlacesRequestMonitorAuthorizationLevelAlways;
+            [self updateRequestAuthorizationLevel:newRequestAuthorizationLevel];
         }
 
         [self.eventQueue poll];
@@ -351,7 +357,13 @@
 - (void) loadPersistedValues {
     NSNumber* monitorMode = [[NSUserDefaults standardUserDefaults] objectForKey:ACPPlacesMonitorDefaultsMonitorMode];
     self.monitorMode = monitorMode ? [monitorMode longValue] : ACPPlacesMonitorModeSignificantChanges;
+    
 
+    self.isMonitoringStarted = [[NSUserDefaults standardUserDefaults] boolForKey:ACPPlacesMonitorDefaultsIsMonitoringStarted];
+    
+    NSNumber* requestAuthorizationLevel = [[NSUserDefaults standardUserDefaults] objectForKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel];
+    self.requestAuthorizationLevel = requestAuthorizationLevel ? [requestAuthorizationLevel longValue] : ACPPlacesRequestMonitorAuthorizationLevelAlways;
+    
     NSArray* persistedRegions = [[NSUserDefaults standardUserDefaults]
                                  arrayForKey:ACPPlacesMonitorDefaultsMonitoredRegions];
     self.currentlyMonitoredRegions = persistedRegions.count ? [persistedRegions mutableCopy] : [@[] mutableCopy];
@@ -379,13 +391,25 @@
     [self updateCurrentlyMonitoredRegionsInPersistence];
 }
 
-- (void) setMonitorMode: (ACPPlacesMonitorMode) monitorMode {
+- (void) updateMonitorMode: (ACPPlacesMonitorMode) monitorMode {
     _monitorMode = monitorMode;
     [[NSUserDefaults standardUserDefaults] setInteger:monitorMode forKey:ACPPlacesMonitorDefaultsMonitorMode];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
     // a call to refresh how we are monitoring based on the new mode
     [self beginTrackingLocation];
+}
+
+
+- (void) updateRequestAuthorizationLevel: (ACPPlacesMonitorRequestAuthorizationLevel) requestAuthorizationLevel {
+    _requestAuthorizationLevel = requestAuthorizationLevel;
+    [[NSUserDefaults standardUserDefaults] setInteger:requestAuthorizationLevel forKey:ACPPlacesMonitorDefaultsRequestAuthorizationLevel];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    // enchance the authorization level if the monitoring has already started
+    if (_isMonitoringStarted) {
+        [self startMonitoring];
+    }
 }
 
 - (void) beginTrackingLocation {
@@ -408,25 +432,40 @@
     }
     
 #endif
-    
+    [self persistMonitoringStatus];
     [self updateLocationNow];
 }
 
 - (void) startMonitoring {
     CLAuthorizationStatus auth = [CLLocationManager authorizationStatus];
-    
-    // if the user has denied location services, bail early
+        
+    // if the user has denied location services, bail out early
     if ([self userHasDeclinedLocationPermission:auth]) {
         [ACPCore log:ACPMobileLogLevelDebug
                  tag:ACPPlacesMonitorExtensionName
-             message:@"Permission to use location data has been denied by the user"];
+             message:@"Unable to start monitoring. Permission to use location data has been denied by the user"];
         return;
     }
     
-    // if the user hasn't been asked yet, we need to ask for permission to use location
-    if (auth == kCLAuthorizationStatusNotDetermined) {
-        if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [_locationManager requestAlwaysAuthorization];
+    // for Request Authorization "whenInUse"
+    if (_requestAuthorizationLevel == ACPPlacesMonitorRequestAuthorizationLevelWhenInUse) {
+        // Ask for "whenInUse" location permission, only if the user hasn't been asked for location permission yet.
+        if (auth == kCLAuthorizationStatusNotDetermined) {
+            // attempt to request whenInUse authorization
+            if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+                [_locationManager requestWhenInUseAuthorization];
+            }
+        }
+    }
+    
+    // for Request Authorization "Always"
+    if (_requestAuthorizationLevel == ACPPlacesRequestMonitorAuthorizationLevelAlways) {
+        // Ask for "always" location permission, only if the user hasn't been asked for location permission yet or has accepted "WhenInUse" authorization
+        if (auth == kCLAuthorizationStatusNotDetermined || auth == kCLAuthorizationStatusAuthorizedWhenInUse) {
+             // attempt to request always authorization
+            if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+                [_locationManager requestAlwaysAuthorization];
+            }
         }
     }
     
@@ -510,6 +549,7 @@
 #if SIGNIFICANT_LOCATION_CHANGE_MONITORING_SUPPORTED
 - (void) startMonitoringSignificantLocationChanges {
     if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+        _isMonitoringStarted = true;
         [_locationManager startMonitoringSignificantLocationChanges];
         [ACPCore log:ACPMobileLogLevelDebug
                  tag:ACPPlacesMonitorExtensionName
@@ -519,6 +559,7 @@
 
 - (void) stopMonitoringSignificantLocationChanges {
     if ([CLLocationManager significantLocationChangeMonitoringAvailable]) {
+        _isMonitoringStarted = false;
         [_locationManager stopMonitoringSignificantLocationChanges];
         [ACPCore log:ACPMobileLogLevelDebug
                  tag:ACPPlacesMonitorExtensionName
@@ -536,6 +577,7 @@
     // this method is available on iOS and starting with watchOS3
     if ([_locationManager respondsToSelector:@selector(startUpdatingLocation)]) {
         [_locationManager startUpdatingLocation];
+        _isMonitoringStarted = true;
         [ACPCore log:ACPMobileLogLevelDebug
                  tag:ACPPlacesMonitorExtensionName
              message:@"Continuous location collection is enabled"];
@@ -544,6 +586,7 @@
 
 - (void) stopMonitoringContinuousLocationChanges {
     [_locationManager stopUpdatingLocation];
+    _isMonitoringStarted = false;
     [ACPCore log:ACPMobileLogLevelDebug
              tag:ACPPlacesMonitorExtensionName
          message:@"Continuous location collection is disabled"];
@@ -559,6 +602,11 @@
     
     [_userWithinRegions removeAllObjects];
     [self updateUserWithinRegionsInPersistence];
+}
+
+- (void) persistMonitoringStatus {
+    [[NSUserDefaults standardUserDefaults] setBool:_isMonitoringStarted forKey:ACPPlacesMonitorDefaultsIsMonitoringStarted];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (BOOL) userHasDeclinedLocationPermission: (CLAuthorizationStatus) status {

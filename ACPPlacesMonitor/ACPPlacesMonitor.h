@@ -35,6 +35,24 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorMode) {
 };
 
 /**
+ * @brief An enum indicating application's authorization to use location services
+ * @discussion
+ * - WhenInUse (ACPPlacesRequestAuthorizationLevelWhenInUse) : Requests the user’s permission to use location
+ *   services while the app is in use. The user prompt contains the text from the NSLocationWhenInUseUsageDescription
+ *   key in your app Info.plist file, and the presence of that key is required when calling this method. For more information
+ *   see : https://developer.apple.com/documentation/corelocation/cllocationmanager/1620562-requestwheninuseauthorization
+ * - Always (ACPPlacesRequestAuthorizationLevelAlways) : Use this enum to request for user permission to use location services
+ *   whether or not the app is in use. You must have NSLocationAlwaysUsageDescription and NSLocationWhenInUseUsageDescription
+ *   keys in your app’s Info.plist file definining the text that will appear during the user prompt.
+ *   see : https://developer.apple.com/documentation/corelocation/cllocationmanager/1620551-requestalwaysauthorization
+*/
+typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorRequestAuthorizationLevel) {
+    ACPPlacesMonitorRequestAuthorizationLevelWhenInUse = 1 << 0,           /*!< Enum value ACPPlacesMonitorRequestAuthorizationLevelWhenInUse */
+    ACPPlacesRequestMonitorAuthorizationLevelAlways = 1 << 1    /*!< Enum value ACPPlacesRequestMonitorAuthorizationLevelAlways */
+};
+
+
+/**
  * @class ACPPlacesMonitor
  *
  * The ACPPlacesMonitor handles OS-level management of tracking the user's location and region monitoring.  It works
@@ -73,6 +91,22 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorMode) {
  * @param monitorMode an ACPPlacesMonitorMode value indicating how the Places Monitor should track the user's location.
  */
 + (void) setPlacesMonitorMode: (ACPPlacesMonitorMode) monitorMode;
+
+/**
+* @brief Sets the type of location authorization request, which the user will be prompted during Places Monitor start.
+*
+* @discussion Call this method before the Places Monitor start to set the appropriate authorization prompt to be shown to the user.
+* Calling this method while actively monitoring will upgrade the location authorization level to the requested authorization value.
+* This method has no effect if the requested authorization level is either already provided or denied by the application user.
+* This method has no effect for the downgrade of permission from "Always" to "WhenInUse" authorization.
+* ACPPlacesRequestAuthorizationLevelAlways is the default request authorization value.
+*
+* The value provided in requestAuthorizationLevel will be persisted to NSUserDefaults for use cross-session.
+* Important: Your app must be in the foreground to show a location authorization prompt.
+*
+* @param requestAuthorizationLevel an ACPPlacesRequestAuthorizationLevel value
+*/
++ (void) setRequestAuthorizationLevel: (ACPPlacesMonitorRequestAuthorizationLevel) requestAuthorizationLevel;
 
 /**
  * @brief Start tracking the device's location and monitoring their nearby Places
