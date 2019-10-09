@@ -53,10 +53,13 @@
     // test
     [ACPPlacesMonitor registerExtension];
     
+
+    NSString* expectedLog  =  [NSString stringWithFormat:@"The ACPPlacesMonitor extension was successfully registered. Version : %@",ACPPlacesMonitorExtensionVersion_Test];
+    
     // verify
     OCMVerify([_coreMock log:ACPMobileLogLevelDebug
                          tag:ACPPlacesMonitorExtensionName_Test
-                     message:@"The ACPPlacesMonitor extension was successfully registered"]);
+                     message:expectedLog]);
 }
 
 - (void) testRegisterExtensionFailure {
@@ -99,6 +102,20 @@
                                         withData:testData]);
 }
 
+- (void) testSetRequestAuthorizationLevel {
+    // setup
+    ACPPlacesMonitorRequestAuthorizationLevel authLevel = ACPPlacesMonitorRequestAuthorizationLevelWhenInUse;
+    NSDictionary *testData = @{ACPPlacesMonitorEventDataRequestAuthorizationLevel_Test: @(authLevel)};
+    
+    // test
+    [ACPPlacesMonitor setRequestAuthorizationLevel:authLevel];
+    
+    // verify
+    OCMVerify([_monitorMock dispatchMonitorEvent:ACPPlacesMonitorEventNameSetRequestAuthorizationLevel_Test
+                                        withData:testData]);
+}
+
+
 - (void) testStart {
     // test
     [ACPPlacesMonitor start];
@@ -114,7 +131,7 @@
     
     // verify
     OCMVerify([_monitorMock dispatchMonitorEvent:ACPPlacesMonitorEventNameStop_Test
-                                        withData:@{ACPPlacesMonitorEventDataClear: @(YES)}]);
+                                        withData:@{ACPPlacesMonitorEventDataClear_Test: @(YES)}]);
 }
 
 - (void) testStopWithoutClear {
@@ -123,7 +140,7 @@
     
     // verify
     OCMVerify([_monitorMock dispatchMonitorEvent:ACPPlacesMonitorEventNameStop_Test
-                                        withData:@{ACPPlacesMonitorEventDataClear: @(NO)}]);
+                                        withData:@{ACPPlacesMonitorEventDataClear_Test: @(NO)}]);
 }
 
 - (void) testUpdateLocationNow {

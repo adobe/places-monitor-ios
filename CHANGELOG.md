@@ -1,3 +1,6 @@
+### 2.1.0 (9 Oct, 2019)
+- Added a new API `setRequestAuthorizationLevel` to set the type of location authorization request for which the user will be prompted.
+
 ### 2.0.0 (25 Jul, 2019)
 - Changed existing API in ACPPlacesMonitor allowing you to clear all Places data from the device:
   - old API - `+ (void) stop;`
