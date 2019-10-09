@@ -146,11 +146,6 @@
         }
     }
     
-    [ACPCore log:ACPMobileLogLevelDebug
-            tag:ACPPlacesMonitorExtensionName
-        message:[NSString stringWithFormat:@"Places Monitor extension successfully initialized. Version: %@",
-    ACPPlacesMonitorExtensionVersion]];
-
     return self;
 }
 
