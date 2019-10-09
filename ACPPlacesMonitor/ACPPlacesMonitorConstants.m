@@ -17,13 +17,15 @@
 #import "ACPPlacesMonitorConstants.h"
 
 #pragma mark - Monitor Properties
-NSString* const ACPPlacesMonitorExtensionVersion = @"2.0.0";
+NSString* const ACPPlacesMonitorExtensionVersion = @"2.1.0";
 NSString* const ACPPlacesMonitorExtensionName = @"com.adobe.placesMonitor";
 int const ACPPlacesMonitorDefaultMaxMonitoredRegionCount = 20;
 
 NSString* const ACPPlacesMonitorDefaultsMonitoredRegions = @"acpplacesmonitor.monitoredregions";
 NSString* const ACPPlacesMonitorDefaultsUserWithinRegions = @"acpplacesmonitor.userwithinregions";
 NSString* const ACPPlacesMonitorDefaultsMonitorMode = @"acpplacesmonitor.monitormode";
+NSString* const ACPPlacesMonitorDefaultsRequestAuthorizationLevel = @"acpplacesmonitor.requestauthorizationlevel";
+NSString* const ACPPlacesMonitorDefaultsIsMonitoringStarted = @"acpplacesmonitor.ismonitoringstarted";
 
 #pragma mark - Event Data Keys
 // event sources
@@ -51,10 +53,14 @@ NSString* const ACPPlacesMonitorRulesTriggeredConsequence = @"triggeredconsequen
 NSString* const ACPPlacesMonitorRulesConsequenceType = @"type";
 NSString* const ACPPlacesMonitorRulesConsequenceDetail = @"detail";
 
-// places monitor
+// places monitor event name
 NSString* const ACPPlacesMonitorEventNameStart = @"start monitoring";
 NSString* const ACPPlacesMonitorEventNameStop = @"stop monitoring";
 NSString* const ACPPlacesMonitorEventNameUpdateLocationNow = @"update location now";
 NSString* const ACPPlacesMonitorEventNameUpdateMonitorConfiguration = @"update monitor configuration";
+NSString* const ACPPlacesMonitorEventNameSetRequestAuthorizationLevel = @"set request authorization level";
+
+// places monitor event data keys
 NSString* const ACPPlacesMonitorEventDataMonitorMode = @"monitormode";
+NSString* const ACPPlacesMonitorEventDataRequestAuthorizationLevel = @"requestauthorizationlevel";
 NSString* const ACPPlacesMonitorEventDataClear = @"clearclientdata";
