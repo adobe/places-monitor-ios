@@ -53,10 +53,13 @@
     // test
     [ACPPlacesMonitor registerExtension];
     
+
+    NSString* expectedLog  =  [NSString stringWithFormat:@"The ACPPlacesMonitor extension was successfully registered. Version : %@",ACPPlacesMonitorExtensionVersion_Test];
+    
     // verify
     OCMVerify([_coreMock log:ACPMobileLogLevelDebug
                          tag:ACPPlacesMonitorExtensionName_Test
-                     message:@"The ACPPlacesMonitor extension was successfully registered"]);
+                     message:expectedLog]);
 }
 
 - (void) testRegisterExtensionFailure {
