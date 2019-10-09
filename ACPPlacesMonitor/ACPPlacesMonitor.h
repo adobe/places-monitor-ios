@@ -12,7 +12,7 @@
 
 //
 // ACPPlacesMonitor.h
-// Places Monitor Version: 2.0.0
+// Places Monitor Version: 2.1.0
 //
 
 #import <Foundation/Foundation.h>
@@ -93,15 +93,14 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorRequestAuthorizationLevel) {
 + (void) setPlacesMonitorMode: (ACPPlacesMonitorMode) monitorMode;
 
 /**
-* @brief Sets the type of location authorization request, which the user will be prompted during Places Monitor start.
+* @brief This API sets the type of location authorization request, for which the user will be prompted for [ACPPlacesMonitor start].
 *
-* @discussion Call this method before the Places Monitor start to set the appropriate authorization prompt to be shown to the user.
+* @discussion To set the appropriate authorization prompt to be shown to the user, call this API before the [ACPPlacesMonitor start].
 * Calling this method while actively monitoring will upgrade the location authorization level to the requested authorization value.
-* This method has no effect if the requested authorization level is either already provided or denied by the application user.
-* This method has no effect for the downgrade of permission from "Always" to "WhenInUse" authorization.
-* ACPPlacesRequestAuthorizationLevelAlways is the default request authorization value.
+* If the requested authorization level is either already provided or denied by the application user or when there is a downgrade of permission
+* from ACPPlacesRequestAuthorizationLevelAlways to ACPPlacesRequestAuthorizationLevelWhenInUse authorization, this method has no effect.
 *
-* The value provided in requestAuthorizationLevel will be persisted to NSUserDefaults for use cross-session.
+* The value provided in requestAuthorizationLevel will be persisted to NSUserDefaults for cross-session usage.
 * Important: Your app must be in the foreground to show a location authorization prompt.
 *
 * @param requestAuthorizationLevel an ACPPlacesRequestAuthorizationLevel value

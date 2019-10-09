@@ -145,6 +145,11 @@
                  message:@"Background location updates are not enabled for this app. If you are doing background region monitoring, you must enable this capability."];
         }
     }
+    
+    [ACPCore log:ACPMobileLogLevelDebug
+            tag:ACPPlacesMonitorExtensionName
+        message:[NSString stringWithFormat:@"Places Monitor extension successfully initialized. Version: %@",
+    ACPPlacesMonitorExtensionVersion]];
 
     return self;
 }
