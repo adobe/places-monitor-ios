@@ -145,7 +145,7 @@
                  message:@"Background location updates are not enabled for this app. If you are doing background region monitoring, you must enable this capability."];
         }
     }
-
+    
     return self;
 }
 

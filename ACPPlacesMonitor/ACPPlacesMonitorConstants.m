@@ -17,7 +17,7 @@
 #import "ACPPlacesMonitorConstants.h"
 
 #pragma mark - Monitor Properties
-NSString* const ACPPlacesMonitorExtensionVersion = @"2.0.0";
+NSString* const ACPPlacesMonitorExtensionVersion = @"2.1.0";
 NSString* const ACPPlacesMonitorExtensionName = @"com.adobe.placesMonitor";
 int const ACPPlacesMonitorDefaultMaxMonitoredRegionCount = 20;
 
