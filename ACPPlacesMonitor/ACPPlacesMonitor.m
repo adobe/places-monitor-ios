@@ -32,7 +32,7 @@
     if ([ACPCore registerExtension:[ACPPlacesMonitorInternal class] error:&error]) {
         [ACPCore log:ACPMobileLogLevelDebug
                  tag:ACPPlacesMonitorExtensionName
-             message:@"The ACPPlacesMonitor extension was successfully registered"];
+             message:[NSString stringWithFormat:@"The ACPPlacesMonitor extension was successfully registered. Version : %@",ACPPlacesMonitorExtensionVersion]];
     } else {
         [ACPCore log:ACPMobileLogLevelError
                  tag:ACPPlacesMonitorExtensionName
