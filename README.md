@@ -42,7 +42,7 @@ make update
 
 #### Open the Xcode workspace
 
-Open the workspace in Xcode by running the following command from the root directory of the repository:
+Open the workspace in Xcode by running the following the command from the root directory of the repository:
 
 ~~~
 open ACPPlacesMonitor.xcworkspace
@@ -50,13 +50,13 @@ open ACPPlacesMonitor.xcworkspace
 
 #### Command line integration
 
-From command line you can build the project by running the following command:
+From the command line you can build the project by running the following the command:
 
 ~~~~
 make build
 ~~~~
 
-You can also run the unit test suite from command line:
+You can also run the unit test suite from the command line:
 
 ~~~~
 make test
