@@ -15,9 +15,9 @@
 //
 
 #import <CoreLocation/CoreLocation.h>
-#import "ACPCore.h"
-#import "ACPExtensionEvent.h"
-#import "ACPPlaces.h"
+#import <ACPCore/ACPCore.h>
+#import <ACPCore/ACPExtensionEvent.h>
+#import <ACPPlaces/ACPPlaces.h>
 #import "ACPPlacesMonitor.h"
 #import "ACPPlacesMonitorConstants.h"
 #import "ACPPlacesMonitorInternal.h"
