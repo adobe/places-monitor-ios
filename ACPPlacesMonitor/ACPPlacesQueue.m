@@ -14,7 +14,7 @@
 // ACPPlacesQueue.m
 //
 
-#import "ACPExtensionEvent.h"
+#import <ACPCore/ACPExtensionEvent.h>
 #import "ACPPlacesQueue.h"
 
 @interface ACPPlacesQueue()
