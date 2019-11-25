@@ -14,8 +14,8 @@
 // ACPPlacesMonitor.m
 //
 
-#import "ACPCore.h"
-#import "ACPExtensionEvent.h"
+#import <ACPCore/ACPCore.h>
+#import <ACPCore/ACPExtensionEvent.h>
 #import "ACPPlacesMonitor.h"
 #import "ACPPlacesMonitorConstants.h"
 #import "ACPPlacesMonitorInternal.h"

@@ -14,8 +14,8 @@
 // ACPPlacesMonitorInternal.h
 //
 
-#import "ACPExtension.h"
-#import "ACPPlaces.h"
+#import <ACPCore/ACPExtension.h>
+#import <ACPPlaces/ACPPlaces.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
