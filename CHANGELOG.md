@@ -1,3 +1,6 @@
+### 2.1.1 (25 Nov, 2019)
+- GitHub issue #44 - Fixed import statements for Cocoapods projects using multiple pod projects option.
+
 ### 2.1.0 (9 Oct, 2019)
 - Added a new API `setRequestAuthorizationLevel` to set the type of location authorization request for which the user will be prompted.
 
