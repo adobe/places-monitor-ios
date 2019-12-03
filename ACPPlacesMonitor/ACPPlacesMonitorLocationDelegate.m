@@ -136,6 +136,9 @@
     [ACPCore log:ACPMobileLogLevelDebug
              tag:ACPPlacesMonitorExtensionName
          message:[NSString stringWithFormat:@"Authorization status changed: %@", [self authStatusString:status]]];
+    
+    // update the places shared state
+    [ACPPlaces setAuthorizationStatus:status];
 }
 
 #pragma mark - other delegate methods

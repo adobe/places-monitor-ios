@@ -351,4 +351,15 @@
     XCTAssertEqual(@"Not Determined", result);
 }
 
+- (void) testAuthStatusChangeReportedToPlaces {
+    // setup
+    id placesMock = OCMClassMock([ACPPlaces class]);
+        
+    // test
+    [_locationDelegate locationManager:_manager didChangeAuthorizationStatus:kCLAuthorizationStatusAuthorizedAlways];
+    
+    // verify
+    OCMVerify([placesMock setAuthorizationStatus:kCLAuthorizationStatusAuthorizedAlways]);
+}
+
 @end
