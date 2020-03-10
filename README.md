@@ -1,4 +1,4 @@
-# Getting started with ACPPlacesMonitor for iOS
+# [DONT MERGE THIS, just a test] Getting started with ACPPlacesMonitor for iOS
 
 Table of Contents
 
