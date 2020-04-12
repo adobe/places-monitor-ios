@@ -64,3 +64,8 @@ NSString* const ACPPlacesMonitorEventNameSetRequestAuthorizationLevel = @"set re
 NSString* const ACPPlacesMonitorEventDataMonitorMode = @"monitormode";
 NSString* const ACPPlacesMonitorEventDataRequestAuthorizationLevel = @"requestauthorizationlevel";
 NSString* const ACPPlacesMonitorEventDataClear = @"clearclientdata";
+
+// places documentation Links
+NSString* const ACPPlacesMonitorRegisterExtensionDocs = @"https://docs.adobe.com/content/help/en/places/using/places-ext-aep-sdks/places-monitor-extension/places-monitor-api-reference.html#registerextension-ios";
+NSString* const ACPPlacesMonitorBackgroundLocationUpdatesDocs = @"https://docs.adobe.com/help/en/places/using/places-ext-aep-sdks/places-monitor-extension/using-places-monitor-extension.html#enable-location-updates-background";
+NSString* const ACPPlacesMonitorConfigurePlistDocs = @"https://docs.adobe.com/content/help/en/places/using/places-ext-aep-sdks/places-monitor-extension/using-places-monitor-extension.html#configuring-the-plist-keys";
