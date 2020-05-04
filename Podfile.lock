@@ -1,12 +1,12 @@
 PODS:
-  - ACPCore (2.3.6):
-    - ACPCore/iOS (= 2.3.6)
-  - ACPCore/iOS (2.3.6)
-  - ACPPlaces (1.3.0):
-    - ACPCore (>= 2.3.6)
-    - ACPPlaces/iOS (= 1.3.0)
-  - ACPPlaces/iOS (1.3.0):
-    - ACPCore (>= 2.3.6)
+  - ACPCore (2.6.0):
+    - ACPCore/iOS (= 2.6.0)
+  - ACPCore/iOS (2.6.0)
+  - ACPPlaces (1.3.1):
+    - ACPCore (>= 2.5.0)
+    - ACPPlaces/iOS (= 1.3.1)
+  - ACPPlaces/iOS (1.3.1):
+    - ACPCore (>= 2.5.0)
   - OCMock (3.4.3)
 
 DEPENDENCIES:
@@ -21,10 +21,10 @@ SPEC REPOS:
     - OCMock
 
 SPEC CHECKSUMS:
-  ACPCore: 1d3a5b79f172de3d998cf63b5c1538da1dd66f33
-  ACPPlaces: deef721ad68ce9abb2b547183a0a9ec326454400
+  ACPCore: 14410c900b154b419a3a5e4a4ffeee17a1958cad
+  ACPPlaces: b08a692490461516fd21b5227ef2abeb7d6cbab0
   OCMock: 43565190abc78977ad44a61c0d20d7f0784d35ab
 
 PODFILE CHECKSUM: b79127b500aa51cc2fc16181b75acbd1dc0dd69c
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.0
