@@ -68,6 +68,11 @@ FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataMonitorMode;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataRequestAuthorizationLevel;
 FOUNDATION_EXPORT NSString* const ACPPlacesMonitorEventDataClear;
 
+// places documentation Links
+#pragma mark - Places Documentation Links
+FOUNDATION_EXPORT NSString* const ACPPlacesMonitorRegisterExtensionDocs;
+FOUNDATION_EXPORT NSString* const ACPPlacesMonitorBackgroundLocationUpdatesDocs;
+FOUNDATION_EXPORT NSString* const ACPPlacesMonitorConfigurePlistDocs;
 
 #pragma mark - capability definitions by platform
 
