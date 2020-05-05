@@ -33,7 +33,7 @@
 - (void) locationManager: (CLLocationManager*) manager didFailWithError: (NSError*) error {
     [ACPCore log:ACPMobileLogLevelWarning
              tag:ACPPlacesMonitorExtensionName
-         message:[NSString stringWithFormat:@"%s - error:%@. Have you set values for NSLocationWhenInUseUsageDescription and NSLocationAlwaysAndWhenInUseUsageDescription in your Info.plist file?", __PRETTY_FUNCTION__, error]];
+         message:[NSString stringWithFormat:@"%s - error:%@. Have you set values for NSLocationWhenInUseUsageDescription and NSLocationAlwaysAndWhenInUseUsageDescription in your Info.plist file? For more details refer to %@", __PRETTY_FUNCTION__, error, ACPPlacesMonitorConfigurePlistDocs]];
 
     // if we get this error, all location activity should end
     if (error.code == kCLErrorDenied) {
