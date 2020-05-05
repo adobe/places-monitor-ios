@@ -1,3 +1,6 @@
+### 2.1.3 (5 May, 2020)
+- Improvements to logging.
+
 ### 2.1.2 (4 Dec, 2019)
 - GitHub issue #51 - Call Places API to collect `CLAuthorizationStatus` from device when it changes.
 
