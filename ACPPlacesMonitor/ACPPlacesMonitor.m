@@ -36,8 +36,8 @@
     } else {
         [ACPCore log:ACPMobileLogLevelError
                  tag:ACPPlacesMonitorExtensionName
-             message:[NSString stringWithFormat:@"An error occurred while attempting to register the ACPPlacesMonitor extension: %@",
-         [error localizedDescription] ? : @"unknown error"]];
+             message:[NSString stringWithFormat:@"An error occurred while attempting to register the ACPPlacesMonitor extension: %@. For more details refer to %@",
+         [error localizedDescription] ? : @"unknown error", ACPPlacesMonitorRegisterExtensionDocs]];
     }
 }
 
