@@ -73,7 +73,7 @@
     // verify
     OCMVerify([_coreMock log:ACPMobileLogLevelError
                          tag:ACPPlacesMonitorExtensionName_Test
-                     message:@"An error occurred while attempting to register the ACPPlacesMonitor extension: unknown error"]);
+                     message:@"An error occurred while attempting to register the ACPPlacesMonitor extension: unknown error. For more details refer to https://docs.adobe.com/content/help/en/places/using/places-ext-aep-sdks/places-monitor-extension/places-monitor-api-reference.html#registerextension-ios"]);
 }
 
 - (void) testSetPlacesMonitorMode {
