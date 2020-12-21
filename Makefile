@@ -218,3 +218,56 @@ clean:
 	@echo "######################################################################"
 	-rm -rf $(BUILD_TEMP_DIR)
 	-rm -rf $(BIN_DIR)$(LIBRARY_NAME)
+
+
+# xcframework helpers
+FW_LIB = lib$(EXTENSION_NAME)_iOS.a
+PATH_TO_LIB = Products/usr/local/lib/$(FW_LIB)
+PATH_TO_BIN = bin/iOS
+FRAMEWORK_NAME = $(PATH_TO_BIN)/$(EXTENSION_NAME).xcframework
+PATH_TO_HEADERS = ACPPlacesMonitor/include
+XCFRAMEWORKS_BUILDFLAGS = SKIP_INSTALL=NO GCC_TREAT_WARNINGS_AS_ERRORS=YES GCC_GENERATE_DEBUGGING_SYMBOLS=NO GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS NDEBUG=1 NS_BLOCK_ASSERTIONS=1 COMPILEFORAPP'
+XCFRAMEWORKS_BUILDFLAGS_SIM = SKIP_INSTALL=NO GCC_TREAT_WARNINGS_AS_ERRORS=YES GCC_GENERATE_DEBUGGING_SYMBOLS=NO GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS NDEBUG=1 NS_BLOCK_ASSERTIONS=1'
+
+# ios device
+FAT_IOS = ./build/ios/$(FW_LIB)
+PATH_IOS_ARM64 = ./build/ios-arm64.xcarchive
+PATH_IOS_ARMV7 = ./build/ios-armv7.xcarchive
+PATH_IOS_ARMV7S = ./build/ios-armv7s.xcarchive
+
+# ios simulator
+FAT_IOS_SIM = ./build/ios-simulator/$(FW_LIB)
+PATH_IOS_SIM_ARM64 = ./build/ios-simulator-arm64.xcarchive
+PATH_IOS_SIM_X86_64 = ./build/ios-simulator-x86_64.xcarchive
+PATH_IOS_SIM_I386 = ./build/ios-simulator-i386.xcarchive
+
+archives: archive-ios combine
+
+archive-ios: archive-ios-device archive-ios-simulator
+archive-ios-device:
+	xcodebuild archive -workspace $(WORKSPACE_NAME) -scheme $(BUILD_SCHEME) -arch $(ARCH_ARM64) -archivePath $(PATH_IOS_ARM64) -sdk iphoneos $(XCFRAMEWORKS_BUILDFLAGS)
+	xcodebuild archive -workspace $(WORKSPACE_NAME) -scheme $(BUILD_SCHEME) -arch $(ARCH_ARMV7) -archivePath $(PATH_IOS_ARMV7) -sdk iphoneos $(XCFRAMEWORKS_BUILDFLAGS)
+	xcodebuild archive -workspace $(WORKSPACE_NAME) -scheme $(BUILD_SCHEME) -arch $(ARCH_ARMV7S) -archivePath $(PATH_IOS_ARMV7S) -sdk iphoneos $(XCFRAMEWORKS_BUILDFLAGS)
+
+archive-ios-simulator:
+	xcodebuild archive -workspace $(WORKSPACE_NAME) -scheme $(BUILD_SCHEME) -arch $(ARCH_ARM64) -archivePath $(PATH_IOS_SIM_ARM64) -sdk iphonesimulator $(XCFRAMEWORKS_BUILDFLAGS_SIM)
+	xcodebuild archive -workspace $(WORKSPACE_NAME) -scheme $(BUILD_SCHEME) -arch $(ARCH_X86_64) -archivePath $(PATH_IOS_SIM_X86_64) -sdk iphonesimulator $(XCFRAMEWORKS_BUILDFLAGS_SIM)
+	xcodebuild archive -workspace $(WORKSPACE_NAME) -scheme $(BUILD_SCHEME) -arch $(ARCH_I386) -archivePath $(PATH_IOS_SIM_I386) -sdk iphonesimulator $(XCFRAMEWORKS_BUILDFLAGS_SIM)
+
+combine: clean-archive-dirs
+	# combine ios device & sim libs
+	xcrun lipo -create $(PATH_IOS_ARM64)/$(PATH_TO_LIB) $(PATH_IOS_ARMV7)/$(PATH_TO_LIB) $(PATH_IOS_ARMV7S)/$(PATH_TO_LIB) -output $(FAT_IOS)
+	xcrun lipo -create $(PATH_IOS_SIM_ARM64)/$(PATH_TO_LIB) $(PATH_IOS_SIM_X86_64)/$(PATH_TO_LIB) $(PATH_IOS_SIM_I386)/$(PATH_TO_LIB) -output $(FAT_IOS_SIM)
+
+clean-archive-dirs:
+	rm -rf "./build/ios" && mkdir "./build/ios"
+	rm -rf "./build/ios-simulator" && mkdir "./build/ios-simulator"
+
+xcframeworks: # archives
+	mkdir -p $(PATH_TO_BIN)
+	rm -rf $(FRAMEWORK_NAME)
+	@echo "######################################################################"
+	@echo "############### Creating combined XCFramework for iOS ################"
+	@echo "###############" $(FRAMEWORK_NAME)
+	@echo "######################################################################"
+	xcodebuild -create-xcframework -library $(FAT_IOS) -headers $(PATH_TO_HEADERS) -library $(FAT_IOS_SIM) -headers $(PATH_TO_HEADERS) -output $(FRAMEWORK_NAME)
