@@ -62,5 +62,13 @@ You can also run the unit test suite from command line:
 make test
 ~~~~
 
+To create an XCFramework, run the following:
+
+~~~~
+make xcframeworks
+~~~~
+
+The resulting XCFramework can be found at `bin/iOS/ACPPlacesMonitor.xcframework`
+
 ## Licensing
 This project is licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.
