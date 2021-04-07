@@ -8,6 +8,11 @@ jobs:
     steps:
       - checkout
 
+      # update bundler 
+      - run: 
+          name: Update Bundler
+          command: gem update
+
       # pre-start the simulator to prevent timeouts
       - run:
           name: Pre-start Simulator
