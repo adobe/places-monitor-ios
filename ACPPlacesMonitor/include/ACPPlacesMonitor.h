@@ -43,7 +43,7 @@ typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorMode) {
  *   see : https://developer.apple.com/documentation/corelocation/cllocationmanager/1620562-requestwheninuseauthorization
  * - Always (ACPPlacesRequestAuthorizationLevelAlways) : Use this enum to request for user permission to use location services
  *   whether or not the app is in use. You must have NSLocationAlwaysUsageDescription and NSLocationWhenInUseUsageDescription
- *   keys in your app’s Info.plist file definining the text that will appear during the user prompt.
+ *   keys in your app’s Info.plist file defining the text that will appear during the user prompt.
  *   see : https://developer.apple.com/documentation/corelocation/cllocationmanager/1620551-requestalwaysauthorization
 */
 typedef NS_OPTIONS(NSInteger, ACPPlacesMonitorRequestAuthorizationLevel) {
