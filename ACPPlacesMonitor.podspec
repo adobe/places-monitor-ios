@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.subspec "iOS" do |ios|
     ios.public_header_files = "ACPPlacesMonitor/include/*.h"
-    ios.source_files = "ACPPlacesMonitor/*.{h,m}"
+    ios.source_files = "ACPPlacesMonitor/**/*.{h,m}"
     ios.frameworks = "CoreLocation"
   end
 
