@@ -954,7 +954,8 @@
                      message:@"Unable to start monitoring. Permission to use location data has been denied by the user"]);
 }
 
-- (void) testStartMonitoringStatusNotDeterminedAndRequestWhenInUseAuthorization {
+
+- (void) testStartMonitoringStatusNotDeterminedAndRequestWhenInUseAuthorization API_AVAILABLE(ios(14.0)) {
     // setup
     id locationManagerMock = OCMClassMock([CLLocationManager class]);
     OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusNotDetermined);
@@ -972,7 +973,7 @@
 }
 
 
-- (void) testStartMonitoringStatusNotDeterminedAndRequestAlwaysAllowAuthorization {
+- (void) testStartMonitoringStatusNotDeterminedAndRequestAlwaysAllowAuthorization API_AVAILABLE(ios(14.0)) {
     // setup
     id locationManagerMock = OCMClassMock([CLLocationManager class]);
     OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusNotDetermined);
@@ -989,25 +990,27 @@
     OCMVerify([locationManagerMock requestAlwaysAuthorization]);
 }
 
-- (void) testStartMonitoringStatusWhenInUseAndRequestAlwaysAllowAuthorization {
-    // setup
-    id locationManagerMock = OCMClassMock([CLLocationManager class]);
-    OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusAuthorizedWhenInUse);
-    _monitor.locationManager = locationManagerMock;
-    OCMStub([_monitor userHasDeclinedLocationPermission:kCLAuthorizationStatusNotDetermined]).andReturn(NO);
-    _monitor.requestAuthorizationLevel = ACPPlacesRequestMonitorAuthorizationLevelAlways;
-    
-    // test
-    [_monitor startMonitoring];
-    
-    // verify
-    OCMVerify([_monitor beginTrackingLocation]);
-    OCMReject([locationManagerMock requestWhenInUseAuthorization]);
-    OCMVerify([locationManagerMock requestAlwaysAuthorization]);
+- (void) testStartMonitoringStatusWhenInUseAndRequestAlwaysAllowAuthorization API_AVAILABLE(ios(14.0)) {
+    if (@available(iOS 14.0, *)) {
+        // setup
+        id locationManagerMock = OCMClassMock([CLLocationManager class]);
+        OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusAuthorizedWhenInUse);
+        _monitor.locationManager = locationManagerMock;
+        OCMStub([_monitor userHasDeclinedLocationPermission:kCLAuthorizationStatusNotDetermined]).andReturn(NO);
+        _monitor.requestAuthorizationLevel = ACPPlacesRequestMonitorAuthorizationLevelAlways;
+        
+        // test
+        [_monitor startMonitoring];
+        
+        // verify
+        OCMVerify([_monitor beginTrackingLocation]);
+        OCMReject([locationManagerMock requestWhenInUseAuthorization]);
+        OCMVerify([locationManagerMock requestAlwaysAuthorization]);
+    }
 }
 
 
-- (void) testStartMonitoringStatusAlwaysAndRequestWhenInUseAuthorization {
+- (void) testStartMonitoringStatusAlwaysAndRequestWhenInUseAuthorization API_AVAILABLE(ios(14.0)) {
     // setup
     id locationManagerMock = OCMClassMock([CLLocationManager class]);
     OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusAuthorizedWhenInUse);
@@ -1031,6 +1034,9 @@
     id locationManagerMock = OCMClassMock([CLLocationManager class]);
     OCMStub([locationManagerMock isMonitoringAvailableForClass:[CLCircularRegion class]]).andReturn(YES);
     OCMStub([locationManagerMock maximumRegionMonitoringDistance]).andReturn(100);
+    if (@available(iOS 14.0, *)) {
+        OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusDenied);
+    }
     _monitor.locationManager = locationManagerMock;
     OCMStub([_monitor userHasDeclinedLocationPermission:kCLAuthorizationStatusRestricted]).andReturn(YES);
     id circularRegionMock = OCMClassMock([CLCircularRegion class]);
@@ -1280,6 +1286,9 @@
     OCMStub([_monitor userHasDeclinedLocationPermission:kCLAuthorizationStatusRestricted]).andReturn(YES);
     id locationManagerMock = OCMClassMock([CLLocationManager class]);
     OCMStub([locationManagerMock respondsToSelector:@selector(startUpdatingLocation)]).andReturn(YES);
+    if (@available(iOS 14.0, *)) {
+        OCMStub([locationManagerMock authorizationStatus]).andReturn(kCLAuthorizationStatusDenied);
+    }    
     _monitor.locationManager = locationManagerMock;
     OCMReject([locationManagerMock respondsToSelector:@selector(startUpdatingLocation)]);
     OCMReject([locationManagerMock startUpdatingLocation]);
