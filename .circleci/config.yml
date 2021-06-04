@@ -11,7 +11,7 @@ jobs:
       # update bundler
       - run:
           name: Update Bundler
-          command: sudo gem update
+          command: gem update
 
       # pre-start the simulator to prevent timeouts
       - run:
