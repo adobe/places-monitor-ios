@@ -17,7 +17,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <ACPCore/ACPCore.h>
 #import <ACPCore/ACPExtensionEvent.h>
-@import AEPPlaces;
+#import <AEPPlaces/AEPPlaces-Swift.h>
 #import "ACPPlacesMonitor.h"
 #import "ACPPlacesMonitorConstants.h"
 #import "ACPPlacesMonitorInternal.h"

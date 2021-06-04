@@ -15,7 +15,7 @@
 //
 
 #import <ACPCore/ACPExtension.h>
-@import AEPPlaces;
+#import <AEPPlaces/AEPPlaces-Swift.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
