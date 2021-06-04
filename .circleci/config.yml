@@ -3,13 +3,13 @@ jobs:
   build:
     # Specify the Xcode version to use
     macos:
-      xcode: "10.0.0"
+      xcode: "12.0.0"
 
     steps:
       - checkout
 
-      # update bundler 
-      - run: 
+      # update bundler
+      - run:
           name: Update Bundler
           command: sudo gem update
 
@@ -73,4 +73,4 @@ jobs:
               shasum -a $i -c --ignore-missing <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM") ||
               shasum -a $i -c <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM" | head -n 1)
             done
-            bash ./codecov -v -X s3 -c -D "./build/out" -J "ACPPlacesMonitor" 
+            bash ./codecov -v -X s3 -c -D "./build/out" -J "ACPPlacesMonitor"
