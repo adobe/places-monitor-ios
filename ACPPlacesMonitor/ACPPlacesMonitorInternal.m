@@ -437,8 +437,13 @@
 }
 
 - (void) startMonitoring {
-    CLAuthorizationStatus auth = [CLLocationManager authorizationStatus];
-        
+    CLAuthorizationStatus auth;
+    if (@available(iOS 14.0, *)) {
+        auth = _locationManager.authorizationStatus;
+    } else {
+        auth = [CLLocationManager authorizationStatus];
+    }
+    
     // if the user has denied location services, bail out early
     if ([self userHasDeclinedLocationPermission:auth]) {
         [ACPCore log:ACPMobileLogLevelDebug
@@ -473,7 +478,14 @@
 }
 
 - (void) startMonitoringGeoFences: (NSArray*) newGeoFences {
-    if ([self userHasDeclinedLocationPermission:[CLLocationManager authorizationStatus]]) {
+    CLAuthorizationStatus auth;
+    if (@available(iOS 14.0, *)) {
+        auth = _locationManager.authorizationStatus;
+    } else {
+        auth = [CLLocationManager authorizationStatus];
+    }
+    
+    if ([self userHasDeclinedLocationPermission:auth]) {
         return;
     }
 
@@ -570,7 +582,14 @@
 
 #if CONTINUOUS_LOCATION_SUPPORTED
 - (void) startMonitoringContinuousLocationChanges {
-    if ([self userHasDeclinedLocationPermission:[CLLocationManager authorizationStatus]]) {
+    CLAuthorizationStatus auth;
+    if (@available(iOS 14.0, *)) {
+        auth = _locationManager.authorizationStatus;
+    } else {
+        auth = [CLLocationManager authorizationStatus];
+    }
+    
+    if ([self userHasDeclinedLocationPermission:auth]) {
         return;
     }
 
