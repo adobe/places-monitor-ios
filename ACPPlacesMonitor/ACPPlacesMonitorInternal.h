@@ -15,7 +15,7 @@
 //
 
 #import <ACPCore/ACPExtension.h>
-#import <ACPPlaces/ACPPlaces.h>
+#import <AEPPlaces/AEPPlaces-Swift.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -100,9 +100,9 @@ NS_ASSUME_NONNULL_BEGIN
  * @brief Signals to the ACPPlaces extension that a region monitoring event has occurred
  *
  * @param region the CLRegion for which there was a region event
- * @param type an ACPRegionEventType representing whether the event was an entry or an exit
+ * @param type an AEPPlacesRegionEvent representing whether the event was an entry or an exit
  */
-- (void) postRegionUpdate: (CLRegion*) region withEventType: (ACPRegionEventType) type;
+- (void) postRegionUpdate: (CLRegion*) region withEventType: (AEPPlacesRegionEvent) type;
 
 /**
  * @brief Initiates a location request from the underlying CLLocationManager

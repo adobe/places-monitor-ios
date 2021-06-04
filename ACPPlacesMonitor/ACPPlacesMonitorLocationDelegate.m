@@ -15,7 +15,7 @@
 //
 
 #import <ACPCore/ACPCore.h>
-#import <ACPPlaces/ACPPlaces.h>
+#import <AEPPlaces/AEPPlaces-Swift.h>
 #import "ACPPlacesMonitorConstants.h"
 #import "ACPPlacesMonitorInternal.h"
 #import "ACPPlacesMonitorLocationDelegate.h"
@@ -56,7 +56,7 @@
     [ACPCore log:ACPMobileLogLevelDebug
              tag:ACPPlacesMonitorExtensionName
          message:[NSString stringWithFormat:@"Entry event detected for region: %@", region]];
-    [_parent postRegionUpdate:region withEventType:ACPRegionEventTypeEntry];
+    [_parent postRegionUpdate:region withEventType:AEPPlacesRegionEventEntry];
     [_parent addDeviceToRegion:region];
 
     // if this is a beacon region, we should begin ranging when we enter
@@ -80,7 +80,7 @@
     [ACPCore log:ACPMobileLogLevelDebug
              tag:ACPPlacesMonitorExtensionName
          message:[NSString stringWithFormat:@"Exit event detected for region: %@", region]];
-    [_parent postRegionUpdate:region withEventType:ACPRegionEventTypeExit];
+    [_parent postRegionUpdate:region withEventType:AEPPlacesRegionEventExit];
     [_parent removeDeviceFromRegion:region];
 
     // if this is a beacon region, we should stop ranging upon exit
@@ -138,7 +138,7 @@
          message:[NSString stringWithFormat:@"Authorization status changed: %@", [self authStatusString:status]]];
     
     // update the places shared state
-    [ACPPlaces setAuthorizationStatus:status];
+    [AEPMobilePlaces setAuthorizationStatus:status];
 }
 
 #pragma mark - other delegate methods

@@ -17,7 +17,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <ACPCore/ACPCore.h>
 #import <ACPCore/ACPExtensionEvent.h>
-#import <ACPPlaces/ACPPlaces.h>
+#import <AEPPlaces/AEPPlaces-Swift.h>
 #import "ACPPlacesMonitor.h"
 #import "ACPPlacesMonitorConstants.h"
 #import "ACPPlacesMonitorInternal.h"
@@ -233,7 +233,7 @@
                   clearData ? @"" : @"not "]];
     
     if (clearData) {
-        [ACPPlaces clear];
+        [AEPMobilePlaces clear];
         [self clearMonitorData];
     }
     
@@ -288,10 +288,15 @@
 
 #pragma mark - Location Updates
 - (void) postLocationUpdate: (CLLocation*) currentLocation {
-    [ACPPlaces getNearbyPointsOfInterest:currentLocation
+    [AEPMobilePlaces getNearbyPointsOfInterest:currentLocation
                                    limit:ACPPlacesMonitorDefaultMaxMonitoredRegionCount
-                                callback: ^ (NSArray<ACPPlacesPoi*>* _Nullable nearbyPoi) {
-                                    [self resetMonitoredGeofences];
+                                callback: ^ (NSArray<AEPPlacesPoi*>* _Nullable nearbyPoi, AEPPlacesQueryResponseCode result) {
+                                    
+        if (result != AEPPlacesQueryResponseCodeOk) {
+            [self handlePlacesRequestError:result];
+        }
+        
+        [self resetMonitoredGeofences];
                                     
                                     if (nearbyPoi.count) {
                                         [ACPCore log:ACPMobileLogLevelDebug
@@ -305,36 +310,34 @@
                                     }
                                     
                                     [self removeNonMonitoredRegionsFromUserWithinRegions];
-                                } errorCallback:^(ACPPlacesRequestError result) {
-                                    [self handlePlacesRequestError:result];
                                 }];
 }
 
-- (void) handlePlacesRequestError:(ACPPlacesRequestError) error {
-    if (error == ACPPlacesRequestErrorNone) {
+- (void) handlePlacesRequestError:(AEPPlacesQueryResponseCode) error {
+    if (error == AEPPlacesQueryResponseCodeOk) {
         return;
     }
     
     NSString *message = @"An error occurred while attempting to retrieve nearby points of interest: %@";
     NSString *errorString = nil;
     switch (error) {
-        case ACPPlacesRequestErrorConfigurationError:
+        case AEPPlacesQueryResponseCodeConfigurationError:
             errorString = @"Missing Places configuration.";
             [self stopAllMonitoring:YES];
             break;
-        case ACPPlacesRequestErrorConnectivityError:
+        case AEPPlacesQueryResponseCodeConnectivityError:
             errorString = @"No network connectivity.";
             break;
-        case ACPPlacesRequestErrorInvalidLatLongError:
+        case AEPPlacesQueryResponseCodeInvalidLatLongError:
             errorString = @"An invalid latitude and/or longitude was provided.  Valid values are -90 to 90 (lat) and -180 to 180 (lon).";
             break;
-        case ACPPlacesRequestErrorQueryServiceUnavailable:
+        case AEPPlacesQueryResponseCodeQueryServiceUnavailable:
             errorString = @"The Places Query Service is unavailable. Try again later.";
             break;
-        case ACPPlacesRequestErrorServerResponseError:
+        case AEPPlacesQueryResponseCodeServerResponseError:
             errorString = @"There is an error in the response from the server.";
             break;
-        case ACPPlacesRequestErrorUnknownError:
+        case AEPPlacesQueryResponseCodeUnknownError:
         default:
             errorString = @"Unknown error.";
             break;
@@ -349,8 +352,8 @@
     [_locationManager requestLocation];
 }
 
-- (void) postRegionUpdate: (CLRegion*) region withEventType: (ACPRegionEventType) type {
-    [ACPPlaces processRegionEvent:region forRegionEventType:type];
+- (void) postRegionUpdate: (CLRegion*) region withEventType: (AEPPlacesRegionEvent) type {
+    [AEPMobilePlaces processRegionEvent:type forRegion:region];
 }
 
 #pragma mark - ACPPlacesMonitorInternal Private Methods
@@ -486,7 +489,8 @@
     }
 
     // loop through our regions while we have them AND we are under our max number of regions
-    for (ACPPlacesPoi * currentRegion in newGeoFences) {
+    for (AEPPlacesPoi * currentRegion in newGeoFences) {
+        
         // update the radius for the region if necessary
         if (_locationManager.maximumRegionMonitoringDistance < currentRegion.radius) {
             currentRegion.radius = _locationManager.maximumRegionMonitoringDistance;
@@ -514,7 +518,7 @@
                      message:[NSString stringWithFormat:@"Suppressing an entry event for region %@, the device is already known to be in this region", currentRegion.identifier]];
             } else {
                 [self addDeviceToRegion:currentCLRegion];
-                [ACPPlaces processRegionEvent:currentCLRegion forRegionEventType:ACPRegionEventTypeEntry];
+                [AEPMobilePlaces processRegionEvent:AEPPlacesRegionEventEntry forRegion:currentCLRegion];
             }
         }
     }
@@ -523,7 +527,7 @@
 }
 
 - (void) stopMonitoringGeoFences {
-    // remove regions in locationManager.moniteredRegions that we have initialized
+    // remove regions in locationManager.monitoredRegions that we have initialized
     NSArray* regions = [_locationManager.monitoredRegions copy];
 
     for (CLRegion * region in regions) {
