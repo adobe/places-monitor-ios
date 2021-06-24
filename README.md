@@ -2,7 +2,7 @@
 
 ## Notice of deprecation
 
-The Places Monitor extension for the Adobe Experience Platform Mobile SDKs will be deprecated on August 31, 2021. The Places Monitor extension will not receive further updates or support beyond August 31st.
+On **August 31, 2021**, the **Places Monitor** extension for the Adobe Experience Platform Mobile SDKs will be **deprecated**. The Places Monitor extension will not receive further updates or support beyond August 31st.
 
 Customers that currently use the Places Monitor extension can continue usage of this extension with the understanding that no additional updates or support will be available through Adobe.
 
