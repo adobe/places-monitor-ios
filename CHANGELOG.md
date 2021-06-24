@@ -2,6 +2,7 @@
 
 #### 2.1.4 (4 Jun, 2021)
 - Update to iOS 14 method for retrieving `CLAuthorizationStatus`.
+- Updating README.md with notice of deprecation on August 31, 2021.
 
 #### 2.1.3 (5 May, 2020)
 - Improvements to logging.
