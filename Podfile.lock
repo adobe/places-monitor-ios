@@ -1,7 +1,7 @@
 PODS:
-  - ACPCore (2.9.0):
-    - ACPCore/main (= 2.9.0)
-  - ACPCore/main (2.9.0)
+  - ACPCore (2.9.3):
+    - ACPCore/main (= 2.9.3)
+  - ACPCore/main (2.9.3)
   - ACPPlaces (1.4.0):
     - ACPCore (>= 2.9.0)
     - ACPPlaces/xcframeworks (= 1.4.0)
@@ -21,10 +21,10 @@ SPEC REPOS:
     - OCMock
 
 SPEC CHECKSUMS:
-  ACPCore: e73b529b015de094d176285efbf2cca3bdbf532b
+  ACPCore: 5f00fcf7aba597b29b359e4c14f7f4f1f95503f3
   ACPPlaces: 6d2f2f4a5d0eee5fd021c11219a7d6775e243ab8
   OCMock: 43565190abc78977ad44a61c0d20d7f0784d35ab
 
 PODFILE CHECKSUM: b79127b500aa51cc2fc16181b75acbd1dc0dd69c
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
