@@ -1,5 +1,17 @@
 # Getting started with ACPPlacesMonitor for iOS
 
+## Notice of deprecation
+
+The Places Monitor extension for the Adobe Experience Platform Mobile SDKs will be deprecated on August 31, 2021. The Places Monitor extension will not receive further updates or support beyond August 31st.
+
+Customers that currently use the Places Monitor extension can continue usage of this extension with the understanding that no additional updates or support will be available through Adobe.
+
+The deprecation of the Places Monitor extension has no bearing or negative impact on the Places Service extension which will continue to be supported with enhancements and updates.
+
+Customers that are looking to transition away from the Places Monitor extension to their own monitoring solution should review the documentation for: [Use Places Service with your own monitoring solution](https://experienceleague.adobe.com/docs/places/using/using-your-own-monitor.html?lang=en). This document explains how to interact with the Places Service by implementing [Core Location](https://developer.apple.com/documentation/corelocation) services on iOS or [Location Services](https://developers.google.com/android/reference/com/google/android/gms/location/package-summary) from Google Play.
+
+---
+
 Table of Contents
 
 1. [About this project](#about-this-project)
