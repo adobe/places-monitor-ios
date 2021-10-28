@@ -263,11 +263,11 @@ clean-archive-dirs:
 	rm -rf "./build/ios" && mkdir "./build/ios"
 	rm -rf "./build/ios-simulator" && mkdir "./build/ios-simulator"
 
-xcframeworks: # archives
+xcframeworks: archives
 	mkdir -p $(PATH_TO_BIN)
 	rm -rf $(FRAMEWORK_NAME)
 	@echo "######################################################################"
 	@echo "############### Creating combined XCFramework for iOS ################"
-	@echo "###############" $(FRAMEWORK_NAME)
+	@echo "###############  $(FRAMEWORK_NAME) ################"
 	@echo "######################################################################"
 	xcodebuild -create-xcframework -library $(FAT_IOS) -headers $(PATH_TO_HEADERS) -library $(FAT_IOS_SIM) -headers $(PATH_TO_HEADERS) -output $(FRAMEWORK_NAME)
