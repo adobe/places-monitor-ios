@@ -26,8 +26,8 @@ The ACPPlacesMonitor for iOS is used to manage the integration between iOS's CLL
 ## Current version
 
 [![Cocoapods](https://img.shields.io/cocoapods/v/ACPPlacesMonitor.svg?color=orange&label=ACPPlacesMonitor&logo=apple&logoColor=white)](https://cocoapods.org/pods/ACPPlacesMonitor)
-[![CircleCI](https://img.shields.io/circleci/project/github/adobe/places-monitor-ios/master.svg?logo=circleci)](https://circleci.com/gh/adobe/workflows/places-monitor-ios)
-[![Code Coverage](https://img.shields.io/codecov/c/github/adobe/places-monitor-ios/master.svg?logo=codecov)](https://codecov.io/gh/adobe/places-monitor-ios/branch/master)
+[![CircleCI](https://img.shields.io/circleci/project/github/adobe/places-monitor-ios/main.svg?logo=circleci)](https://circleci.com/gh/adobe/workflows/places-monitor-ios)
+[![Code Coverage](https://img.shields.io/codecov/c/github/adobe/places-monitor-ios/main.svg?logo=codecov)](https://codecov.io/gh/adobe/places-monitor-ios/branch/main)
 
 
 ## Contributing to the project
